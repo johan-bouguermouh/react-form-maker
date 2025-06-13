@@ -1,19 +1,19 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { FieldParams } from '../interfaces/FieldParams';
 
 const InputPasswordVisibility = React.forwardRef(
-  (
-    { zFields, fieldProps, indexField, className, id }: FieldParams,
-    ref: React.Ref<any>,
-  ) => {
+  ({ zFields, fieldProps, indexField, id }: FieldParams) => {
     const [showPassword, setShowPassword] = React.useState(false);
-    const inputValue = zFields.value !== undefined ? zFields.value : '';
+
+    const inputValue: string =
+      zFields.value !== undefined ? String(zFields.value) : '';
 
     return (
-      <div className={`${fieldProps.className} flex flex-row items-center`}>
+      <div className={cn('flex flex-row items-center', fieldProps.className)}>
         <Input
           id={id ?? fieldProps.inputName}
           className="rounded-[var(--radius)_0px_0px_var(--radius)] w-[calc(100%_-_49px)] border-r-[none]"
