@@ -1,0 +1,14 @@
+# Node modules
+node_modules/
+
+# Fichiers générés
+dist/
+*.log
+
+# Systèmes
+.DS_Store
+Thumbs.db
+
+# Environnements
+.env
+.env.local
