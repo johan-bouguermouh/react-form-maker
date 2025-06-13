@@ -26,6 +26,7 @@
     "prettier"
   ],
   "rules": {
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "quotes": ["error", "single"],
     "react/jsx-props-no-spreading": "off", // Allow props spreading in JSX only for
     "import/extensions": [
@@ -62,5 +63,8 @@
       }
     }
   ],
-  "ignorePatterns": ["src/components/ui/*"]
+  "ignorePatterns": [
+    "src/components/ui/*",
+    "src/components/ReactFormMaker/zodRFM/zodRFM.class.ts"
+  ]
 }
