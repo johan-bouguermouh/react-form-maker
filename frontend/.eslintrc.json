@@ -27,6 +27,7 @@
   ],
   "rules": {
     "quotes": ["error", "single"],
+    "react/jsx-props-no-spreading": "off", // Allow props spreading in JSX only for
     "import/extensions": [
       "error",
       "ignorePackages",
