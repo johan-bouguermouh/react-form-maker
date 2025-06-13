@@ -6,9 +6,7 @@ import {
   ReactFormMakerStep,
 } from '../../interfaces/FieldInterfaces';
 
-export function isCompositeField(
-  element: any | CompositeField,
-): element is CompositeField {
+export function isCompositeField(element: unknown): element is CompositeField {
   return (element as CompositeField).fields !== undefined;
 }
 
