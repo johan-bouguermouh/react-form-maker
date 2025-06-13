@@ -1,7 +1,5 @@
-import { FormEvent } from 'react';
-import { ZodType } from 'zod';
 import { FieldErrors, FieldValues } from 'react-hook-form';
-import { CompositeField, ReactFormMakerFieldset } from './FieldInterfaces';
+import { CompositeField } from './FieldInterfaces';
 
 /**
  * @description
@@ -78,7 +76,7 @@ export interface ReactFormMakerParams<T extends FieldValues> {
    * @returns void
    * deprecated
    */
-  //setZodObject?: (zObject: { [key in keyof T]: ZodType<T[key]> }) => void;
+  // setZodObject?: (zObject: { [key in keyof T]: ZodType<T[key]> }) => void;
 
   /**
    * @description
