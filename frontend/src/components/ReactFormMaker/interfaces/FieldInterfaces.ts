@@ -1,7 +1,7 @@
 import { ZodType } from 'zod';
-import { FormFieldEvent } from './FormFieldEvent';
-import { StepFormState } from '../formElements/Stepper/SteppersElements/StepperContext.interface';
 import { UseFormReturn } from 'react-hook-form';
+import { FormFieldEvent } from './FormFieldEvent';
+import type { StepFormState } from '../formElements/Stepper/SteppersElements/StepperContext.interface';
 
 export type InputType =
   | 'text'
@@ -161,13 +161,14 @@ export interface FieldReactFormMaker extends CompositeField {
    * We use the Zod object to validate the input field and to return the object with the correct types.
    * If you don't provide a Zod object, the input field will be validated with the default values.
    */
-  zodObject?: ZodType<any>;
+  zodObject?: ZodType;
   /**
    * @description
    * The default values of the input field.
    * This is the default value that will be displayed in the input field.
    * This is optional.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultValues?: any;
   /**
    * @description
@@ -298,6 +299,7 @@ export interface FieldReactFormMaker extends CompositeField {
    * This is optional.
    */
   customInputFieldElement?: React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props?: Record<string, any>;
 }
 
@@ -583,7 +585,9 @@ export interface ReactFormMakerStep extends CompositeField {
    * @returns Promise<boolean> if true, the user can switch to the next step, if false, the user cannot switch to the next step.
    */
   onBeforeNextStep?: (data: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     submissionState: StepFormState<any>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     form: UseFormReturn<any>;
   }) => Promise<boolean>;
 
@@ -594,6 +598,7 @@ export interface ReactFormMakerStep extends CompositeField {
    * If IconStep is not provided, the step will have defaults icons depending on the step status.
    * This is optional.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   IconStep?: React.ComponentType<any>;
 
   /**
@@ -601,14 +606,14 @@ export interface ReactFormMakerStep extends CompositeField {
    * change name of the button next
    * this is optional
    */
-  buttonNextContent?: String;
+  buttonNextContent?: string;
 
   /**
    * @description
    * change name of the button previous
    * tjhis is optional
    */
-  buttonPreviousContent?: String;
+  buttonPreviousContent?: string;
 
   /**
    * @description
