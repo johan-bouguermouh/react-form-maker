@@ -11,7 +11,7 @@ import { isStepReactFormMaker } from '../typeGuards/compositeField.TypeGuards';
  * @param stepper - Le boolean indiquant si le formulaire utilise un stepper.
  * @returns Vrai si la validation passe, sinon une erreur ou un avertissement est lancé.
  */
-export function validateStepperFormFields(
+export default function validateStepperFormFields(
   formfields: CompositeField[],
   stepper: boolean,
 ): void {
@@ -19,11 +19,11 @@ export function validateStepperFormFields(
     const stepFields = formfields.filter(isStepReactFormMaker);
     if (stepFields.length < 1) {
       throw new Error(
-        "Le formulaire doit contenir au moins un champ de type 'ReactFormMakerStep' lorsque le stepper est activé.",
+        'Le formulaire doit contenir au moins un champ de type "ReactFormMakerStep" lorsque le stepper est activé.',
       );
     } else if (stepFields.length === 1) {
       console.warn(
-        "Le formulaire contient seulement un champ de type 'ReactFormMakerStep'. Le stepper n'est pas utile avec une seule étape.",
+        'Le formulaire contient seulement un champ de type "ReactFormMakerStep". Le stepper n\'est pas utile avec une seule étape.',
       );
     }
   }
