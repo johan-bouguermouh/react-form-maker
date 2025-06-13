@@ -37,14 +37,14 @@ import { FieldReactFormMaker } from './FieldInterfaces';
  * | ref      | true       | RefCallBack | The ref of the input field. |
  *
  */
-export interface FieldParams {
+export interface FieldParams<T extends FieldValues> {
   /**
    * @description
    * The register of the input field.
    * This is the register of the input field that will be displayed.
    * Is a representation of the input field in the form and interprets the input field of zodObject.
    */
-  zFields: ControllerRenderProps<any, Path<any>>;
+  zFields: ControllerRenderProps<T, Path<T>>;
   /**
    * @description
    * The fieldProps of the input field.
