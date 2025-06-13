@@ -1,4 +1,9 @@
-import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
+import {
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+  UseFormReturn,
+} from 'react-hook-form';
 
 /**
  * @description
@@ -7,7 +12,8 @@ import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
  * FormFieldEnvent add the controlField and form attributes to the React.FocusEvent<HTMLInputElement> interface.
  * Also, we add form attribute to the React.FocusEvent<HTMLInputElement> interface to control the form directly from the event.
  */
-export interface FormFieldEvent extends React.FocusEvent<HTMLInputElement> {
-  controlField?: ControllerRenderProps<any, string>;
-  form?: UseFormReturn<any>;
+export interface FormFieldEvent<T extends FieldValues = FieldValues>
+  extends React.FocusEvent<HTMLInputElement> {
+  controlField?: ControllerRenderProps<T, Path<T>>;
+  form?: UseFormReturn<T>;
 }
