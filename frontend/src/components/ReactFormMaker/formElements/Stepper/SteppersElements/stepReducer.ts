@@ -1,6 +1,63 @@
 import { CompositeField } from '@/components/ReactFormMaker/interfaces/FieldInterfaces';
-import { StepElement } from './StepperContext.interface';
 import { isStepReactFormMaker } from '@/components/ReactFormMaker/utils/typeGuards/compositeField.TypeGuards';
+import { StepElement } from './StepperContext.interface';
+
+type TypeReducerActionNames =
+  | 'CHANGE_FOCUS'
+  | 'SET_DONE'
+  | 'REMOVE_DONE'
+  | 'SET_STRICT_DISABLED_EFFECT'
+  | 'SET_BETFORE_DISABLED_EFFECT';
+
+type ActionType = {
+  type: TypeReducerActionNames;
+  currentStepIndex?: number;
+};
+
+export function setStrictDisabledEffect(state: StepElement[]): StepElement[] {
+  const disabledAfterBy: string[] = [];
+
+  return state.map((step: StepElement) => {
+    const newStep = {
+      ...step,
+      subjectedStrictSteps: [...disabledAfterBy],
+      isdisabled:
+        disabledAfterBy.length > 0 ||
+        step.subjectedDisabledBeforeSteps.length > 0,
+    };
+    if (step.isStrict && !step.isDone) {
+      disabledAfterBy.push(step.stepName);
+    }
+    return newStep;
+  });
+}
+
+export function setDisabledBeforeEffect(state: StepElement[]): StepElement[] {
+  const disabledBeforeBy: string[] = [];
+
+  const currentStates = state.map((step: StepElement) => {
+    return step;
+  });
+
+  const newStates = currentStates.reverse().map((step: StepElement) => {
+    const newStep = {
+      ...step,
+      subjectedDisabledBeforeSteps: [...disabledBeforeBy],
+      isdisabled:
+        disabledBeforeBy.length > 0 ||
+        step.subjectedStrictSteps.length > 0 ||
+        (step.disabledBefore !== undefined &&
+          step.disabledBefore === true &&
+          step.isDone),
+    };
+    if (step.disabledBefore && step.isDone) {
+      disabledBeforeBy.push(step.stepName);
+    }
+    return newStep;
+  });
+
+  return newStates.reverse();
+}
 
 export function initialSteps(formfields: CompositeField[]): StepElement[] {
   const currentForm: StepElement[] = formfields
@@ -20,56 +77,10 @@ export function initialSteps(formfields: CompositeField[]): StepElement[] {
   return setDisabledBeforeEffect(currentFormWithStrictEffect);
 }
 
-export function setStrictDisabledEffect(state: StepElement[]): StepElement[] {
-  let disabledAfterBy: string[] = [];
-
-  return state.map((step: StepElement, index: number) => {
-    const newStep = {
-      ...step,
-      subjectedStrictSteps: [...disabledAfterBy],
-      isdisabled:
-        disabledAfterBy.length > 0 ||
-        step.subjectedDisabledBeforeSteps.length > 0,
-    };
-    if (step.isStrict && !step.isDone) {
-      disabledAfterBy.push(step.stepName);
-    }
-    return newStep;
-  });
-}
-
-export function setDisabledBeforeEffect(state: StepElement[]): StepElement[] {
-  let disabledBeforeBy: string[] = [];
-
-  const currentStates = state.map((step: StepElement, index: number) => {
-    return step;
-  });
-
-  const newStates = currentStates
-    .reverse()
-    .map((step: StepElement, index: number) => {
-      const newStep = {
-        ...step,
-        subjectedDisabledBeforeSteps: [...disabledBeforeBy],
-        isdisabled:
-          disabledBeforeBy.length > 0 ||
-          step.subjectedStrictSteps.length > 0 ||
-          (step.disabledBefore !== undefined &&
-            step.disabledBefore === true &&
-            step.isDone),
-      };
-      if (step.disabledBefore && step.isDone) {
-        disabledBeforeBy.push(step.stepName);
-      }
-      return newStep;
-    });
-
-  return newStates.reverse();
-}
-
-let boudary = 0;
-
-const stepReducer = (state: StepElement[], action: any): StepElement[] => {
+const stepReducer = (
+  state: StepElement[],
+  action: ActionType,
+): StepElement[] => {
   switch (action.type) {
     case 'SET_STRICT_DISABLED_EFFECT':
       return setStrictDisabledEffect(state);
@@ -79,25 +90,30 @@ const stepReducer = (state: StepElement[], action: any): StepElement[] => {
 
     case 'CHANGE_FOCUS':
       return state.map((step, index) => {
+        if (action.currentStepIndex === undefined) {
+          throw new Error(
+            'currentStepIndex is required for CHANGE_FOCUS action',
+          );
+        }
         if (index === action.currentStepIndex) {
           return {
             ...step,
             isCurrent: true,
             isNext: false,
           };
-        } else if (index === action.currentStepIndex + 1) {
+        }
+        if (index === action.currentStepIndex + 1) {
           return {
             ...step,
             isNext: true,
             isCurrent: false,
           };
-        } else {
-          return {
-            ...step,
-            isCurrent: false,
-            isNext: false,
-          };
         }
+        return {
+          ...step,
+          isCurrent: false,
+          isNext: false,
+        };
       });
     case 'SET_DONE':
       return state.map((step, index) => {
@@ -106,9 +122,8 @@ const stepReducer = (state: StepElement[], action: any): StepElement[] => {
             ...step,
             isDone: true,
           };
-        } else {
-          return step;
         }
+        return step;
       });
     case 'REMOVE_DONE':
       return state.map((step, index) => {
@@ -117,9 +132,8 @@ const stepReducer = (state: StepElement[], action: any): StepElement[] => {
             ...step,
             isDone: false,
           };
-        } else {
-          return step;
         }
+        return step;
       });
     default:
       return state;
