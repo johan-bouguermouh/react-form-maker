@@ -10,12 +10,7 @@ interface MultiSelectInputProps
   extends FieldParams,
     Partial<MultiSelectParams> {}
 
-function MultiSelectInput({
-  zFields,
-  fieldProps,
-  indexField,
-  ...restProps
-}: MultiSelectInputProps) {
+function MultiSelectInput({ zFields, fieldProps }: MultiSelectInputProps) {
   const { value, onChange, ...restZfields } = zFields;
 
   if (!fieldProps.options) {
@@ -25,9 +20,8 @@ function MultiSelectInput({
   const serializedOptions = fieldProps.options.map((option) => {
     if (isOption(option)) {
       return option;
-    } else {
-      return { value: option, label: option };
     }
+    return { value: option, label: option };
   });
 
   return (
@@ -35,7 +29,7 @@ function MultiSelectInput({
       id={fieldProps.inputName}
       onChange={onChange}
       {...restZfields}
-      defaultValues={value}
+      defaultValues={value ? value : fieldProps.defaultValues}
       options={serializedOptions}
     />
   );
