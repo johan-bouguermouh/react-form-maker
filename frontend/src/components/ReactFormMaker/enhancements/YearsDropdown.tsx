@@ -41,7 +41,7 @@ export default function YearsDropdownCustom({
   };
 
   const currentYear = new Date().getFullYear();
-  const decade = parseInt(`${currentYear.toString().slice(0, -1)}0`);
+  const decade = parseInt(`${currentYear.toString().slice(0, -1)}0`, 10);
 
   const decades = Array.from({ length: 200 }, (_, i) => decade - 100 + i);
 
@@ -68,8 +68,8 @@ export default function YearsDropdownCustom({
   );
 
   function indexToStart(): number {
-    const index = segementDecade.findIndex((decade) => {
-      return decade.some((option) => {
+    const index = segementDecade.findIndex((decadeData) => {
+      return decadeData.some((option) => {
         return option.value === selectedYear;
       });
     });
@@ -106,13 +106,13 @@ export default function YearsDropdownCustom({
             <CarouselContent>
               {segementDecade.map((decade, index) => (
                 <CarouselItem
-                  key={index}
+                  key={decade[0].label}
                   className="flex flex-row items-center justify-center w-full h-full flex-wrap m-2"
                 >
                   {decade.map((option) => (
                     <Button
                       key={option.value}
-                      onClick={(e) => {
+                      onClick={() => {
                         const newDate = new Date(
                           option.value,
                           selectedData[range]?.getMonth() ||
