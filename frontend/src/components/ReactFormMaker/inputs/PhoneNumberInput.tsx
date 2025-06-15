@@ -1,5 +1,5 @@
 import React from 'react';
-import { PhoneInput } from '../enhancements/PhoneInput';
+import PhoneInput from '../enhancements/PhoneInput';
 import { FieldParams } from '../interfaces/FieldParams';
 
 function PhoneNumberInput({ zFields, fieldProps, indexField }: FieldParams) {

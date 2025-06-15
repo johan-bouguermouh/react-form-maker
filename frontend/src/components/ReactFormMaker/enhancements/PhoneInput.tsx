@@ -20,7 +20,42 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import { AsYouType, E164Number } from 'libphonenumber-js';
+import { CountryCode } from 'libphonenumber-js/core';
+
+interface CountrySelectOptionProps extends RPNInput.FlagProps {
+  selectedCountry: RPNInput.Country;
+  onChange: (country: RPNInput.Country) => void;
+}
+
+type IpApiInfo = {
+  ip: string;
+  network: string;
+  version: string;
+  city: string;
+  region: string;
+  region_code: string;
+  country: string;
+  country_name: string;
+  country_code: CountryCode;
+  country_code_iso3: string;
+  country_capital: string;
+  country_tld: string;
+  continent_code: string;
+  in_eu: boolean;
+  postal: string;
+  latitude: number;
+  longitude: number;
+  timezone: string;
+  utc_offset: string;
+  country_calling_code: string;
+  currency: string;
+  currency_name: string;
+  languages: string;
+  country_area: number;
+  country_population: number;
+  asn: string;
+  org: string;
+};
 
 type PhoneInputProps = Omit<
   React.ComponentProps<'input'>,
@@ -29,56 +64,6 @@ type PhoneInputProps = Omit<
   Omit<RPNInput.Props<typeof RPNInput.default>, 'onChange'> & {
     onChange?: (value: RPNInput.Value) => void;
   };
-
-const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
-  React.forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
-    ({ className, onChange, ...props }, ref) => {
-      const [defaultCountry, setDefaultCountry] = React.useState<
-        RPNInput.Country | undefined
-      >(undefined);
-
-      React.useEffect(() => {
-        const fetchCountry = async () => {
-          try {
-            const response = await fetch('https://ipapi.co/json/');
-            const data = await response.json();
-            setDefaultCountry(data.country_code);
-          } catch (error) {
-            console.warn('Error fetching geolocation data:', error);
-          }
-        };
-
-        fetchCountry();
-      }, []);
-
-      return (
-        <RPNInput.default
-          ref={ref}
-          international={true}
-          defaultCountry={defaultCountry}
-          className={cn('flex', className)}
-          flagComponent={FlagComponent}
-          countrySelectComponent={CountrySelect}
-          inputComponent={InputComponent}
-          smartCaret={true}
-          focusInputOnCountrySelection={true}
-          addInternationalOption={true}
-          /**
-           * Handles the onChange event.
-           *
-           * react-phone-number-input might trigger the onChange event as undefined
-           * when a valid phone number is not entered. To prevent this,
-           * the value is coerced to an empty string.
-           *
-           * @param {E164Number | undefined} value - The entered value
-           */
-          onChange={(value) => onChange?.(value || ('' as RPNInput.Value))}
-          {...props}
-        />
-      );
-    },
-  );
-PhoneInput.displayName = 'PhoneInput';
 
 const InputComponent = React.forwardRef<
   HTMLInputElement,
@@ -101,12 +86,40 @@ type CountrySelectProps = {
   onChange: (country: RPNInput.Country) => void;
 };
 
-const CountrySelect = ({
+function FlagComponent({ country, countryName }: RPNInput.FlagProps) {
+  const Flag = flags[country];
+
+  return (
+    <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
+      {Flag && <Flag title={countryName} />}
+    </span>
+  );
+}
+
+function CountrySelectOption({
+  country,
+  countryName,
+  selectedCountry,
+  onChange,
+}: CountrySelectOptionProps) {
+  return (
+    <CommandItem className="gap-2" onSelect={() => onChange(country)}>
+      <FlagComponent country={country} countryName={countryName} />
+      <span className="flex-1 text-sm">{countryName}</span>
+      <span className="text-sm text-foreground/50">{`+${RPNInput.getCountryCallingCode(country)}`}</span>
+      <CheckIcon
+        className={`ml-auto size-4 ${country === selectedCountry ? 'opacity-100' : 'opacity-0'}`}
+      />
+    </CommandItem>
+  );
+}
+
+function CountrySelect({
   disabled,
   value: selectedCountry,
   options: countryList,
   onChange,
-}: CountrySelectProps) => {
+}: CountrySelectProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -153,39 +166,59 @@ const CountrySelect = ({
       </PopoverContent>
     </Popover>
   );
-};
-
-interface CountrySelectOptionProps extends RPNInput.FlagProps {
-  selectedCountry: RPNInput.Country;
-  onChange: (country: RPNInput.Country) => void;
 }
 
-const CountrySelectOption = ({
-  country,
-  countryName,
-  selectedCountry,
-  onChange,
-}: CountrySelectOptionProps) => {
-  return (
-    <CommandItem className="gap-2" onSelect={() => onChange(country)}>
-      <FlagComponent country={country} countryName={countryName} />
-      <span className="flex-1 text-sm">{countryName}</span>
-      <span className="text-sm text-foreground/50">{`+${RPNInput.getCountryCallingCode(country)}`}</span>
-      <CheckIcon
-        className={`ml-auto size-4 ${country === selectedCountry ? 'opacity-100' : 'opacity-0'}`}
-      />
-    </CommandItem>
+const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
+  React.forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
+    ({ className, onChange, ...props }, ref) => {
+      const [defaultCountry, setDefaultCountry] = React.useState<
+        RPNInput.Country | undefined
+      >(undefined);
+
+      React.useEffect(() => {
+        const fetchCountry = async () => {
+          try {
+            const response = await fetch('https://ipapi.co/json/');
+            const data = (await response.json()) as IpApiInfo;
+            setDefaultCountry(data.country_code);
+          } catch (error) {
+            console.warn('Error fetching geolocation data:', error);
+          }
+        };
+
+        fetchCountry().catch((error) => {
+          console.warn('Error fetching country data:', error);
+        });
+      }, []);
+
+      return (
+        // eslint-disable-next-line react/jsx-pascal-case
+        <RPNInput.default
+          ref={ref}
+          international
+          defaultCountry={defaultCountry}
+          className={cn('flex', className)}
+          flagComponent={FlagComponent}
+          countrySelectComponent={CountrySelect}
+          inputComponent={InputComponent}
+          smartCaret
+          focusInputOnCountrySelection
+          addInternationalOption
+          /**
+           * Handles the onChange event.
+           *
+           * react-phone-number-input might trigger the onChange event as undefined
+           * when a valid phone number is not entered. To prevent this,
+           * the value is coerced to an empty string.
+           *
+           * @param {E164Number | undefined} value - The entered value
+           */
+          onChange={(value) => onChange?.(value || ('' as RPNInput.Value))}
+          {...props}
+        />
+      );
+    },
   );
-};
+PhoneInput.displayName = 'PhoneInput';
 
-const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
-  const Flag = flags[country];
-
-  return (
-    <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
-      {Flag && <Flag title={countryName} />}
-    </span>
-  );
-};
-
-export { PhoneInput };
+export default PhoneInput;
