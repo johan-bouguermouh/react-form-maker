@@ -6,7 +6,7 @@ import {
   FieldValues,
 } from 'react-hook-form';
 
-interface userFormHandlerParams<T extends FieldValues> {
+interface UserFormHandlerParams<T extends FieldValues> {
   /**
    * Function to be called when the form is submitted. This function will be called with the data or errors.
    * @param data Represents the data of the form when the form is submitted.
@@ -35,9 +35,9 @@ interface UseFormHandlersReturn<T extends FieldValues> {
  * @param onSubmit - The function to be called when the form is submitted.
  * @returns
  */
-export function useFormHandlers<T extends FieldValues>({
+export default function useFormHandlers<T extends FieldValues>({
   onSubmit,
-}: userFormHandlerParams<T>): UseFormHandlersReturn<T> {
+}: UserFormHandlerParams<T>): UseFormHandlersReturn<T> {
   const onValid: SubmitHandler<T> = (data: T) => {
     onSubmit(data, false);
   };
