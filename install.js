@@ -7,7 +7,7 @@ const { execSync } = require("child_process");
 
 const DIST_FILE = path.join(__dirname, "dist", "rfm-file.json");
 
-// Vérifier si le projet est vide ou minimal
+// Check if project is empty or minimal
 function isEmptyProject() {
   return (
     !fs.existsSync("package.json") ||
@@ -17,7 +17,7 @@ function isEmptyProject() {
   );
 }
 
-// Vérifier si un package est installé
+// Check if a package is installed
 function isPackageInstalled(packageName) {
   try {
     const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
@@ -151,7 +151,7 @@ async function main() {
   // Vérifier si le fichier de distribution existe
   if (!fs.existsSync(DIST_FILE)) {
     console.error(
-      "❌ Fichier de distribution non trouvé. Veuillez d'abord générer les fichiers avec npm run build."
+      "❌ Distribution file not found. Please generate files first with npm run build."
     );
     process.exit(1);
   }
@@ -167,23 +167,24 @@ async function main() {
 
   // Mode INIT pour projet vide
   if (isEmpty) {
-    console.log("🆕 Projet vide détecté - Mode INIT disponible");
+    console.log("🆕 Empty project detected - INIT mode available");
     const initResponse = await prompts({
       type: "confirm",
       name: "initProject",
-      message: "Voulez-vous initialiser un projet Next.js + Shadcn/ui complet?",
+      message:
+        "Would you like to initialize a complete Next.js + Shadcn/ui project?",
       initial: true,
     });
 
     if (initResponse.initProject) {
-      console.log("\n🏗️  Initialisation du projet...");
+      console.log("\n🏗️  Initializing project...");
       try {
         execSync(
           "npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias '@/*'",
           { stdio: "inherit" }
         );
         execSync("npx shadcn@latest init", { stdio: "inherit" });
-        console.log("✅ Projet Next.js + Shadcn initialisé!");
+        console.log("✅ Next.js + Shadcn project initialized!");
 
         // Relancer les détections après init
         const newProjectType = detectProjectType();
@@ -194,34 +195,34 @@ async function main() {
         Object.assign(shadcnConfig, newShadcnConfig);
         Object.assign(componentsDir, newComponentsDir);
       } catch (error) {
-        console.error("❌ Erreur lors de l'initialisation:", error.message);
+        console.error("❌ Error during initialization:", error.message);
         process.exit(1);
       }
     }
   }
 
-  console.log("📋 Analyse de votre projet:");
+  console.log("📋 Analyzing your project:");
   console.log(`   Type: ${projectType}`);
   console.log(`   Tailwind CSS: ${hasTailwind ? "✅" : "❌"}`);
   console.log(`   Tailwind Merge: ${hasTailwindMerge ? "✅" : "❌"}`);
-  console.log(`   Config Tailwind: ${hasTailwindConfig ? "✅" : "❌"}`);
+  console.log(`   Tailwind Config: ${hasTailwindConfig ? "✅" : "❌"}`);
   console.log(`   Shadcn Config: ${shadcnConfig.hasConfig ? "✅" : "❌"}`);
   if (shadcnConfig.hasConfig) {
     console.log(`   UI Path: ${shadcnConfig.uiPath}`);
     console.log(`   Components Path: ${shadcnConfig.componentsPath}`);
   } else if (componentsDir.componentsPath) {
-    console.log(`   Components trouvés: ${componentsDir.componentsPath}`);
-    console.log(`   UI Path: ${componentsDir.uiPath || "non trouvé"}`);
+    console.log(`   Components found: ${componentsDir.componentsPath}`);
+    console.log(`   UI Path: ${componentsDir.uiPath || "not found"}`);
   }
   console.log("");
 
   // Vérifier les prérequis
   if (!hasTailwind) {
     console.error(
-      "❌ Tailwind CSS n'est pas installé. ReactFormMaker nécessite Tailwind CSS."
+      "❌ Tailwind CSS is not installed. ReactFormMaker requires Tailwind CSS."
     );
     console.log(
-      "📖 Installez d'abord Tailwind: https://tailwindcss.com/docs/installation"
+      "📖 Please install Tailwind first: https://tailwindcss.com/docs/installation"
     );
     process.exit(1);
   }
@@ -259,9 +260,7 @@ async function main() {
     questions.push({
       type: "confirm",
       name: "installDeps",
-      message: `Installer les dépendances manquantes? (${missingDeps.join(
-        ", "
-      )})`,
+      message: `Install missing dependencies? (${missingDeps.join(", ")})`,
       initial: true,
     });
   }
@@ -278,7 +277,7 @@ async function main() {
   questions.push({
     type: "confirm",
     name: "installShadcn",
-    message: `Installer les composants shadcn requis? (${requiredShadcnComponents.join(
+    message: `Install required shadcn components? (${requiredShadcnComponents.join(
       ", "
     )})`,
     initial: !shadcnConfig.hasConfig, // Par défaut oui si pas de config shadcn
@@ -288,31 +287,31 @@ async function main() {
     {
       type: "text",
       name: "targetDir",
-      message: "Dans quel dossier souhaitez-vous installer React Form Maker?",
+      message: "In which folder would you like to install React Form Maker?",
       initial: defaultTargetDir,
       validate: (value) => {
-        if (!value.trim()) return "Le chemin ne peut pas être vide";
+        if (!value.trim()) return "Path cannot be empty";
         return true;
       },
     },
     {
       type: "multiselect",
       name: "components",
-      message: "Quels composants souhaitez-vous installer?",
+      message: "Which components would you like to install?",
       choices: [
         {
-          title: "ReactFormMaker (Composant principal)",
+          title: "ReactFormMaker (Core component)",
           value: "core",
           selected: true,
         },
         {
-          title: "Composants UI (Typography, etc.)",
+          title: "UI Components (Typography, etc.)",
           value: "ui",
           selected: true,
         },
-        { title: "Utilitaires (lib)", value: "lib", selected: true },
+        { title: "Utilities (lib)", value: "lib", selected: true },
         {
-          title: "Enhancements (Composants avancés)",
+          title: "Enhancements (Advanced components)",
           value: "enhancements",
           selected: false,
         },
@@ -322,7 +321,7 @@ async function main() {
     {
       type: "confirm",
       name: "overwrite",
-      message: "Écraser les fichiers existants?",
+      message: "Overwrite existing files?",
       initial: false,
     }
   );
@@ -330,13 +329,13 @@ async function main() {
   const response = await prompts(questions);
 
   if (!response.targetDir || !response.components) {
-    console.log("❌ Installation annulée.");
+    console.log("❌ Installation cancelled.");
     process.exit(0);
   }
 
   // Installer les dépendances manquantes si demandé
   if (response.installDeps && missingDeps.length > 0) {
-    console.log("\n📦 Installation des dépendances...");
+    console.log("\n📦 Installing dependencies...");
     try {
       const packageManager = fs.existsSync("yarn.lock")
         ? "yarn add"
@@ -344,13 +343,10 @@ async function main() {
       execSync(`${packageManager} ${missingDeps.join(" ")}`, {
         stdio: "inherit",
       });
-      console.log("✅ Dépendances installées avec succès!");
+      console.log("✅ Dependencies installed successfully!");
     } catch (error) {
-      console.error(
-        "❌ Erreur lors de l'installation des dépendances:",
-        error.message
-      );
-      console.log("⚠️  Vous devrez les installer manuellement:");
+      console.error("❌ Error installing dependencies:", error.message);
+      console.log("⚠️  You will need to install them manually:");
       console.log(
         `   ${missingDeps.map((dep) => `npm install ${dep}`).join("\n   ")}`
       );
@@ -359,19 +355,16 @@ async function main() {
 
   // Installer les composants shadcn si demandé
   if (response.installShadcn) {
-    console.log("\n🎨 Installation des composants shadcn...");
+    console.log("\n🎨 Installing shadcn components...");
     try {
       for (const component of requiredShadcnComponents) {
-        console.log(`   Ajout de ${component}...`);
+        console.log(`   Adding ${component}...`);
         execSync(`npx shadcn@latest add ${component}`, { stdio: "inherit" });
       }
-      console.log("✅ Composants shadcn installés avec succès!");
+      console.log("✅ Shadcn components installed successfully!");
     } catch (error) {
-      console.error(
-        "❌ Erreur lors de l'installation des composants shadcn:",
-        error.message
-      );
-      console.log("⚠️  Vous devrez les installer manuellement:");
+      console.error("❌ Error installing shadcn components:", error.message);
+      console.log("⚠️  You will need to install them manually:");
       console.log(
         `   ${requiredShadcnComponents
           .map((comp) => `npx shadcn@latest add ${comp}`)
@@ -393,14 +386,14 @@ async function main() {
     componentsDir
   );
 
-  console.log("\n✅ Installation terminée!");
-  console.log("\n📖 Prochaines étapes:");
-  console.log("1. Installez les dépendances requises:");
+  console.log("\n✅ Installation completed!");
+  console.log("\n📖 Next steps:");
+  console.log("1. Install required dependencies:");
   console.log("   npm install react-hook-form zod @hookform/resolvers");
   console.log("   npm install @radix-ui/react-select @radix-ui/react-checkbox");
   console.log("   npm install class-variance-authority clsx tailwind-merge");
-  console.log("2. Configurez votre projet avec les composants installés");
-  console.log("3. Consultez la documentation dans les fichiers installés");
+  console.log("2. Configure your project with the installed components");
+  console.log("3. Check the documentation in the installed files");
 }
 
 async function installFiles(
@@ -437,7 +430,7 @@ async function installFiles(
     // Vérifier si le fichier existe déjà
     if (fs.existsSync(fullPath) && !overwrite) {
       console.log(
-        `⚠️  Fichier existant ignoré: ${path.relative(process.cwd(), fullPath)}`
+        `⚠️  Existing file skipped: ${path.relative(process.cwd(), fullPath)}`
       );
       skippedCount++;
       continue;
@@ -445,12 +438,12 @@ async function installFiles(
 
     // Écrire le fichier
     fs.writeFileSync(fullPath, content, "utf8");
-    console.log(`✅ Installé: ${relativePath}`);
+    console.log(`✅ Installed: ${path.relative(process.cwd(), fullPath)}`);
     installedCount++;
   }
 
   console.log(
-    `\n📊 Résumé: ${installedCount} fichiers installés, ${skippedCount} ignorés`
+    `\n📊 Summary: ${installedCount} files installed, ${skippedCount} skipped`
   );
 }
 
