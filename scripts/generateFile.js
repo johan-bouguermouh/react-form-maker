@@ -59,6 +59,12 @@ Object.keys(files).forEach((relPath) => {
   }
 });
 
+// Créer le dossier dist s'il n'existe pas
+const distDir = path.resolve(root, "./dist");
+if (!fs.existsSync(distDir)) {
+  fs.mkdirSync(distDir, { recursive: true });
+}
+
 fs.writeFileSync(
   path.resolve(root, "./dist/rfm-file.json"),
   JSON.stringify(prefixedFiles, null, 2)

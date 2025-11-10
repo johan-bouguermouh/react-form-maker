@@ -5,15 +5,30 @@
   "bin": {
     "react-form-maker": "./install.js"
   },
-  "main": "module",
+  "main": "install.js",
   "scripts": {
+    "build": "node scripts/generateFile.js",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
     "install.js",
     "dist/rfm-file.json"
   ],
-  "keywords": [],
+  "keywords": [
+    "react",
+    "form",
+    "form-builder",
+    "react-hook-form",
+    "zod",
+    "shadcn",
+    "typescript",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johan-bouguermouh/react-form-maker.git"
+  },
   "author": "Johan Bouguermouh",
   "dependencies": {
     "prompts": "^2.4.2"
