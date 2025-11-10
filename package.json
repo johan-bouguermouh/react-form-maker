@@ -1,19 +1,34 @@
 {
-  "name": "react-form-maker",
+  "name": "rfm-toolkit",
   "version": "0.0.1",
-  "description": "React Form Maker is a tool designed to simplify the creation and editing of simple, repetitive forms. It is based on a straightforward JSON approach, where all the necessary information for inserting form fields is provided.React Form Maker combines the power of React Hook Form and Zod to ensure robust state management and integrated form validation.The project is built on top of ShadCN and the Radix UI library, allowing every developer to easily customize the behavior and UI of their components at the root level.",
+  "description": "React Form Maker toolkit is a tool designed to simplify the creation and editing of simple, repetitive forms. It is based on a straightforward JSON approach, where all the necessary information for inserting form fields is provided.React Form Maker combines the power of React Hook Form and Zod to ensure robust state management and integrated form validation.The project is built on top of ShadCN and the Radix UI library, allowing every developer to easily customize the behavior and UI of their components at the root level.",
   "bin": {
-    "react-form-maker": "./install.js"
+    "rfm-toolkit": "./install.js"
   },
-  "main": "module",
+  "main": "install.js",
   "scripts": {
+    "build": "node scripts/generateFile.js",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
     "install.js",
     "dist/rfm-file.json"
   ],
-  "keywords": [],
+  "keywords": [
+    "react",
+    "form",
+    "form-builder",
+    "react-hook-form",
+    "zod",
+    "shadcn",
+    "typescript",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johan-bouguermouh/react-form-maker.git"
+  },
   "author": "Johan Bouguermouh",
   "dependencies": {
     "prompts": "^2.4.2"
