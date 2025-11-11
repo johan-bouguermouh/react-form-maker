@@ -1,6 +1,20 @@
 const fs = require("fs");
 const path = require("path");
 
+// Tableau des chemins à exclure de la génération
+const EXCLUDE_PATHS = ["/lib/zodRFM/*", "/lib/zodRFM/"];
+
+// Fonction pour vérifier si un chemin doit être exclu
+function shouldExclude(filePath) {
+  return EXCLUDE_PATHS.some((excludePattern) => {
+    if (excludePattern.endsWith("/*")) {
+      const basePath = excludePattern.slice(0, -2);
+      return filePath.startsWith(basePath);
+    }
+    return filePath === excludePattern || filePath.startsWith(excludePattern);
+  });
+}
+
 function walk(dir, fileList = {}, baseDir = dir) {
   fs.readdirSync(dir).forEach((file) => {
     const fullPath = path.join(dir, file);
@@ -9,7 +23,13 @@ function walk(dir, fileList = {}, baseDir = dir) {
     } else {
       const relPath =
         "/" + path.relative(baseDir, fullPath).replace(/\\/g, "/");
-      fileList[relPath] = fs.readFileSync(fullPath, "utf8");
+
+      // Vérifier si le fichier doit être exclu
+      if (!shouldExclude(relPath)) {
+        fileList[relPath] = fs.readFileSync(fullPath, "utf8");
+      } else {
+        console.log(`Exclu: ${relPath}`);
+      }
     }
   });
   return fileList;

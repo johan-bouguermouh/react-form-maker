@@ -2,7 +2,6 @@
 node_modules/
 
 # Fichiers générés
-dist/
 *.log
 
 # Systèmes
@@ -12,3 +11,6 @@ Thumbs.db
 # Environnements
 .env
 .env.local
+
+# Test local
+test-local/
