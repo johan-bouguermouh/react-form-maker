@@ -16,6 +16,7 @@ import {
 import { CustomInputFieldElementParams } from '@/components/ReactFormMaker/interfaces/CustomInputFieldElementParams';
 import React from 'react';
 import { Option } from '@/components/ReactFormMaker/utils/typeGuards/optionsFields.TypeGuards';
+import { FieldValue } from 'react-hook-form';
 
 /**
  * Represents a condition where a value must be in the past.
@@ -805,15 +806,23 @@ export default class Field<T extends FieldReactFormMaker> {
    * - The properties like `zFields`, `fieldProps`, and `index` will be dynamically injected into the cloned component.
    */
   public custom<T>(
-    type: React.ComponentType<CustomInputFieldElementParams<T>>,
+    type: React.ComponentType<
+      CustomInputFieldElementParams<
+        T extends Record<string, any> ? T : Record<string, any>
+      >
+    >,
     props?: T,
     ...children: React.ReactNode[]
   ): this {
     this.inputType = 'custom';
 
     // Encapsuler automatiquement les propriétés dans un objet `props`
-    const wrappedProps: CustomInputFieldElementParams<T> = {
-      props: props || ({} as T), // Si `props` est vide, on passe un objet vide
+    const wrappedProps: CustomInputFieldElementParams<
+      T extends Record<string, any> ? T : Record<string, any>
+    > = {
+      props: (props || {}) as T extends Record<string, any>
+        ? T
+        : Record<string, any>, // Si `props` est vide, on passe un objet vide
     };
 
     this.customInputFieldElement = React.createElement(
@@ -931,13 +940,21 @@ export default class Field<T extends FieldReactFormMaker> {
    * @returns
    */
   public Children<T>(
-    type: React.ComponentType<CustomInputFieldElementParams<T>>,
+    type: React.ComponentType<
+      CustomInputFieldElementParams<
+        T extends Record<string, any> ? T : Record<string, any>
+      >
+    >,
     props?: T,
     ...children: React.ReactNode[]
   ): this {
     // Encapsuler automatiquement les propriétés dans un objet `props`
-    const wrappedProps: CustomInputFieldElementParams<T> = {
-      props: props || ({} as T), // Si `props` est vide, on passe un objet vide
+    const wrappedProps: CustomInputFieldElementParams<
+      T extends Record<string, any> ? T : Record<string, any>
+    > = {
+      props: (props || {}) as T extends Record<string, any>
+        ? T
+        : Record<string, any>, // Si `props` est vide, on passe un objet vide
     };
 
     this.children = React.createElement(type, wrappedProps, ...children);
@@ -1185,6 +1202,16 @@ export default class Field<T extends FieldReactFormMaker> {
    */
   setDefaultValues(value: any): this {
     this.defaultValues = value;
+    return this;
+  }
+
+  /**
+   * set if the field is disabled
+   * @param value
+   * @returns
+   */
+  setDisabled(value: boolean): this {
+    this.disabled = value;
     return this;
   }
 

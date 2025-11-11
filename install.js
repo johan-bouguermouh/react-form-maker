@@ -94,12 +94,35 @@ function findComponentsDir() {
   return { componentsPath: null, uiPath: null };
 }
 
+// Vérifier si un composant shadcn est déjà installé
+function isShadcnComponentInstalled(componentName, uiPath) {
+  if (!uiPath || !fs.existsSync(uiPath)) return false;
+
+  // Mappings pour les noms de fichiers spéciaux
+  const fileNameMap = {
+    "radio-group": "radio-group.tsx",
+    "scroll-area": "scroll-area.tsx",
+  };
+
+  const fileName = fileNameMap[componentName] || `${componentName}.tsx`;
+  const componentPath = path.join(uiPath, fileName);
+
+  return fs.existsSync(componentPath);
+}
+
 // Trouver ou créer le dossier lib (très tolérant)
 function findOrCreateLibDir(targetDir) {
+  // Nettoyer le targetDir - remplacer @ par src si c'est un alias
+  let cleanTargetDir = targetDir;
+  if (targetDir === "@" || targetDir.startsWith("@/")) {
+    cleanTargetDir = "src";
+  }
+
   const possibleLibPaths = [
-    path.join(targetDir, "lib"),
-    path.join(targetDir, "utils"),
-    path.join(targetDir, "helpers"),
+    path.join(cleanTargetDir, "lib"),
+    path.join(cleanTargetDir, "utils"),
+    path.join(cleanTargetDir, "helpers"),
+    "src/lib",
     "lib",
     "utils",
     "helpers",
@@ -112,15 +135,24 @@ function findOrCreateLibDir(targetDir) {
     }
   }
 
-  // Créer lib dans le targetDir par défaut
-  const defaultLibPath = path.join(targetDir, "lib");
+  // Créer lib dans src par défaut pour les projets Next.js
+  const defaultLibPath =
+    cleanTargetDir === "src" || fs.existsSync("src")
+      ? path.join("src", "lib")
+      : path.join(cleanTargetDir, "lib");
   return defaultLibPath;
 }
 
 // Mapper nos chemins JSON vers les vrais chemins utilisateur
 function mapFilePaths(filePath, targetDir, shadcnConfig, componentsDir) {
+  // Nettoyer le targetDir - remplacer @ par src si c'est un alias
+  let cleanTargetDir = targetDir;
+  if (targetDir === "@" || targetDir.startsWith("@/")) {
+    cleanTargetDir = "src";
+  }
+
   if (filePath.startsWith("/lib/")) {
-    const libDir = findOrCreateLibDir(targetDir);
+    const libDir = findOrCreateLibDir(cleanTargetDir);
     return path.join(libDir, filePath.replace("/lib/", ""));
   }
 
@@ -128,7 +160,7 @@ function mapFilePaths(filePath, targetDir, shadcnConfig, componentsDir) {
     const componentsPath =
       shadcnConfig.componentsPath ||
       componentsDir.componentsPath ||
-      path.join(targetDir, "components");
+      path.join(cleanTargetDir, "components");
     return path.join(componentsPath, filePath.replace("/components/", ""));
   }
 
@@ -136,12 +168,12 @@ function mapFilePaths(filePath, targetDir, shadcnConfig, componentsDir) {
     const uiPath =
       shadcnConfig.uiPath ||
       componentsDir.uiPath ||
-      path.join(targetDir, "components", "ui");
+      path.join(cleanTargetDir, "components", "ui");
     return path.join(uiPath, filePath.replace("/components/ui/", ""));
   }
 
-  // Fallback: mettre dans targetDir
-  return path.join(targetDir, filePath.substring(1));
+  // Fallback: mettre dans cleanTargetDir
+  return path.join(cleanTargetDir, filePath.substring(1));
 }
 
 async function main() {
@@ -158,10 +190,10 @@ async function main() {
 
   // Vérifications de l'environnement
   const isEmpty = isEmptyProject();
-  const projectType = detectProjectType();
-  const hasTailwind = isPackageInstalled("tailwindcss");
-  const hasTailwindMerge = isPackageInstalled("tailwind-merge");
-  const hasTailwindConfig = isTailwindConfigured();
+  let projectType = detectProjectType();
+  let hasTailwind = isPackageInstalled("tailwindcss");
+  let hasTailwindMerge = isPackageInstalled("tailwind-merge");
+  let hasTailwindConfig = isTailwindConfigured();
   const shadcnConfig = detectShadcnConfig();
   const componentsDir = findComponentsDir();
 
@@ -184,20 +216,57 @@ async function main() {
           { stdio: "inherit" }
         );
         execSync("npx shadcn@latest init", { stdio: "inherit" });
+
+        // Installer les composants shadcn requis
+        console.log("🎨 Installing required shadcn components...");
+        const initComponents = [
+          "button",
+          "input",
+          "form",
+          "select",
+          "checkbox",
+          "label",
+        ];
+
+        // Installation en une seule commande
+        console.log(`   Adding components: ${initComponents.join(", ")}...`);
+        execSync(`npx shadcn@latest add ${initComponents.join(" ")}`, {
+          stdio: "inherit",
+        });
+
         console.log("✅ Next.js + Shadcn project initialized!");
 
         // Relancer les détections après init
-        const newProjectType = detectProjectType();
+        console.log("🔄 Re-analyzing project after initialization...");
+
+        // Attendre un peu que les fichiers soient bien écrits
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // Relancer toutes les détections
+        projectType = detectProjectType();
+        const newHasTailwind = isPackageInstalled("tailwindcss");
+        const newHasTailwindMerge = isPackageInstalled("tailwind-merge");
+        const newHasTailwindConfig = isTailwindConfigured();
         const newShadcnConfig = detectShadcnConfig();
         const newComponentsDir = findComponentsDir();
 
-        // Mettre à jour les variables
+        // Mettre à jour toutes les variables
         Object.assign(shadcnConfig, newShadcnConfig);
         Object.assign(componentsDir, newComponentsDir);
+
+        // Mettre à jour les flags Tailwind
+        hasTailwind = newHasTailwind;
+        hasTailwindMerge = newHasTailwindMerge;
+        hasTailwindConfig = newHasTailwindConfig;
+
+        console.log("✅ Project re-analysis completed!");
       } catch (error) {
         console.error("❌ Error during initialization:", error.message);
         process.exit(1);
       }
+    } else {
+      console.log("❌ Cannot proceed without project initialization.");
+      process.exit(0);
     }
   }
 
@@ -227,43 +296,30 @@ async function main() {
     process.exit(1);
   }
 
-  // Lister les dépendances manquantes
-  const missingDeps = [];
-  const requiredDeps = [
-    "tailwind-merge",
-    "clsx",
-    "class-variance-authority",
-    "react-hook-form",
-    "zod",
-    "@hookform/resolvers",
-  ];
-
-  requiredDeps.forEach((dep) => {
-    if (!isPackageInstalled(dep)) {
-      missingDeps.push(dep);
-    }
-  });
+  // Cette partie sera gérée par installMissingDependencies() plus tard
 
   // Questions interactives
   const questions = [];
 
   // Déterminer le dossier cible par défaut
-  let defaultTargetDir = "./src";
+  let defaultTargetDir = "src/components";
   if (shadcnConfig.hasConfig) {
-    defaultTargetDir = path.dirname(shadcnConfig.componentsPath);
+    let componentsPath = shadcnConfig.componentsPath;
+    // Remplacer l'alias @ par src
+    if (componentsPath.startsWith("@/")) {
+      componentsPath = componentsPath.replace("@/", "src/");
+    }
+    defaultTargetDir = componentsPath;
   } else if (componentsDir.componentsPath) {
     defaultTargetDir = path.dirname(componentsDir.componentsPath);
   }
 
-  // Question pour installer les dépendances
-  if (missingDeps.length > 0) {
-    questions.push({
-      type: "confirm",
-      name: "installDeps",
-      message: `Install missing dependencies? (${missingDeps.join(", ")})`,
-      initial: true,
-    });
+  // S'assurer que defaultTargetDir ne contient pas d'alias @
+  if (defaultTargetDir === "@" || defaultTargetDir.startsWith("@/")) {
+    defaultTargetDir = "src/components";
   }
+
+  // Les dépendances sont maintenant gérées automatiquement par installMissingDependencies()
 
   // Question pour installer les composants shadcn
   const requiredShadcnComponents = [
@@ -273,6 +329,16 @@ async function main() {
     "select",
     "checkbox",
     "label",
+    "textarea",
+    "radio-group",
+    "switch",
+    "tooltip",
+    "carousel",
+    "command",
+    "popover",
+    "calendar",
+    "scroll-area",
+    "dialog",
   ];
   questions.push({
     type: "confirm",
@@ -287,37 +353,14 @@ async function main() {
     {
       type: "text",
       name: "targetDir",
-      message: "In which folder would you like to install React Form Maker?",
+      message: "Where would you like to install React Form Maker components?",
       initial: defaultTargetDir,
       validate: (value) => {
         if (!value.trim()) return "Path cannot be empty";
         return true;
       },
     },
-    {
-      type: "multiselect",
-      name: "components",
-      message: "Which components would you like to install?",
-      choices: [
-        {
-          title: "ReactFormMaker (Core component)",
-          value: "core",
-          selected: true,
-        },
-        {
-          title: "UI Components (Typography, etc.)",
-          value: "ui",
-          selected: true,
-        },
-        { title: "Utilities (lib)", value: "lib", selected: true },
-        {
-          title: "Enhancements (Advanced components)",
-          value: "enhancements",
-          selected: false,
-        },
-      ],
-      min: 1,
-    },
+
     {
       type: "confirm",
       name: "overwrite",
@@ -328,48 +371,49 @@ async function main() {
 
   const response = await prompts(questions);
 
-  if (!response.targetDir || !response.components) {
+  if (!response.targetDir) {
     console.log("❌ Installation cancelled.");
     process.exit(0);
   }
 
-  // Installer les dépendances manquantes si demandé
-  if (response.installDeps && missingDeps.length > 0) {
-    console.log("\n📦 Installing dependencies...");
-    try {
-      const packageManager = fs.existsSync("yarn.lock")
-        ? "yarn add"
-        : "npm install";
-      execSync(`${packageManager} ${missingDeps.join(" ")}`, {
-        stdio: "inherit",
-      });
-      console.log("✅ Dependencies installed successfully!");
-    } catch (error) {
-      console.error("❌ Error installing dependencies:", error.message);
-      console.log("⚠️  You will need to install them manually:");
-      console.log(
-        `   ${missingDeps.map((dep) => `npm install ${dep}`).join("\n   ")}`
-      );
-    }
-  }
+  // Force installation of all components (ReactFormMaker needs everything)
+  response.components = ["core", "ui", "lib", "enhancements"];
+
+  // Les dépendances sont maintenant installées par installMissingDependencies() dans installFiles()
 
   // Installer les composants shadcn si demandé
   if (response.installShadcn) {
     console.log("\n🎨 Installing shadcn components...");
-    try {
-      for (const component of requiredShadcnComponents) {
-        console.log(`   Adding ${component}...`);
-        execSync(`npx shadcn@latest add ${component}`, { stdio: "inherit" });
-      }
-      console.log("✅ Shadcn components installed successfully!");
-    } catch (error) {
-      console.error("❌ Error installing shadcn components:", error.message);
-      console.log("⚠️  You will need to install them manually:");
-      console.log(
-        `   ${requiredShadcnComponents
-          .map((comp) => `npx shadcn@latest add ${comp}`)
-          .join("\n   ")}`
+
+    // Filtrer les composants déjà installés
+    const componentsDir = findComponentsDir();
+    const missingComponents = requiredShadcnComponents.filter((component) => {
+      const isInstalled = isShadcnComponentInstalled(
+        component,
+        componentsDir.uiPath
       );
+      if (isInstalled) {
+        console.log(`   ✓ ${component} already exists, skipping...`);
+        return false;
+      }
+      return true;
+    });
+
+    if (missingComponents.length === 0) {
+      console.log("✅ All shadcn components are already installed!");
+    } else {
+      try {
+        // Installation en une seule commande
+        console.log(`   Adding components: ${missingComponents.join(", ")}...`);
+        execSync(`npx shadcn@latest add ${missingComponents.join(" ")}`, {
+          stdio: "inherit",
+        });
+        console.log("✅ Shadcn components installed successfully!");
+      } catch (error) {
+        console.error("❌ Error installing shadcn components:", error.message);
+        console.log("⚠️  You will need to install them manually:");
+        console.log(`   npx shadcn@latest add ${missingComponents.join(" ")}`);
+      }
     }
   }
 
@@ -377,6 +421,7 @@ async function main() {
   const files = JSON.parse(fs.readFileSync(DIST_FILE, "utf8"));
 
   // Installer les fichiers
+  console.log("\n📁 Installing ReactFormMaker components...");
   await installFiles(
     files,
     response.targetDir,
@@ -396,6 +441,225 @@ async function main() {
   console.log("3. Check the documentation in the installed files");
 }
 
+// Liste des dépendances NPM requises pour ReactFormMaker
+const REQUIRED_DEPENDENCIES = {
+  dependencies: [
+    // Dépendances de base pour ReactFormMaker
+    "tailwind-merge",
+    "clsx",
+    "class-variance-authority",
+    "react-hook-form",
+    "zod",
+    "@hookform/resolvers",
+    // Dépendances spécifiques pour les composants avancés
+    "@radix-ui/react-icons",
+    "@react-hook/resize-observer",
+    "react-dropzone",
+    "react-phone-number-input",
+    "sonner",
+    "uuid",
+    "date-fns",
+    "react-day-picker",
+    "libphonenumber-js",
+  ],
+  devDependencies: ["@types/uuid"],
+};
+
+// Fonction pour installer les dépendances NPM manquantes
+async function installMissingDependencies() {
+  const missingDeps = [];
+  const missingDevDeps = [];
+
+  // Vérifier les dépendances manquantes
+  REQUIRED_DEPENDENCIES.dependencies.forEach((dep) => {
+    if (!isPackageInstalled(dep)) {
+      missingDeps.push(dep);
+    }
+  });
+
+  REQUIRED_DEPENDENCIES.devDependencies.forEach((dep) => {
+    if (!isPackageInstalled(dep)) {
+      missingDevDeps.push(dep);
+    }
+  });
+
+  if (missingDeps.length === 0 && missingDevDeps.length === 0) {
+    console.log("✅ Toutes les dépendances NPM sont déjà installées");
+    return;
+  }
+
+  console.log("\n📦 Dépendances NPM manquantes détectées:");
+  if (missingDeps.length > 0) {
+    console.log(`   Dependencies: ${missingDeps.join(", ")}`);
+  }
+  if (missingDevDeps.length > 0) {
+    console.log(`   DevDependencies: ${missingDevDeps.join(", ")}`);
+  }
+
+  const { installDeps } = await prompts({
+    type: "confirm",
+    name: "installDeps",
+    message: "Voulez-vous installer automatiquement ces dépendances ?",
+    initial: true,
+  });
+
+  if (!installDeps) {
+    console.log(
+      "⚠️  Installation annulée. Vous devrez installer manuellement :"
+    );
+    if (missingDeps.length > 0) {
+      console.log(`   npm install ${missingDeps.join(" ")}`);
+    }
+    if (missingDevDeps.length > 0) {
+      console.log(`   npm install -D ${missingDevDeps.join(" ")}`);
+    }
+    return;
+  }
+
+  try {
+    if (missingDeps.length > 0) {
+      console.log("📦 Installation des dépendances...");
+      execSync(`npm install ${missingDeps.join(" ")}`, { stdio: "inherit" });
+    }
+
+    if (missingDevDeps.length > 0) {
+      console.log("📦 Installation des dépendances de développement...");
+      execSync(`npm install -D ${missingDevDeps.join(" ")}`, {
+        stdio: "inherit",
+      });
+    }
+
+    console.log("✅ Toutes les dépendances ont été installées avec succès!");
+  } catch (error) {
+    console.error(
+      "❌ Erreur lors de l'installation des dépendances:",
+      error.message
+    );
+    console.log("Vous pouvez les installer manuellement :");
+    if (missingDeps.length > 0) {
+      console.log(`   npm install ${missingDeps.join(" ")}`);
+    }
+    if (missingDevDeps.length > 0) {
+      console.log(`   npm install -D ${missingDevDeps.join(" ")}`);
+    }
+  }
+}
+
+// Fonction pour créer le fichier utils.ts avec toutes les fonctions utilitaires
+function createUtilsFile(targetDir) {
+  const libDir = findOrCreateLibDir(targetDir);
+  const utilsPath = path.join(libDir, "utils.ts");
+
+  if (fs.existsSync(utilsPath)) {
+    // Vérifier si mergeRefs existe déjà
+    const existingContent = fs.readFileSync(utilsPath, "utf8");
+    if (existingContent.includes("mergeRefs")) {
+      console.log("✅ Fichier utils.ts avec mergeRefs déjà existant");
+      return;
+    } else {
+      // Ajouter mergeRefs au fichier existant
+      const mergeRefsFunction = `
+export function mergeRefs<T = any>(
+  ...refs: Array<
+    React.MutableRefObject<T> | React.LegacyRef<T> | undefined | null
+  >
+): React.RefCallback<T> | null {
+  return (value: T | null) => {
+    refs.forEach((ref) => {
+      if (typeof ref === 'function') {
+        ref(value);
+      } else if (ref != null) {
+        (ref as React.MutableRefObject<T | null>).current = value;
+      }
+    });
+  };
+}
+
+export function formatBytes(
+  bytes: number,
+  opts: {
+    decimals?: number;
+    sizeType?: 'accurate' | 'normal';
+  } = {},
+) {
+  const { decimals = 0, sizeType = 'normal' } = opts;
+
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const accurateSizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB'];
+  if (bytes === 0) return '0 Byte';
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return \`\${(bytes / Math.pow(1024, i)).toFixed(decimals)} \${
+    sizeType === 'accurate'
+      ? (accurateSizes[i] ?? 'Bytes')
+      : (sizes[i] ?? 'Bytes')
+  }\`;
+}
+`;
+
+      // Ajouter React import si pas présent
+      let updatedContent = existingContent;
+      if (!existingContent.includes("import React")) {
+        updatedContent = `import React from 'react';\n${updatedContent}`;
+      }
+
+      updatedContent += mergeRefsFunction;
+      fs.writeFileSync(utilsPath, updatedContent);
+      console.log("✅ Fonctions mergeRefs et formatBytes ajoutées à utils.ts");
+      return;
+    }
+  }
+
+  const utilsContent = `import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import React from 'react';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export function mergeRefs<T = any>(
+  ...refs: Array<
+    React.MutableRefObject<T> | React.LegacyRef<T> | undefined | null
+  >
+): React.RefCallback<T> | null {
+  return (value: T | null) => {
+    refs.forEach((ref) => {
+      if (typeof ref === 'function') {
+        ref(value);
+      } else if (ref != null) {
+        (ref as React.MutableRefObject<T | null>).current = value;
+      }
+    });
+  };
+}
+
+export function formatBytes(
+  bytes: number,
+  opts: {
+    decimals?: number;
+    sizeType?: 'accurate' | 'normal';
+  } = {},
+) {
+  const { decimals = 0, sizeType = 'normal' } = opts;
+
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const accurateSizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB'];
+  if (bytes === 0) return '0 Byte';
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return \`\${(bytes / Math.pow(1024, i)).toFixed(decimals)} \${
+    sizeType === 'accurate'
+      ? (accurateSizes[i] ?? 'Bytes')
+      : (sizes[i] ?? 'Bytes')
+  }\`;
+}
+`;
+
+  fs.writeFileSync(utilsPath, utilsContent);
+  console.log(
+    "✅ Fichier utils.ts créé avec les fonctions utilitaires (cn, mergeRefs, formatBytes)"
+  );
+}
+
 async function installFiles(
   files,
   targetDir,
@@ -406,6 +670,17 @@ async function installFiles(
 ) {
   let installedCount = 0;
   let skippedCount = 0;
+
+  // Installer les dépendances NPM manquantes
+  await installMissingDependencies();
+
+  // Créer le fichier utils.ts si nécessaire
+  if (
+    selectedComponents.includes("lib") ||
+    selectedComponents.includes("all")
+  ) {
+    createUtilsFile(targetDir);
+  }
 
   for (const [relativePath, content] of Object.entries(files)) {
     // Filtrer selon les composants sélectionnés
@@ -438,7 +713,10 @@ async function installFiles(
 
     // Écrire le fichier
     fs.writeFileSync(fullPath, content, "utf8");
-    console.log(`✅ Installed: ${path.relative(process.cwd(), fullPath)}`);
+
+    // Log discret en gris
+    const displayPath = path.relative(process.cwd(), fullPath);
+    process.stdout.write(`\x1b[90m   ${displayPath}\x1b[0m\n`);
     installedCount++;
   }
 

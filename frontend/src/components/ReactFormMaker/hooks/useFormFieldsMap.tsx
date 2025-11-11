@@ -29,7 +29,7 @@ interface UseFormFieldsMapReturn<T extends FieldValues> {
     zFields,
     fieldProps,
     indexField,
-  }: FieldParams) => React.ReactElement<typeof InputComponent>;
+  }: FieldParams<T>) => React.ReactElement<typeof InputComponent>;
 
   /**
    * **Generates an array of React elements or null based on the provided data fields.**
@@ -97,7 +97,7 @@ export function useFormFieldsMap<T extends FieldValues>(
       zFields,
       fieldProps,
       indexField,
-    }: FieldParams): React.ReactElement<typeof InputComponent> => (
+    }: FieldParams<T>): React.ReactElement<typeof InputComponent> => (
       <InputComponent
         zFields={zFields as ControllerRenderProps<T, Path<T>>}
         fieldProps={fieldProps as FieldReactFormMaker}
