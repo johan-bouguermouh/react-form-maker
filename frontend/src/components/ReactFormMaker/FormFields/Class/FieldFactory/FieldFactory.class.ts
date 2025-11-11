@@ -415,6 +415,8 @@ export default class Field<T extends FieldReactFormMaker> {
    *   - At least one lowercase letter.
    *   - At least one number.
    *
+   * ---
+   * @info > If you use key name `password` exactly, and second password type with namekey `confirmPassword`, the form will automaticly check if the two passwords are the same. The seconde password will be deleted from returned data for security reason.
    * @returns The current instance of the class for method chaining.
    */
   public password(zodObject?: ZodType<any, ZodTypeDef, String>): this {

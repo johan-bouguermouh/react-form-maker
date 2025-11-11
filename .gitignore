@@ -2,7 +2,6 @@
 node_modules/
 
 # Fichiers générés
-dist/
 *.log
 
 # Systèmes

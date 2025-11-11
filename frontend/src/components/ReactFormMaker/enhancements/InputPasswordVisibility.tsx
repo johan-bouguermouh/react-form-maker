@@ -31,7 +31,7 @@ const InputPasswordVisibility = React.forwardRef<
         type="button"
         onClick={() => setShowPassword((prev) => !prev)}
       >
-        {showPassword ? <EyeClosedIcon /> : <EyeOpenIcon />}
+        {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
       </Button>
     </div>
   );
