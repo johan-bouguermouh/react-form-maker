@@ -7,6 +7,30 @@ const { execSync } = require("child_process");
 
 const DIST_FILE = path.join(__dirname, "dist", "rfm-file.json");
 
+// Installation messages in English (universal standard)
+const msg = {
+  welcome: "🎉 Welcome to React Form Maker!",
+  detectingProject: "🔍 Detecting project type...",
+  projectDetected: "📦 Project detected:",
+  initializingProject: "🚀 Initializing project...",
+  installDependencies: "📦 Installing dependencies...",
+  installShadcn: "🎨 Installing Shadcn/ui components...",
+  copyingFiles: "📋 Copying ReactFormMaker files...",
+  success: "✅ Installation completed successfully!",
+  error: "❌ Error:",
+  emptyProjectDetected: "📁 Empty project detected.",
+  createProject: "Would you like to create a new project?",
+  selectProjectType: "What type of project do you want to create?",
+  creatingProject: "🏗️ Creating project...",
+  projectCreated: "✅ Project created successfully!",
+  installationComplete: "🎊 React Form Maker installation complete!",
+  nextSteps: "📚 Next steps:",
+  checkDocs: "1. Check the documentation in the README",
+  runDev: "2. Start your development server",
+  testExample: "3. Test the examples in /field-tests",
+  enjoyDeveloping: "🚀 Happy developing with React Form Maker!",
+};
+
 // Check if project is empty or minimal
 function isEmptyProject() {
   return (
@@ -177,7 +201,7 @@ function mapFilePaths(filePath, targetDir, shadcnConfig, componentsDir) {
 }
 
 async function main() {
-  console.log("🚀 React Form Maker - Installation");
+  console.log(msg.welcome);
   console.log("===================================\n");
 
   // Vérifier si le fichier de distribution existe
@@ -199,7 +223,7 @@ async function main() {
 
   // Mode INIT pour projet vide
   if (isEmpty) {
-    console.log("🆕 Empty project detected - INIT mode available");
+    console.log(msg.emptyProjectDetected);
     const initResponse = await prompts({
       type: "confirm",
       name: "initProject",
@@ -209,7 +233,7 @@ async function main() {
     });
 
     if (initResponse.initProject) {
-      console.log("\n🏗️  Initializing project...");
+      console.log(`\n${msg.initializingProject}`);
       try {
         execSync(
           "npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias '@/*'",
@@ -218,7 +242,7 @@ async function main() {
         execSync("npx shadcn@latest init", { stdio: "inherit" });
 
         // Installer les composants shadcn requis
-        console.log("🎨 Installing required shadcn components...");
+        console.log(msg.installShadcn);
         const initComponents = [
           "button",
           "input",
@@ -234,7 +258,7 @@ async function main() {
           stdio: "inherit",
         });
 
-        console.log("✅ Next.js + Shadcn project initialized!");
+        console.log(msg.projectCreated);
 
         // Relancer les détections après init
         console.log("🔄 Re-analyzing project after initialization...");
@@ -270,7 +294,7 @@ async function main() {
     }
   }
 
-  console.log("📋 Analyzing your project:");
+  console.log(msg.detectingProject);
   console.log(`   Type: ${projectType}`);
   console.log(`   Tailwind CSS: ${hasTailwind ? "✅" : "❌"}`);
   console.log(`   Tailwind Merge: ${hasTailwindMerge ? "✅" : "❌"}`);
@@ -431,14 +455,28 @@ async function main() {
     componentsDir
   );
 
-  console.log("\n✅ Installation completed!");
-  console.log("\n📖 Next steps:");
-  console.log("1. Install required dependencies:");
-  console.log("   npm install react-hook-form zod @hookform/resolvers");
-  console.log("   npm install @radix-ui/react-select @radix-ui/react-checkbox");
-  console.log("   npm install class-variance-authority clsx tailwind-merge");
-  console.log("2. Configure your project with the installed components");
-  console.log("3. Check the documentation in the installed files");
+  console.log(`\n${msg.installationComplete}`);
+  console.log(`\n${msg.nextSteps}`);
+  if (currentLang === "fr") {
+    console.log("1. Installez les dépendances requises :");
+    console.log("   npm install react-hook-form zod @hookform/resolvers");
+    console.log(
+      "   npm install @radix-ui/react-select @radix-ui/react-checkbox"
+    );
+    console.log("   npm install class-variance-authority clsx tailwind-merge");
+    console.log("2. Configurez votre projet avec les composants installés");
+    console.log("3. Consultez la documentation dans les fichiers installés");
+  } else {
+    console.log("1. Install required dependencies:");
+    console.log("   npm install react-hook-form zod @hookform/resolvers");
+    console.log(
+      "   npm install @radix-ui/react-select @radix-ui/react-checkbox"
+    );
+    console.log("   npm install class-variance-authority clsx tailwind-merge");
+    console.log("2. Configure your project with the installed components");
+    console.log("3. Check the documentation in the installed files");
+  }
+  console.log(`\n${msg.enjoyDeveloping}`);
 }
 
 // Liste des dépendances NPM requises pour ReactFormMaker
@@ -759,17 +797,29 @@ function shouldInstallFile(filePath, selectedComponents) {
 
 // Gestion des erreurs
 process.on("SIGINT", () => {
-  console.log("\n❌ Installation interrompue par l'utilisateur.");
+  console.log(
+    `\n${msg.error} ${
+      currentLang === "fr"
+        ? "Installation interrompue par l'utilisateur."
+        : "Installation interrupted by user."
+    }`
+  );
   process.exit(0);
 });
 
 process.on("unhandledRejection", (error) => {
-  console.error("❌ Erreur lors de l'installation:", error.message);
+  console.error(
+    `${msg.error} ${
+      currentLang === "fr"
+        ? "Erreur lors de l'installation:"
+        : "Installation error:"
+    } ${error.message}`
+  );
   process.exit(1);
 });
 
 // Lancer le script principal
 main().catch((error) => {
-  console.error("❌ Erreur:", error.message);
+  console.error(`${msg.error} ${error.message}`);
   process.exit(1);
 });
