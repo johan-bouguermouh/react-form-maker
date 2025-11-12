@@ -6,7 +6,19 @@ const { execSync } = require("child_process");
 const https = require("https");
 const prompts = require("prompts");
 
-// ANSI color codes pour les messages
+const DIST_FILE = path.join(__dirname, "dist", "rfm-file.json");
+
+// Verify that the distribution file exists
+if (!fs.existsSync(DIST_FILE)) {
+  console.error(
+    "❌ We have a probleme with distribution file for own package. If problem persists, please contact the author."
+  );
+  process.exit(1);
+}
+
+/**
+ * ANSI color codes pour les messages
+ * */
 const colors = {
   reset: "\x1b[0m",
   bright: "\x1b[1m",
@@ -20,51 +32,96 @@ const colors = {
   white: "\x1b[37m",
 };
 
-// Messages localisés
-const messages = {
-  fr: {
-    welcome: "🚀 ReactFormMaker - Installation et Configuration",
-    projectAnalysis: "🔍 Analyse du projet en cours...",
-    projectType: "Type de projet détecté",
-    tailwindFound: "Tailwind CSS trouvé",
-    tailwindNotFound: "Tailwind CSS non trouvé",
-    shadcnFound: "Shadcn/ui configuré",
-    shadcnNotFound: "Shadcn/ui non configuré",
-    componentsDirFound: "Répertoire des composants",
-    installationComplete: "✅ Installation de ReactFormMaker terminée !",
-    enjoyDeveloping: "🎉 Bon développement avec ReactFormMaker !",
-    nextSteps: "📋 Prochaines étapes :",
-    checkDocs: "1. Consultez la documentation dans les fichiers installés",
-    configureProject:
-      "2. Configurez votre projet avec les composants installés",
-    installMissingDeps: "3. Installez les dépendances manquantes si nécessaire",
-    error: "❌ Erreur",
-  },
-  en: {
-    welcome: "🚀 ReactFormMaker - Installation and Configuration",
-    projectAnalysis: "🔍 Analyzing project...",
-    projectType: "Detected project type",
-    tailwindFound: "Tailwind CSS found",
-    tailwindNotFound: "Tailwind CSS not found",
-    shadcnFound: "Shadcn/ui configured",
-    shadcnNotFound: "Shadcn/ui not configured",
-    componentsDirFound: "Components directory",
-    installationComplete: "✅ ReactFormMaker installation completed!",
-    enjoyDeveloping: "🎉 Happy coding with ReactFormMaker!",
-    nextSteps: "📋 Next steps:",
-    checkDocs: "1. Check the documentation in the installed files",
-    configureProject: "2. Configure your project with the installed components",
-    installMissingDeps: "3. Install missing dependencies if needed",
-    error: "❌ Error",
-  },
+/**
+ * Localized messages for cli
+ */
+const msg = {
+  welcome: "🚀 ReactFormMaker - Installation and Configuration",
+  projectAnalysis: "🔍 Analyzing project...",
+  projectType: "Detected project type",
+  tailwindFound: "Tailwind CSS found",
+  tailwindNotFound: "Tailwind CSS not found",
+  shadcnFound: "Shadcn/ui configured",
+  shadcnNotFound: "Shadcn/ui not configured",
+  componentsDirFound: "Components directory",
+  installationComplete: "✅ ReactFormMaker installation completed!",
+  enjoyDeveloping: "🎉 Happy coding with ReactFormMaker!",
+  nextSteps: "📋 Next steps:",
+  checkDocs: "1. Check the documentation in the installed files",
+  configureProject: "2. Configure your project with the installed components",
+  installMissingDeps: "3. Install missing dependencies if needed",
+  error: "❌ Error",
+  emptyProjectDetected: "📁 Empty project detected.",
+  initializingProject: "🚀 Initializing project...",
+  projectCreated: "✅ Project created successfully!",
 };
 
-// Sélection de la langue (par défaut anglais)
-const msg = messages.en;
+/**
+ *  List of NPM dependencies required for ReactFormMaker
+ */
+const REQUIRED_DEPENDENCIES = {
+  dependencies: [
+    // Base dependencies for ReactFormMaker
+    "tailwind-merge",
+    "clsx",
+    "class-variance-authority",
+    "react-hook-form",
+    "zod",
+    "@hookform/resolvers",
+    // Specific dependencies for advanced components
+    "@radix-ui/react-icons",
+    "@react-hook/resize-observer",
+    "react-dropzone",
+    "react-phone-number-input",
+    "sonner",
+    "uuid",
+    "date-fns",
+    "react-day-picker",
+    "libphonenumber-js",
+  ],
+  devDependencies: ["@types/uuid"],
+};
+
+/**
+ * List of required shadcn components for ReactFormMaker
+ */
+const requiredShadcnComponents = [
+  "button",
+  "input",
+  "form",
+  "select",
+  "checkbox",
+  "label",
+  "textarea",
+  "radio-group",
+  "switch",
+  "tooltip",
+  "carousel",
+  "command",
+  "popover",
+  "calendar",
+  "scroll-area",
+  "dialog",
+];
+
+/** default target dir to src/components */
+let defaultTargetDir = "src/components";
 
 console.log(`${colors.cyan}${colors.bright}${msg.welcome}${colors.reset}\n`);
 
 // Fonctions utilitaires pour détecter l'environnement du projet
+
+/**
+ * Verify if is empty project or if we installed in a project
+ */
+function isEmptyProject() {
+  return (
+    !fs.existsSync("package.json") ||
+    (!fs.existsSync("src") &&
+      !fs.existsSync("app") &&
+      !fs.existsSync("components"))
+  );
+}
 
 /**
  * Vérifie si un package est installé
@@ -158,6 +215,7 @@ function detectShadcnConfig() {
     if (fs.existsSync(configPath)) {
       try {
         const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+        /** we verify if config contain componentsPath key */
         return {
           hasConfig: true,
           configPath,
@@ -165,6 +223,7 @@ function detectShadcnConfig() {
         };
       } catch (error) {
         // Configuration invalide, continuer la recherche
+        return { hasConfig: false };
       }
     }
   }
@@ -173,7 +232,7 @@ function detectShadcnConfig() {
 }
 
 /**
- * Trouve le répertoire des composants
+ * Find shadcn components directory
  */
 function findComponentsDir() {
   const possibleDirs = [
@@ -189,7 +248,9 @@ function findComponentsDir() {
     }
   }
 
-  return { exists: false, path: "src/components" };
+  console.debug("No components directory found for shadcn/ui.");
+
+  return { exists: false, path: "src/" };
 }
 
 /**
@@ -448,15 +509,73 @@ async function main() {
   try {
     console.log(`${msg.projectAnalysis}`);
 
+    // Vérifications de l'environnement
+    const isEmpty = isEmptyProject();
     // Détecter l'environnement du projet
-    const projectType = detectProjectType();
+    let projectType = detectProjectType();
     const tailwindDetection = detectTailwindInstallationMethod(projectType);
     let hasTailwind = tailwindDetection.hasAnyTailwind;
     let hasTailwindConfig = isTailwindConfigured();
     let shadcnConfig = detectShadcnConfig();
     let componentsDir = findComponentsDir();
 
+    if (isEmpty) {
+      console.log(msg.emptyProjectDetected);
+      const initResponse = await prompts({
+        type: "confirm",
+        name: "initProject",
+        message:
+          "Would you like to initialize a complete Next.js + Shadcn/ui project?",
+        initial: true,
+      });
+
+      if (initResponse.initProject) {
+        console.log(`\n${msg.initializingProject}`);
+        try {
+          execSync(
+            "npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias '@/*'",
+            { stdio: "inherit" }
+          );
+          execSync("npx shadcn@latest init", { stdio: "inherit" });
+
+          console.log(msg.projectCreated);
+
+          // Relancer les détections après init
+          console.log("🔄 Re-analyzing project after initialization...");
+
+          // Attendre un peu que les fichiers soient bien écrits
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          // Relancer toutes les détections
+          projectType = detectProjectType();
+          const newHasTailwind = isPackageInstalled("tailwindcss");
+          const newHasTailwindMerge = isPackageInstalled("tailwind-merge");
+          const newHasTailwindConfig = isTailwindConfigured();
+          const newShadcnConfig = detectShadcnConfig();
+          const newComponentsDir = findComponentsDir();
+
+          // Mettre à jour toutes les variables
+          Object.assign(shadcnConfig, newShadcnConfig);
+          Object.assign(componentsDir, newComponentsDir);
+
+          // Mettre à jour les flags Tailwind
+          hasTailwind = newHasTailwind;
+          hasTailwindMerge = newHasTailwindMerge;
+          hasTailwindConfig = newHasTailwindConfig;
+
+          console.log("✅ Project re-analysis completed!");
+        } catch (error) {
+          console.error("❌ Error during initialization:", error.message);
+          process.exit(1);
+        }
+      } else {
+        console.log("❌ Cannot proceed without project initialization.");
+        process.exit(0);
+      }
+    }
+
     // Afficher l'état du projet
+    console.group("Analysis Results of the project");
     console.log(`\n📋 Project Status:`);
     console.log(`   ${msg.projectType}: ${projectType}`);
     console.log(`   Tailwind CSS: ${hasTailwind ? "✅" : "❌"}`);
@@ -470,6 +589,7 @@ async function main() {
         componentsDir.path
       })`
     );
+    console.groupEnd();
 
     // Installer Tailwind CSS si nécessaire
     if (!hasTailwind) {
@@ -575,27 +695,139 @@ async function main() {
     // Installer les dépendances manquantes
     await installMissingDependencies();
 
-    // Créer le répertoire des composants si nécessaire
-    const finalComponentsDir = findComponentsDir();
-    if (!finalComponentsDir.exists) {
-      fs.mkdirSync(finalComponentsDir.path, { recursive: true });
+    /**
+     * Questions for final installation
+     */
+    const questions = [];
+
+    if (shadcnConfig.hasConfig) {
+      let componentsPath = defaultTargetDir;
+      // Remplacer l'alias @ par src
+      if (componentsPath.startsWith("@/")) {
+        componentsPath = componentsPath.replace("@/", "src/");
+      }
+      defaultTargetDir = componentsPath;
+    } else if (componentsDir.componentsPath) {
+      defaultTargetDir = path.dirname(componentsDir.componentsPath);
       console.log(
-        `✅ Created components directory: ${finalComponentsDir.path}`
+        "default components dir from shadcn config:",
+        defaultTargetDir
       );
     }
 
-    // Installer les composants ReactFormMaker
-    await installReactFormMakerComponents(finalComponentsDir.path);
+    //for sécurity we verify if defaultType not begin with @, @/
+    if (defaultTargetDir === "@" || defaultTargetDir.startsWith("@/")) {
+      defaultTargetDir = "src/components";
+    }
+
+    questions.push({
+      type: "confirm",
+      name: "installShadcn",
+      message: `Install required shadcn components? (${requiredShadcnComponents.join(
+        ", "
+      )})`,
+      initial: !shadcnConfig.hasConfig, // Par défaut oui si pas de config shadcn
+    });
+
+    questions.push(
+      {
+        type: "text",
+        name: "targetDir",
+        message: "Where would you like to install React Form Maker components?",
+        initial: defaultTargetDir,
+        validate: (value) => {
+          if (!value.trim()) return "Path cannot be empty";
+          return true;
+        },
+      },
+
+      {
+        type: "select",
+        name: "overwrite",
+        message: "Overwrite existing files?",
+        choices: [
+          { title: "No, keep existing files", value: false },
+          { title: "Yes, overwrite existing files", value: true },
+        ],
+        initial: 0,
+      }
+    );
+
+    const response = await prompts(questions);
+
+    if (!response.targetDir) {
+      console.log("❌ Installation cancelled.");
+      process.exit(0);
+    }
+
+    // Force installation of all components (ReactFormMaker needs everything)
+    response.components = ["core", "ui", "lib", "enhancements"];
+
+    // Les dépendances sont maintenant installées par installMissingDependencies() dans installFiles()
+
+    // Installer les composants shadcn si demandé
+    if (response.installShadcn) {
+      console.log("\n🎨 Installing shadcn components...");
+
+      // Filtrer les composants déjà installés
+      const componentsDir = findComponentsDir();
+      console.log(`   Components directory for shadcn: ${componentsDir}`);
+      const missingComponents = requiredShadcnComponents.filter((component) => {
+        const isInstalled = isShadcnComponentInstalled(
+          component,
+          componentsDir.uiPath
+        );
+        if (isInstalled) {
+          console.log(`   ✓ ${component} already exists, skipping...`);
+          return false;
+        }
+        return true;
+      });
+
+      if (missingComponents.length === 0) {
+        console.log("✅ All shadcn components are already installed!");
+      } else {
+        try {
+          // Installation en une seule commande
+          console.log(
+            `   Adding components: ${missingComponents.join(", ")}...`
+          );
+          execSync(`npx shadcn@latest add ${missingComponents.join(" ")}`, {
+            stdio: "inherit",
+          });
+          console.log("✅ Shadcn components installed successfully!");
+        } catch (error) {
+          console.error(
+            "❌ Error installing shadcn components:",
+            error.message
+          );
+          console.log("⚠️  You will need to install them manually:");
+          console.log(
+            `   npx shadcn@latest add ${missingComponents.join(" ")}`
+          );
+        }
+      }
+    }
+
+    // Charger les fichiers
+    const files = JSON.parse(fs.readFileSync(DIST_FILE, "utf8"));
+
+    // Installer les fichiers
+    console.log("\n📁 Installing ReactFormMaker components...");
+    await installFiles(
+      files,
+      response.targetDir,
+      response.components,
+      response.overwrite,
+      shadcnConfig,
+      componentsDir
+    );
 
     // Messages de fin
     console.log(
       `\n${colors.green}${colors.bright}${msg.installationComplete}${colors.reset}`
     );
     console.log(`\n${msg.nextSteps}`);
-    console.log("1. Install any missing dependencies with:");
-    console.log("   npm install class-variance-authority clsx tailwind-merge");
-    console.log("2. Configure your project with the installed components");
-    console.log("3. Check the documentation in the installed files");
     console.log(`\n${msg.enjoyDeveloping}`);
     // finish script
     process.exit(0);
@@ -606,36 +838,12 @@ async function main() {
   }
 }
 
-// List of NPM dependencies required for ReactFormMaker
-const REQUIRED_DEPENDENCIES = {
-  dependencies: [
-    // Base dependencies for ReactFormMaker
-    "tailwind-merge",
-    "clsx",
-    "class-variance-authority",
-    "react-hook-form",
-    "zod",
-    "@hookform/resolvers",
-    // Specific dependencies for advanced components
-    "@radix-ui/react-icons",
-    "@react-hook/resize-observer",
-    "react-dropzone",
-    "react-phone-number-input",
-    "sonner",
-    "uuid",
-    "date-fns",
-    "react-day-picker",
-    "libphonenumber-js",
-  ],
-  devDependencies: ["@types/uuid"],
-};
-
 // Function to install missing NPM dependencies
 async function installMissingDependencies() {
   const missingDeps = [];
   const missingDevDeps = [];
 
-  // Check missing dependencies
+  // Vérifier les dépendances manquantes
   REQUIRED_DEPENDENCIES.dependencies.forEach((dep) => {
     if (!isPackageInstalled(dep)) {
       missingDeps.push(dep);
@@ -649,113 +857,373 @@ async function installMissingDependencies() {
   });
 
   if (missingDeps.length === 0 && missingDevDeps.length === 0) {
-    console.log("✅ All NPM dependencies are already installed");
+    console.log("✅ All required NPM dependencies are already installed");
     return;
   }
 
-  console.log("\n📦 Installing missing NPM dependencies...");
-
+  console.log("\n📦 Detected missing NPM dependencies:");
   if (missingDeps.length > 0) {
-    console.log(`Installing dependencies: ${missingDeps.join(", ")}`);
-    try {
-      execSync(`npm install ${missingDeps.join(" ")}`, {
-        stdio: "inherit",
-        cwd: process.cwd(),
-      });
-      console.log("✅ Dependencies installed successfully");
-    } catch (error) {
-      console.error("❌ Error installing dependencies:", error.message);
-      console.log("⚠️  Please install them manually:");
-      console.log(`   npm install ${missingDeps.join(" ")}`);
-    }
+    console.log(`   Dependencies: ${missingDeps.join(", ")}`);
+  }
+  if (missingDevDeps.length > 0) {
+    console.log(`   DevDependencies: ${missingDevDeps.join(", ")}`);
   }
 
-  if (missingDevDeps.length > 0) {
-    console.log(`Installing dev dependencies: ${missingDevDeps.join(", ")}`);
+  const { installDeps } = await prompts({
+    type: "select",
+    name: "installDeps",
+    message: "Do you want to automatically install these dependencies?",
+    choices: [
+      { title: "Yes, install now", value: true },
+      { title: "No, I will install manually", value: false },
+    ],
+    initial: 0,
+  });
+
+  if (!installDeps) {
+    console.log(
+      "⚠️  Installation cancelled. You will need to install manually:"
+    );
+    return;
+  } else {
     try {
-      execSync(`npm install -D ${missingDevDeps.join(" ")}`, {
-        stdio: "inherit",
-        cwd: process.cwd(),
-      });
-      console.log("✅ Dev dependencies installed successfully");
+      if (missingDeps.length > 0) {
+        console.log("📦 Installing dependencies...");
+        execSync(`npm install ${missingDeps.join(" ")}`, { stdio: "inherit" });
+      }
+
+      if (missingDevDeps.length > 0) {
+        console.log("📦 Installing development dependencies...");
+        execSync(`npm install -D ${missingDevDeps.join(" ")}`, {
+          stdio: "inherit",
+        });
+      }
+
+      console.log("✅ All missing dependencies installed successfully!");
     } catch (error) {
-      console.error("❌ Error installing dev dependencies:", error.message);
-      console.log("⚠️  Please install them manually:");
-      console.log(`   npm install -D ${missingDevDeps.join(" ")}`);
+      console.error("❌ Error installing dependencies:", error.message);
+      console.log("You can install them manually:");
+      if (missingDeps.length > 0) {
+        console.log(`   npm install ${missingDeps.join(" ")}`);
+      }
+      if (missingDevDeps.length > 0) {
+        console.log(`   npm install -D ${missingDevDeps.join(" ")}`);
+      }
     }
   }
 }
 
 // Function to download and save files from GitHub
-async function downloadFile(url, destination) {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(destination);
+// Fonction pour créer le fichier utils.ts avec toutes les fonctions utilitaires
+function createUtilsFile(targetDir) {
+  const libDir = findOrCreateLibDir(targetDir);
+  const utilsPath = path.join(libDir, "utils.ts");
 
-    https
-      .get(url, (response) => {
-        if (response.statusCode === 200) {
-          response.pipe(file);
-          file.on("finish", () => {
-            file.close();
-            resolve();
-          });
-        } else if (response.statusCode === 302 || response.statusCode === 301) {
-          // Handle redirects
-          https
-            .get(response.headers.location, (redirectResponse) => {
-              redirectResponse.pipe(file);
-              file.on("finish", () => {
-                file.close();
-                resolve();
-              });
-            })
-            .on("error", reject);
-        } else {
-          reject(new Error(`Failed to download file: ${response.statusCode}`));
-        }
-      })
-      .on("error", reject);
-
-    file.on("error", reject);
-  });
+  if (fs.existsSync(utilsPath)) {
+    // Vérifier si mergeRefs existe déjà
+    const existingContent = fs.readFileSync(utilsPath, "utf8");
+    if (existingContent.includes("mergeRefs")) {
+      console.log("✅ Fichier utils.ts avec mergeRefs déjà existant");
+      return;
+    } else {
+      // Ajouter mergeRefs au fichier existant
+      const mergeRefsFunction = `
+export function mergeRefs<T = any>(
+  ...refs: Array<
+    React.MutableRefObject<T> | React.LegacyRef<T> | undefined | null
+  >
+): React.RefCallback<T> | null {
+  return (value: T | null) => {
+    refs.forEach((ref) => {
+      if (typeof ref === 'function') {
+        ref(value);
+      } else if (ref != null) {
+        (ref as React.MutableRefObject<T | null>).current = value;
+      }
+    });
+  };
 }
 
-// Function to install ReactFormMaker components
-async function installReactFormMakerComponents(componentsPath) {
-  console.log("\n🎨 Installing ReactFormMaker components...");
+export function formatBytes(
+  bytes: number,
+  opts: {
+    decimals?: number;
+    sizeType?: 'accurate' | 'normal';
+  } = {},
+) {
+  const { decimals = 0, sizeType = 'normal' } = opts;
 
-  const baseUrl =
-    "https://raw.githubusercontent.com/votre-username/react-form-maker/main/frontend/src/components/ReactFormMaker";
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const accurateSizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB'];
+  if (bytes === 0) return '0 Byte';
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return \`\${(bytes / Math.pow(1024, i)).toFixed(decimals)} \${
+    sizeType === 'accurate'
+      ? (accurateSizes[i] ?? 'Bytes')
+      : (sizes[i] ?? 'Bytes')
+  }\`;
+}
+`;
 
-  const filesToDownload = [
-    {
-      url: `${baseUrl}/ReactFormMaker.tsx`,
-      path: path.join(componentsPath, "ReactFormMaker", "ReactFormMaker.tsx"),
-    },
-    {
-      url: `${baseUrl}/DOCUMENTATION.md`,
-      path: path.join(componentsPath, "ReactFormMaker", "DOCUMENTATION.md"),
-    },
-    // Vous pouvez ajouter d'autres fichiers ici
-  ];
-
-  for (const file of filesToDownload) {
-    try {
-      // Créer le répertoire si nécessaire
-      const dir = path.dirname(file.path);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+      // Ajouter React import si pas présent
+      let updatedContent = existingContent;
+      if (!existingContent.includes("import React")) {
+        updatedContent = `import React from 'react';\n${updatedContent}`;
       }
 
-      console.log(`📥 Downloading: ${path.basename(file.path)}`);
-      await downloadFile(file.url, file.path);
-      console.log(`✅ Downloaded: ${file.path}`);
-    } catch (error) {
-      console.error(`❌ Error downloading ${file.path}:`, error.message);
+      updatedContent += mergeRefsFunction;
+      fs.writeFileSync(utilsPath, updatedContent);
+      console.log("✅ Fonctions mergeRefs et formatBytes ajoutées à utils.ts");
+      return;
     }
   }
 
-  console.log("✅ ReactFormMaker components installed successfully!");
+  const utilsContent = `import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import React from 'react';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export function mergeRefs<T = any>(
+  ...refs: Array<
+    React.MutableRefObject<T> | React.LegacyRef<T> | undefined | null
+  >
+): React.RefCallback<T> | null {
+  return (value: T | null) => {
+    refs.forEach((ref) => {
+      if (typeof ref === 'function') {
+        ref(value);
+      } else if (ref != null) {
+        (ref as React.MutableRefObject<T | null>).current = value;
+      }
+    });
+  };
+}
+
+export function formatBytes(
+  bytes: number,
+  opts: {
+    decimals?: number;
+    sizeType?: 'accurate' | 'normal';
+  } = {},
+) {
+  const { decimals = 0, sizeType = 'normal' } = opts;
+
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const accurateSizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB'];
+  if (bytes === 0) return '0 Byte';
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return \`\${(bytes / Math.pow(1024, i)).toFixed(decimals)} \${
+    sizeType === 'accurate'
+      ? (accurateSizes[i] ?? 'Bytes')
+      : (sizes[i] ?? 'Bytes')
+  }\`;
+}
+`;
+
+  fs.writeFileSync(utilsPath, utilsContent);
+  console.log(
+    "✅ Fichier utils.ts créé avec les fonctions utilitaires (cn, mergeRefs, formatBytes)"
+  );
+}
+
+async function installFiles(
+  files,
+  targetDir,
+  selectedComponents,
+  overwrite,
+  shadcnConfig = {},
+  componentsDir = {}
+) {
+  let installedCount = 0;
+  let skippedCount = 0;
+
+  // Installer les dépendances NPM manquantes
+  await installMissingDependencies();
+
+  // Créer le fichier utils.ts si nécessaire
+  if (
+    selectedComponents.includes("lib") ||
+    selectedComponents.includes("all")
+  ) {
+    createUtilsFile(targetDir);
+  }
+
+  for (const [relativePath, content] of Object.entries(files)) {
+    // Filtrer selon les composants sélectionnés
+    if (!shouldInstallFile(relativePath, selectedComponents)) {
+      continue;
+    }
+
+    // Mapper le chemin JSON vers le vrai chemin utilisateur
+    const fullPath = mapFilePaths(
+      relativePath,
+      targetDir,
+      shadcnConfig,
+      componentsDir
+    );
+    const dir = path.dirname(fullPath);
+
+    // Créer les dossiers nécessaires
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    // Vérifier si le fichier existe déjà
+    if (fs.existsSync(fullPath) && !overwrite) {
+      console.log(
+        `⚠️  Existing file skipped: ${path.relative(process.cwd(), fullPath)}`
+      );
+      skippedCount++;
+      continue;
+    }
+
+    // Écrire le fichier
+    fs.writeFileSync(fullPath, content, "utf8");
+
+    // Log discret en gris
+    const displayPath = path.relative(process.cwd(), fullPath);
+    process.stdout.write(`\x1b[90m   ${displayPath}\x1b[0m\n`);
+    installedCount++;
+  }
+
+  console.log(
+    `\n📊 Summary: ${installedCount} files installed, ${skippedCount} skipped`
+  );
+}
+
+function shouldInstallFile(filePath, selectedComponents) {
+  // Composant principal
+  if (
+    selectedComponents.includes("core") &&
+    filePath.includes("/ReactFormMaker/")
+  ) {
+    // Exclure les enhancements si non sélectionnés
+    if (
+      filePath.includes("/enhancements/") &&
+      !selectedComponents.includes("enhancements")
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  // Composants UI
+  if (
+    selectedComponents.includes("ui") &&
+    filePath.includes("/components/ui/")
+  ) {
+    return true;
+  }
+
+  // Utilitaires
+  if (selectedComponents.includes("lib") && filePath.includes("/lib/")) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * define if a shadcn component is already installed
+ * @param {*} componentName
+ * @param {*} uiPath
+ * @returns
+ */
+function isShadcnComponentInstalled(componentName, uiPath) {
+  if (!uiPath || !fs.existsSync(uiPath)) return false;
+
+  // Mappings pour les noms de fichiers spéciaux
+  const fileNameMap = {
+    "radio-group": "radio-group.tsx",
+    "scroll-area": "scroll-area.tsx",
+  };
+
+  const fileName = fileNameMap[componentName] || `${componentName}.tsx`;
+  const componentPath = path.join(uiPath, fileName);
+
+  return fs.existsSync(componentPath);
+}
+
+/**
+ * We need to find or create a lib directory to place utility functions
+ * @param {*} targetDir
+ * @returns
+ */
+function findOrCreateLibDir(targetDir) {
+  // Nettoyer le targetDir - remplacer @ par src si c'est un alias
+  let cleanTargetDir = targetDir;
+  if (targetDir === "@" || targetDir.startsWith("@/")) {
+    cleanTargetDir = "src";
+  }
+
+  const possibleLibPaths = [
+    path.join(cleanTargetDir, "lib"),
+    path.join(cleanTargetDir, "utils"),
+    path.join(cleanTargetDir, "helpers"),
+    "src/lib",
+    "lib",
+    "utils",
+    "helpers",
+  ];
+
+  // Chercher un dossier lib existant
+  for (const libPath of possibleLibPaths) {
+    if (fs.existsSync(libPath)) {
+      return libPath;
+    }
+  }
+
+  // Créer lib dans src par défaut pour les projets Next.js
+  const defaultLibPath =
+    cleanTargetDir === "src" || fs.existsSync("src")
+      ? path.join("src", "lib")
+      : path.join(cleanTargetDir, "lib");
+  return defaultLibPath;
+}
+
+/**
+ * We need to map the file paths from the JSON to the user's project structure
+ * @param {*} filePath
+ * @param {*} targetDir
+ * @param {*} shadcnConfig
+ * @param {*} componentsDir
+ * @returns
+ */
+function mapFilePaths(filePath, targetDir, shadcnConfig, componentsDir) {
+  // Nettoyer le targetDir - remplacer @ par src si c'est un alias
+  let cleanTargetDir = targetDir;
+  if (targetDir === "@" || targetDir.startsWith("@/")) {
+    cleanTargetDir = "src";
+  }
+
+  if (filePath.startsWith("/lib/")) {
+    const libDir = findOrCreateLibDir(cleanTargetDir);
+    return path.join(libDir, filePath.replace("/lib/", ""));
+  }
+
+  if (filePath.startsWith("/components/ReactFormMaker/")) {
+    const componentsPath =
+      shadcnConfig.componentsPath ||
+      componentsDir.componentsPath ||
+      path.join(cleanTargetDir, "components");
+    return path.join(componentsPath, filePath.replace("/components/", ""));
+  }
+
+  if (filePath.startsWith("/components/ui/")) {
+    const uiPath =
+      shadcnConfig.uiPath ||
+      componentsDir.uiPath ||
+      path.join(cleanTargetDir, "ui");
+
+    console.debug("Mapping UI path to:", uiPath);
+    return path.join(uiPath, filePath.replace("/components/ui/", ""));
+  }
+
+  // Fallback: mettre dans cleanTargetDir
+  return path.join(cleanTargetDir, filePath.substring(1));
 }
 
 // Run the main function

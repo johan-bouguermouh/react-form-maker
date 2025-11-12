@@ -322,7 +322,7 @@ async function main() {
 
   // Cette partie sera gérée par installMissingDependencies() plus tard
 
-  // Questions interactives
+  // Questions for final installation
   const questions = [];
 
   // Déterminer le dossier cible par défaut
