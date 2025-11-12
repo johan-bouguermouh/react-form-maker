@@ -4,6 +4,9 @@ import { FieldParams } from '../interfaces/FieldParams';
 
 function TextInput({ zFields, fieldProps, indexField }: FieldParams) {
   const { value, onChange, ...restZfields } = zFields;
+  if (value === undefined || value === null) {
+    zFields.value = '';
+  }
   return (
     <Input
       id={fieldProps.inputName}
