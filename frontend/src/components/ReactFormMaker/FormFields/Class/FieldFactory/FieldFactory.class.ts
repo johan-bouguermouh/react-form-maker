@@ -1,22 +1,21 @@
-import { z, ZodNumber, ZodString, ZodType, ZodTypeDef } from 'zod';
-import {
+import { z, ZodNumber, ZodString, ZodType, type ZodTypeDef } from 'zod';
+import type {
   DividerReactFormMaker,
   FieldReactFormMaker,
   InputType,
   ReactFormMakerFieldset,
 } from '../../../interfaces/FieldInterfaces';
-import { FormFieldEvent } from '../../../interfaces/FormFieldEvent';
+import type { FormFieldEvent } from '../../../interfaces/FormFieldEvent';
+import type { CustomInputFieldElementParams } from '@/components/ReactFormMaker/interfaces/CustomInputFieldElementParams';
+import type { Option } from '@/components/ReactFormMaker/utils/typeGuards/optionsFields.TypeGuards';
 
 import {
   isBetween,
   islaterThan,
   isOlderThan,
-  SimpleDurationValues,
+  type SimpleDurationValues,
 } from '../../../utils/validators/dateValidators';
-import { CustomInputFieldElementParams } from '@/components/ReactFormMaker/interfaces/CustomInputFieldElementParams';
 import React from 'react';
-import { Option } from '@/components/ReactFormMaker/utils/typeGuards/optionsFields.TypeGuards';
-import { FieldValue } from 'react-hook-form';
 
 /**
  * Represents a condition where a value must be in the past.
@@ -281,11 +280,11 @@ export default class Field<T extends FieldReactFormMaker> {
         if (typeof type === 'object' && 'type' in type) {
           if (type.type === 'olderThan') {
             return z.date().refine((date) => isOlderThan(date, type.value), {
-              message: `Date must be later than ${stringifyDuration(type.value)} ago`,
+              message: `Date must be later than ${stringifyDuration(type?.value)} ago`,
             });
           } else if (type.type === 'laterThan') {
             return z.date().refine((date) => islaterThan(date, type.value), {
-              message: `Date must be older than ${stringifyDuration(type.value)} away`,
+              message: `Date must be older than ${stringifyDuration(type?.value)} away`,
             });
           }
         } else if (type instanceof ZodType) {

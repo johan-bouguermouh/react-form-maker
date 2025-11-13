@@ -15,9 +15,9 @@ import {
 } from 'react';
 import {
   useDropzone,
-  DropzoneState,
-  FileRejection,
-  DropzoneOptions,
+  type DropzoneState,
+  type FileRejection,
+  type DropzoneOptions,
 } from 'react-dropzone';
 import { toast } from 'sonner';
 import { Trash2 as RemoveIcon } from 'lucide-react';

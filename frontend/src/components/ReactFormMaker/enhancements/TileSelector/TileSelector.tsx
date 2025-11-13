@@ -4,7 +4,7 @@ import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
 import TileSelectorItem from './TileSelectorItem';
 import {
   isOption,
-  Option,
+  type Option,
 } from '../../utils/typeGuards/optionsFields.TypeGuards';
 
 interface TileSelectorProps {

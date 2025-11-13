@@ -1,5 +1,5 @@
 // StepInfoDisplay.component.tsx
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import {
   Tooltip,
   TooltipContent,
@@ -18,10 +18,7 @@ type StepInfoDisplayProps = {
 };
 
 const StepInfoDisplay = forwardRef<HTMLDivElement, StepInfoDisplayProps>(
-  (
-    { stepName, legend, orientation, maxWidth, opacityClass, positionTooltip },
-    ref,
-  ) => {
+  ({ stepName, legend, orientation, opacityClass, positionTooltip }, ref) => {
     return (
       <>
         {orientation === 'horizontal' ? (

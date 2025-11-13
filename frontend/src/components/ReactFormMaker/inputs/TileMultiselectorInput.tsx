@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { FieldParams } from '../interfaces/FieldParams';
+import React from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
+import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 import { isOption } from '../utils/typeGuards/optionsFields.TypeGuards';
-import { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 import { z } from 'zod';
 import TileMultiSelector, {
-  TileMultiSelectorProps,
+  type TileMultiSelectorProps,
 } from '../enhancements/TileSelector/TileMultiSelector';
 
 interface TileMultiSelectorInputProps

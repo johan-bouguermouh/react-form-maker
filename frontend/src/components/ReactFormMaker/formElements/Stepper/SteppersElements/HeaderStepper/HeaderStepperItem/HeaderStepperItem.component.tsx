@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react';
 import { useHeaderStepperItem } from './useHeaderStepperItem.hook';
 import StepInfoDisplay from './StepInfoDisplay.component';
-import {
+import type {
   HeaderStepperItemInterface,
   HeaderStepperItemProps,
 } from './HeaderStepperItem.interface';

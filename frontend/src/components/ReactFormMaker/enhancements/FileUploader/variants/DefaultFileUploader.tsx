@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { type DropzoneOptions } from 'react-dropzone';
 import {
+  type FileUploaderProps,
   FileUploader,
   FileUploaderContent,
   FileUploaderItem,
   FileInput,
-  FileUploaderProps,
 } from '@/components/ReactFormMaker/enhancements/FileUploader/FileUploader';
 import { Paperclip } from 'lucide-react';
-import { DropzoneOptions } from 'react-dropzone';
 import { cn } from '@/lib/utils';
 
 interface FileSvgDrawProps {

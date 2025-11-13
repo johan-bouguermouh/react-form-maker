@@ -1,5 +1,5 @@
-import { FieldReactFormMaker } from './FieldInterfaces';
-import { FormFieldEvent } from './FormFieldEvent';
+import type { FieldReactFormMaker } from './FieldInterfaces';
+import type { FormFieldEvent } from './FormFieldEvent';
 
 export interface ElementField extends FieldReactFormMaker {
   fields?: any;

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { ButtonProps } from 'react-day-picker';
+import { type ButtonProps } from 'react-day-picker';
 import { useStepper } from '../StepperContext';
 
 interface FooterStepperReactHookFormProps extends Omit<ButtonProps, 'variant'> {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
+import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 import TileSelector from '../enhancements/TileSelector/TileSelector';
 import { isOption } from '../utils/typeGuards/optionsFields.TypeGuards';
-import { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 import { z } from 'zod';
 
 function TileSelectorInput({ zFields, fieldProps, indexField }: FieldParams) {

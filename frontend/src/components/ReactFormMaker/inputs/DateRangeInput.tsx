@@ -1,6 +1,6 @@
 import React from 'react';
 import { DateRangePicker } from '../enhancements/DateRangePicker';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
 
 function DateRangeInput({ zFields, fieldProps, indexField }: FieldParams) {
   return (

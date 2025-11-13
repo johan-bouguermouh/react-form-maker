@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import TextInput from '../inputs/TextInput';
 import PasswordInput from '../inputs/PasswordInput';
 import SelectInput from '../inputs/SelectInput';
@@ -9,7 +10,6 @@ import CheckboxInput from '../inputs/CheckboxInput';
 import SwitchInput from '../inputs/SwitchInput';
 import NumberInput from '../inputs/NumberInput';
 import FileInput from '../inputs/FileInput';
-import { FieldParams } from '../interfaces/FieldParams';
 import { v4 as uuidV4 } from 'uuid';
 import TileSelectorInput from '../inputs/TileSelectorInput';
 import TileMultiSelectorInput from '../inputs/TileMultiselectorInput';

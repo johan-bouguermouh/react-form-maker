@@ -1,4 +1,5 @@
 import React from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import {
   Popover,
   PopoverTrigger,
@@ -9,7 +10,6 @@ import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
 import { cn } from '../../../lib/utils';
-import { FieldParams } from '../interfaces/FieldParams';
 
 const DatePickerSimple = React.forwardRef<HTMLButtonElement, FieldParams>(
   ({ zFields, fieldProps }, ref) => {

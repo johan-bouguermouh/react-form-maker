@@ -1,11 +1,9 @@
 import React from 'react';
-import { Slottable } from '@radix-ui/react-slot';
-import {
+import type {
   CompositeField,
   DividerReactFormMaker,
-  FieldReactFormMaker,
 } from '../interfaces/FieldInterfaces';
-import { ElementField } from '../interfaces/ElementField';
+import { Slottable } from '@radix-ui/react-slot';
 
 interface DivElementFieldProps {
   elementField: DividerReactFormMaker;

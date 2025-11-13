@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
 
 function NumberInput({ zFields, fieldProps, indexField }: FieldParams) {
   return (

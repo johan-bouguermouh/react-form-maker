@@ -1,22 +1,20 @@
 import React from 'react';
-import { UseFormReturn, FieldValues, Path } from 'react-hook-form';
-import { CompositeField } from '../../interfaces/FieldInterfaces';
+import type { CompositeField } from '../../interfaces/FieldInterfaces';
+import type {
+  orientationMutable,
+  StepElement,
+  StepFormState,
+  StepperContextProps,
+} from './SteppersElements/StepperContext.interface';
+import type { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 import {
   isFieldReactFormMaker,
   isStepReactFormMaker,
 } from '../../utils/typeGuards/compositeField.TypeGuards';
 import stepReducer, { initialSteps } from './SteppersElements/stepReducer';
 import { z } from 'zod';
-import {
-  orientationMutable,
-  StepElement,
-  StepFormState,
-  StepperContextProps,
-} from './SteppersElements/StepperContext.interface';
 import { usePromiseObserver } from '@/lib/usePromiseObserver';
 import { CommandManager } from '@/lib/commandManager';
-
-let bounced = 0;
 
 const StepperContext = React.createContext<
   StepperContextProps<any> | undefined

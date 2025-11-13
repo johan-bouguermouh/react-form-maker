@@ -19,9 +19,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import {
+  type Option,
   isOption,
   isOptionsArray,
-  Option,
 } from '../utils/typeGuards/optionsFields.TypeGuards';
 
 export interface SelectAutocompleteParams

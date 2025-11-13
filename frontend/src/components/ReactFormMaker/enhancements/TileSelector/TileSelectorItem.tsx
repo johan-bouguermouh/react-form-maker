@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import {
   isOption,
-  Option,
+  type Option,
 } from '../../utils/typeGuards/optionsFields.TypeGuards';
 
 interface TileSelectorItemProps {

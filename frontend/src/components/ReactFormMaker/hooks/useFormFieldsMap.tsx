@@ -1,9 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import {
+import type {
   CompositeField,
   FieldReactFormMaker,
 } from '../interfaces/FieldInterfaces';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
+import type {
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+  UseFormReturn,
+} from 'react-hook-form';
 import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
 import {
   isDividerReactFormMaker,
@@ -12,12 +18,6 @@ import {
 } from '../utils/typeGuards/compositeField.TypeGuards';
 import DivElementField from '../formElements/DivElementField';
 import FormFieldElement from '../formElements/FormFieldElement';
-import {
-  ControllerRenderProps,
-  FieldValues,
-  Path,
-  UseFormReturn,
-} from 'react-hook-form';
 import InputComponent from '../formElements/InputComponent';
 import { cn } from '@/lib/utils';
 

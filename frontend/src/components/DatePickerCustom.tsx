@@ -1,4 +1,4 @@
-import { CustomInputFieldElementParams } from './ReactFormMaker/interfaces/CustomInputFieldElementParams';
+import type { CustomInputFieldElementParams } from './ReactFormMaker/interfaces/CustomInputFieldElementParams';
 import React from 'react';
 import {
   Popover,

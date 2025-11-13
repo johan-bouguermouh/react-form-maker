@@ -1,6 +1,6 @@
 import React from 'react';
 import CheckboxWithText from '../enhancements/CheckboxWithText';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
 
 function CheckboxInput({ zFields, fieldProps, indexField }: FieldParams) {
   return (

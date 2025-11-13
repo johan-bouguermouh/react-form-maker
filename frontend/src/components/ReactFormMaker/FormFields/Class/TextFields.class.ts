@@ -1,10 +1,7 @@
 import Field from './FieldFactory/FieldFactory.class';
-import {
-  FieldReactFormMaker,
-  ReactFormMakerFieldset,
-} from '../../interfaces/FieldInterfaces';
+import type { FieldReactFormMaker } from '../../interfaces/FieldInterfaces';
+import type { FormFieldEvent } from '../../interfaces/FormFieldEvent';
 import { z } from 'zod';
-import { FormFieldEvent } from '../../interfaces/FormFieldEvent';
 
 export class TextField extends Field<FieldReactFormMaker> {
   constructor(name: string, config?: Partial<FieldReactFormMaker>) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { CustomInputFieldElementParams } from './ReactFormMaker/interfaces/CustomInputFieldElementParams';
+import type { CustomInputFieldElementParams } from './ReactFormMaker/interfaces/CustomInputFieldElementParams';
 
 interface GaugePasswordProps {
   exemple?: string;

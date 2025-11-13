@@ -1,10 +1,10 @@
 import React from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { FieldParams } from '../interfaces/FieldParams';
 import {
   isOption,
-  Option,
+  type Option,
   useValueOption,
 } from '../utils/typeGuards/optionsFields.TypeGuards';
 

@@ -1,10 +1,6 @@
 import React from 'react';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { SelectAutocomplete } from '../enhancements/SelectAutocomplete';
-import {
-  isOption,
-  mustBeArrayOfOptions,
-} from '../utils/typeGuards/optionsFields.TypeGuards';
 
 function SelectAutocompleteInput({
   zFields,

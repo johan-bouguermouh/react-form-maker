@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { type CountryCode } from 'libphonenumber-js/core';
 import { CheckIcon, ChevronsUpDown } from 'lucide-react';
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
@@ -20,7 +21,6 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import { CountryCode } from 'libphonenumber-js/core';
 
 interface CountrySelectOptionProps extends RPNInput.FlagProps {
   selectedCountry: RPNInput.Country;
@@ -90,7 +90,7 @@ function FlagComponent({ country, countryName }: RPNInput.FlagProps) {
   const Flag = flags[country];
 
   return (
-    <span className="flex h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
+    <span className="flex justify-center items-center h-4 w-6 overflow-hidden rounded-sm bg-foreground/20">
       {Flag && <Flag title={countryName} />}
     </span>
   );

@@ -1,9 +1,9 @@
 import React from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
-import { FieldParams } from '../interfaces/FieldParams';
 
 const InputPasswordVisibility = React.forwardRef<
   HTMLInputElement,
@@ -18,7 +18,7 @@ const InputPasswordVisibility = React.forwardRef<
     <div className={cn('flex flex-row items-center', fieldProps.className)}>
       <Input
         id={id ?? fieldProps.inputName}
-        className="rounded-[var(--radius)_0px_0px_var(--radius)] w-[calc(100%_-_49px)] border-r-[none]"
+        className=" rounded-[var(--radius)_0px_0px_var(--radius)] w-[calc(100%_-_49px)] border-r-[none]"
         key={indexField}
         type={showPassword ? 'text' : 'password'}
         placeholder={fieldProps.placeholder}
@@ -26,7 +26,7 @@ const InputPasswordVisibility = React.forwardRef<
         value={inputValue}
       />
       <Button
-        className="rounded-[0px_var(--radius)_var(--radius)_0px]"
+        className="!rounded-[0px_var(--radius)_var(--radius)_0px] bg-white"
         variant="outline"
         type="button"
         onClick={() => setShowPassword((prev) => !prev)}

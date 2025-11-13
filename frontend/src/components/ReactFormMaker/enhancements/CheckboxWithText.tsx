@@ -1,7 +1,7 @@
 import React from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '../../../lib/utils';
-import { FieldParams } from '../interfaces/FieldParams';
 
 function CheckboxWithText(params: FieldParams) {
   const { zFields, fieldProps, indexField } = params;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
+import { type ClassValue } from 'clsx';
 import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
 import TileSelectorItem from './TileSelectorItem';
 import {
   isOption,
-  Option,
+  type Option,
 } from '../../utils/typeGuards/optionsFields.TypeGuards';
-import { ClassValue } from 'clsx';
 
 export interface TileMultiSelectorProps {
   options: string[] | Option[];

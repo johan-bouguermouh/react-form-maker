@@ -1,5 +1,5 @@
-import { FieldErrors, FieldValues } from 'react-hook-form';
-import { CompositeField } from './FieldInterfaces';
+import type { FieldErrors, FieldValues } from 'react-hook-form';
+import type { CompositeField } from './FieldInterfaces';
 
 /**
  * @description

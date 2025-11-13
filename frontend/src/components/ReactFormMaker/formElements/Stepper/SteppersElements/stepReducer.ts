@@ -1,6 +1,6 @@
-import { CompositeField } from '@/components/ReactFormMaker/interfaces/FieldInterfaces';
+import { type CompositeField } from '@/components/ReactFormMaker/interfaces/FieldInterfaces';
+import type { StepElement } from './StepperContext.interface';
 import { isStepReactFormMaker } from '@/components/ReactFormMaker/utils/typeGuards/compositeField.TypeGuards';
-import { StepElement } from './StepperContext.interface';
 
 type TypeReducerActionNames =
   | 'CHANGE_FOCUS'

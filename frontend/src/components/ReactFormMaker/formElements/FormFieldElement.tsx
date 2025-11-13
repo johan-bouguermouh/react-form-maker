@@ -7,12 +7,10 @@ import {
   FormDescription,
   FormMessage,
 } from '@/components/ui/form';
-import { Slottable } from '@radix-ui/react-slot';
-import { FieldValues, Path, UseFormReturn } from 'react-hook-form';
-import { ElementField } from '../interfaces/ElementField';
-import { FieldParams } from '../interfaces/FieldParams';
-import { CustomInputFieldElementParams } from '../interfaces/CustomInputFieldElementParams';
-import { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
+import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
+import type { FieldParams } from '../interfaces/FieldParams';
+import type { CustomInputFieldElementParams } from '../interfaces/CustomInputFieldElementParams';
+import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 
 interface FormFieldElementProps<T extends FieldValues> {
   elementField: FieldReactFormMaker;

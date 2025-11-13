@@ -1,6 +1,6 @@
-import { ZodType } from 'zod';
-import { UseFormReturn } from 'react-hook-form';
-import { FormFieldEvent } from './FormFieldEvent';
+import type { ZodType } from 'zod';
+import type { UseFormReturn } from 'react-hook-form';
+import type { FormFieldEvent } from './FormFieldEvent';
 import type { StepFormState } from '../formElements/Stepper/SteppersElements/StepperContext.interface';
 
 export type InputType =

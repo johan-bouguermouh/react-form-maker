@@ -2,14 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  DefaultValues,
-  FieldValues,
+  type FieldValues,
+  type DefaultValues,
+  type UseFormReturn,
   useForm,
-  UseFormReturn,
 } from 'react-hook-form';
-import { z, ZodType, ZodObject, any } from 'zod';
+import type { CompositeField } from '../interfaces/FieldInterfaces';
+import { z, type ZodType, ZodObject } from 'zod';
 import React from 'react';
-import { CompositeField } from '../interfaces/FieldInterfaces';
 import {
   isDividerReactFormMaker,
   isFieldReactFormMaker,

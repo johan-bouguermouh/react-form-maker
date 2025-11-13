@@ -1,6 +1,6 @@
-import { FieldError, FieldValues, UseFormReturn } from 'react-hook-form';
+import type { FieldError, FieldValues, UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
-import { ReactFormMakerStep } from '../../../interfaces/FieldInterfaces';
+import type { ReactFormMakerStep } from '../../../interfaces/FieldInterfaces';
 
 /**
  * **Define the structure of a field state in the stepper context**

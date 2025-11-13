@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useStepper } from '../../StepperContext';
 import useResizeObserver from '@react-hook/resize-observer';
-import { StepElement } from '../StepperContext.interface';
+import type { StepElement } from '../StepperContext.interface';
 
 interface HeaderStepperReturn {
   /**

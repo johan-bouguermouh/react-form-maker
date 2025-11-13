@@ -1,11 +1,8 @@
-import {
+import type {
   DividerReactFormMaker,
   FieldReactFormMaker,
   ReactFormMakerFieldset,
 } from '../../interfaces/FieldInterfaces';
-import { isCompositeField } from '../../utils/typeGuards/compositeField.TypeGuards';
-import Field from './FieldFactory/FieldFactory.class';
-import { TextField } from './TextFields.class';
 
 type includedField =
   | FieldReactFormMaker

@@ -1,6 +1,6 @@
-import { ClassValue } from 'clsx';
-import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
-import { FieldReactFormMaker } from './FieldInterfaces';
+import type { ClassValue } from 'clsx';
+import type { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
+import type { FieldReactFormMaker } from './FieldInterfaces';
 
 /**
  * @description

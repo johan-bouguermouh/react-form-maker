@@ -1,5 +1,5 @@
-import React, { ReactNode, useEffect } from 'react';
-import { FieldValues } from 'react-hook-form';
+import React, { type ReactNode, useEffect } from 'react';
+import type { FieldValues } from 'react-hook-form';
 import useResizeObserver from '@react-hook/resize-observer';
 import { cn } from '@/lib/utils';
 import { useStepper } from '../StepperContext';

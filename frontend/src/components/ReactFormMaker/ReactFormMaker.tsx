@@ -1,12 +1,12 @@
 'use client';
 
+import type { FieldValues } from 'react-hook-form';
+import type { ReactFormMakerParams } from './interfaces/FormParams';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Slottable } from '@radix-ui/react-slot';
 import React, { useCallback } from 'react';
-import { FieldValues } from 'react-hook-form';
 import { cn } from '@/lib/utils';
-import { ReactFormMakerParams } from './interfaces/FormParams';
 import mapChildrenWithForm from './formElements/mapChildrenWithForm';
 import validateStepperFormFields from './utils/validators/formValidators';
 import useFormHandlers from './hooks/useFormHandlers.hook';

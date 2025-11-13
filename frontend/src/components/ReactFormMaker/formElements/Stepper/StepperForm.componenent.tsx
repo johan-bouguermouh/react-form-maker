@@ -1,12 +1,12 @@
 import React from 'react';
-import { FieldValues, UseFormReturn } from 'react-hook-form';
-import { StepperProvider } from './StepperContext';
-import { StepperContent } from './SteppersElements/StepperContent';
-import FooterStepperReactHookForm from './SteppersElements/FooterSteppers.component';
-import {
+import type { FieldValues, UseFormReturn } from 'react-hook-form';
+import type {
   CompositeField,
   ReactFormMakerStep,
 } from '../../interfaces/FieldInterfaces';
+import { StepperProvider } from './StepperContext';
+import { StepperContent } from './SteppersElements/StepperContent';
+import FooterStepperReactHookForm from './SteppersElements/FooterSteppers.component';
 import { Stepper } from './SteppersElements/Stepper.component';
 import NavigationStepper from './SteppersElements/HeaderStepper/HeaderStepper.componenent';
 import { useStepperItemsMap } from './SteppersElements/useStepperItemMap.hook';

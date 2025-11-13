@@ -1,9 +1,6 @@
 import { z, AnyZodObject, ZodTypeAny } from 'zod';
 import { merge } from 'ts-deepmerge';
-import {
-  InputType,
-  ReactFormMakerFieldset,
-} from '../interfaces/FieldInterfaces';
+import type { ReactFormMakerFieldset } from '../interfaces/FieldInterfaces';
 
 export interface ReferenceObject {
   $ref: string;

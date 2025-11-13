@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import {
+import type {
   CompositeField,
   FieldReactFormMaker,
   ReactFormMakerStep,
@@ -43,13 +43,11 @@ export function useStepperItemsMap(
     (
       formfields: CompositeField[],
     ): (React.ReactElement<typeof StepperItem> | null)[] => {
-      const uuids = useGenerateUUIDs<CompositeField>(formfields);
-
       return formfields.map((element, index) => {
         if (isStepReactFormMaker(element)) {
           return (
             <StepperItem
-              key={uuids[index]}
+              key={`stepper-${element.stepName}-${index}`}
               className={`${element.className} ${element.isHide ? 'hidden' : ''}`}
             >
               <H3 className={element?.legendClassName}>{element.stepName}</H3>

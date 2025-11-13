@@ -14,7 +14,11 @@ import {
 } from '@radix-ui/react-popover';
 import { ChevronDown } from 'lucide-react';
 import React from 'react';
-import { DropdownOption, DropdownProps, useDayPicker } from 'react-day-picker';
+import {
+  type DropdownOption,
+  type DropdownProps,
+  useDayPicker,
+} from 'react-day-picker';
 
 export interface YearsDropdownProps extends DropdownProps {
   selectedYear: number;

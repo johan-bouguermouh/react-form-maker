@@ -1,6 +1,6 @@
 import { StepElement } from '../../StepperContext.interface';
 import { SizeElement } from '../HeaderStepper.hook';
-import { ReactFormMakerStep } from '@/components/ReactFormMaker/interfaces/FieldInterfaces';
+import type { ReactFormMakerStep } from '@/components/ReactFormMaker/interfaces/FieldInterfaces';
 
 /**
  * **Properties for the HeaderStepperItem component**

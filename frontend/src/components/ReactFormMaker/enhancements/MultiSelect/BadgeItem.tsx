@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { Option } from '../../utils/typeGuards/optionsFields.TypeGuards';
+import { type Option } from '../../utils/typeGuards/optionsFields.TypeGuards';
 
 export interface BadgeItemParams extends React.ComponentProps<'div'> {
   option: Option | undefined;
