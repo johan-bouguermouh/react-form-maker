@@ -109,25 +109,26 @@ export function useFormFieldsMap<T extends FieldValues>(
 
   const FormFieldsMap = useCallback(
     (dataField: CompositeField[]) => {
-      const uuids = useGenerateUUIDs<CompositeField>(dataField);
-
       return dataField?.map((elementField: CompositeField, index) => {
         if (isDividerReactFormMaker(elementField)) {
           return (
             <DivElementField
-              key={uuids ? uuids[index] : index}
+              key={`divider-${index}`}
               elementField={elementField}
-              uuid={uuids[index]}
               FormFieldsMap={FormFieldsMap}
             />
           );
         }
         if (isFieldReactFormMaker(elementField)) {
           return (
-            <div role="form-field-element" className="mb-4" key={uuids[index]}>
+            <div
+              role="form-field-element"
+              className="mb-4"
+              key={`form-field-${index}`}
+            >
               <FormFieldElement<T>
                 elementField={elementField}
-                index={'FormFieldElement' + uuids[index] + index}
+                index={'FormFieldElement' + elementField.inputName}
                 form={form}
                 InpuTComponentCallBack={InpuTComponentCallBack}
               />
@@ -144,18 +145,16 @@ export function useFormFieldsMap<T extends FieldValues>(
     (
       formfields: CompositeField[],
     ): (React.ReactElement<'fieldset'> | null)[] => {
-      const uuids = useGenerateUUIDs<CompositeField>(formfields);
-
       return formfields.map((element, index) => {
         if (isReactFormMakerFieldset(element)) {
           return (
             <fieldset
-              key={uuids ? 'fieldset' + uuids[index] : 'fieldset' + index}
+              key={`fieldset-${index}`}
               className={cn({ hidden: element.isHide }, element.className)}
             >
               {element.legend && (
                 <legend
-                  key={uuids[index] + 'legend'}
+                  key={`fieldset-legend-${index}`}
                   className={cn(
                     'text-lg font-bold pb-3',
                     element.legendClassName,

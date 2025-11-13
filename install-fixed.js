@@ -1,9 +1,7 @@
 #!/usr/bin/env node
-const recast = require("recast");
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
-const https = require("https");
 const prompts = require("prompts");
 const configureVitePlugin = require("./scripts/install/fixConfigVite");
 
@@ -118,9 +116,7 @@ console.log(`${colors.cyan}${colors.bright}${msg.welcome}${colors.reset}\n`);
 function isEmptyProject() {
   return (
     !fs.existsSync("package.json") ||
-    (!fs.existsSync("src") &&
-      !fs.existsSync("app") &&
-      !fs.existsSync("components"))
+    (!fs.existsSync("src") && !fs.existsSync("app"))
   );
 }
 
@@ -628,14 +624,32 @@ async function main() {
       defaultTargetDir = "src/components";
     }
 
-    questions.push({
-      type: "confirm",
-      name: "installShadcn",
-      message: `Install required shadcn components? (${requiredShadcnComponents.join(
-        ", "
-      )})`,
-      initial: !shadcnConfig.hasConfig, // Par défaut oui si pas de config shadcn
-    });
+    const presearchComponentNeeded = requiredShadcnComponents.filter(
+      (component) => {
+        const isInstalled = isShadcnComponentInstalled(
+          component,
+          `${componentsDir.path}/ui`
+        );
+        return !isInstalled;
+      }
+    );
+
+    if (presearchComponentNeeded.length === 0) {
+      console.log("✅ All required shadcn components are already installed!");
+    } else {
+      questions.push({
+        type: "select",
+        name: "installShadcn",
+        message: `Install required shadcn components? (${presearchComponentNeeded.join(
+          ", "
+        )})`,
+        choices: [
+          { title: "No", value: false },
+          { title: "Yes", value: true },
+        ],
+        initial: 1,
+      });
+    }
 
     questions.push(
       {
@@ -652,7 +666,7 @@ async function main() {
       {
         type: "select",
         name: "overwrite",
-        message: "Overwrite existing files?",
+        message: `Overwrite existing files? ${colors.dim}(Existing files will be kept by default, ui shadcn components installed will not be overwritten)${colors.reset}`,
         choices: [
           { title: "No, keep existing files", value: false },
           { title: "Yes, overwrite existing files", value: true },
@@ -683,7 +697,7 @@ async function main() {
       const missingComponents = requiredShadcnComponents.filter((component) => {
         const isInstalled = isShadcnComponentInstalled(
           component,
-          componentsDir.uiPath
+          `${componentsDir.path}/ui`
         );
         if (isInstalled) {
           console.log(`   ✓ ${component} already exists, skipping...`);
@@ -696,7 +710,7 @@ async function main() {
         console.log("✅ All shadcn components are already installed!");
       } else {
         try {
-          // Installation en une seule commande
+          // Install missing components via npx shadcn add
           console.log(
             `   Adding components: ${missingComponents.join(", ")}...`
           );
@@ -735,7 +749,7 @@ async function main() {
     console.log(
       `\n${colors.green}${colors.bright}${msg.installationComplete}${colors.reset}`
     );
-    console.log(`\n${msg.nextSteps}`);
+
     console.log(`\n${msg.enjoyDeveloping}`);
     // finish script
     process.exit(0);
@@ -831,7 +845,9 @@ function createUtilsFile(targetDir) {
     // Vérifier si mergeRefs existe déjà
     const existingContent = fs.readFileSync(utilsPath, "utf8");
     if (existingContent.includes("mergeRefs")) {
-      console.log("✅ Fichier utils.ts avec mergeRefs déjà existant");
+      console.log(
+        "✅ Updated utils.ts already contains mergeRefs and formatBytes"
+      );
       return;
     } else {
       // Ajouter mergeRefs au fichier existant
@@ -881,7 +897,7 @@ export function formatBytes(
 
       updatedContent += mergeRefsFunction;
       fs.writeFileSync(utilsPath, updatedContent);
-      console.log("✅ Fonctions mergeRefs et formatBytes ajoutées à utils.ts");
+      console.log("✅ Functions mergeRefs and formatBytes added to utils.ts");
       return;
     }
   }
@@ -933,7 +949,7 @@ export function formatBytes(
 
   fs.writeFileSync(utilsPath, utilsContent);
   console.log(
-    "✅ Fichier utils.ts créé avec les fonctions utilitaires (cn, mergeRefs, formatBytes)"
+    "✅ utils.ts file created with utility functions (cn, mergeRefs, formatBytes)"
   );
 }
 
@@ -981,8 +997,9 @@ async function installFiles(
 
     // Vérifier si le fichier existe déjà
     if (fs.existsSync(fullPath) && !overwrite) {
+      //Should be grey and litle logs
       console.log(
-        `⚠️  Existing file skipped: ${path.relative(process.cwd(), fullPath)}`
+        `\x1b[90mSkipped: ${path.relative(process.cwd(), fullPath)}\x1b[0m`
       );
       skippedCount++;
       continue;
@@ -1126,7 +1143,6 @@ function mapFilePaths(filePath, targetDir, shadcnConfig, componentsDir) {
       componentsDir.uiPath ||
       path.join(cleanTargetDir, "ui");
 
-    console.debug("Mapping UI path to:", uiPath);
     return path.join(uiPath, filePath.replace("/components/ui/", ""));
   }
 

@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import type { FieldParams } from '../interfaces/FieldParams';
+import type { FieldValues } from 'react-hook-form';
 import TextInput from '../inputs/TextInput';
 import PasswordInput from '../inputs/PasswordInput';
 import SelectInput from '../inputs/SelectInput';
@@ -37,7 +38,9 @@ import DateRangeInput from '../inputs/DateRangeInput';
  *
  * @see {@link FieldParams} for the interface used in the `params` argument.
  */
-function InputComponent(params: FieldParams) {
+function InputComponent<T extends FieldValues>(
+  params: FieldParams<T>,
+): JSX.Element {
   const {
     fieldProps: { inputType, customInputFieldElement },
     indexField,

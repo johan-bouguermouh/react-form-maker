@@ -37,7 +37,7 @@ import type { FieldReactFormMaker } from './FieldInterfaces';
  * | ref      | true       | RefCallBack | The ref of the input field. |
  *
  */
-export interface FieldParams<T extends FieldValues = FieldValues> {
+export interface FieldParams<T extends FieldValues> {
   /**
    * @description
    * The register of the input field.

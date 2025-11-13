@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { v4 as uuidV4 } from 'uuid';
 import type {
   CompositeField,
   DividerReactFormMaker,
@@ -7,15 +8,17 @@ import { Slottable } from '@radix-ui/react-slot';
 
 interface DivElementFieldProps {
   elementField: DividerReactFormMaker;
-  uuid: string;
   FormFieldsMap: (dataField: CompositeField[]) => (React.JSX.Element | null)[];
 }
 
 const DivElementField: React.FC<DivElementFieldProps> = ({
   elementField,
-  uuid,
   FormFieldsMap,
 }) => {
+  const uuid = useMemo(() => {
+    return uuidV4();
+  }, []);
+
   return (
     <div
       key={uuid}
