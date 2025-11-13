@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-
+const recast = require("recast");
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 const https = require("https");
 const prompts = require("prompts");
+const configureVitePlugin = require("./scripts/install/fixConfigVite");
 
 const DIST_FILE = path.join(__dirname, "dist", "rfm-file.json");
 
@@ -251,99 +252,6 @@ function findComponentsDir() {
   console.debug("No components directory found for shadcn/ui.");
 
   return { exists: false, path: "src/" };
-}
-
-/**
- * Configure le plugin Vite pour Tailwind CSS
- */
-async function configureVitePlugin() {
-  console.log("🔧 Configuring Vite plugin...");
-
-  const viteConfigJs = "vite.config.js";
-  const viteConfigTs = "vite.config.ts";
-  let viteConfigPath = null;
-
-  if (fs.existsSync(viteConfigTs)) {
-    viteConfigPath = viteConfigTs;
-  } else if (fs.existsSync(viteConfigJs)) {
-    viteConfigPath = viteConfigJs;
-  }
-
-  if (viteConfigPath) {
-    let viteConfig = fs.readFileSync(viteConfigPath, "utf8");
-
-    // Ajouter l'import path si pas présent
-    if (
-      !viteConfig.includes('import path from "path"') &&
-      !viteConfig.includes("import path from 'path'")
-    ) {
-      viteConfig = viteConfig.replace(
-        /import { defineConfig } from ['"]vite['"]/,
-        "import path from \"path\"\nimport { defineConfig } from 'vite'"
-      );
-    }
-
-    // Ajouter l'import tailwindcss si pas présent
-    if (!viteConfig.includes("@tailwindcss/vite")) {
-      viteConfig = viteConfig.replace(
-        /import { defineConfig } from ['"]vite['"]/,
-        "import { defineConfig } from 'vite'\nimport tailwindcss from '@tailwindcss/vite'"
-      );
-    }
-
-    // Ajouter le plugin dans la configuration
-    if (!viteConfig.includes("tailwindcss()")) {
-      viteConfig = viteConfig.replace(
-        /plugins:\s*\[([\s\S]*?)\]/,
-        (match, plugins) => {
-          const cleanPlugins = plugins.trim();
-          if (cleanPlugins) {
-            return `plugins: [\n    tailwindcss(),\n${plugins}\n  ]`;
-          } else {
-            return `plugins: [\n    tailwindcss(),\n  ]`;
-          }
-        }
-      );
-    }
-
-    // Ajouter la résolution d'alias si pas présente
-    if (!viteConfig.includes("resolve:") && !viteConfig.includes("alias")) {
-      viteConfig = viteConfig.replace(
-        /plugins:\s*\[[\s\S]*?\],?/,
-        (match) => `${match}
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },`
-      );
-    }
-
-    fs.writeFileSync(viteConfigPath, viteConfig);
-    console.log(
-      `✅ Updated ${viteConfigPath} with Tailwind CSS plugin and path aliases`
-    );
-  } else {
-    console.log("⚠️  No vite.config found, creating one...");
-    const viteConfig = `import path from "path"
-import tailwindcss from "@tailwindcss/vite"
-import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
-
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-})`;
-    fs.writeFileSync("vite.config.ts", viteConfig);
-    console.log(
-      "✅ Created vite.config.ts with Tailwind CSS plugin and path aliases"
-    );
-  }
 }
 
 /**

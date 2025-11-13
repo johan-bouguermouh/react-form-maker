@@ -31,7 +31,8 @@
   },
   "author": "Johan Bouguermouh",
   "dependencies": {
-    "prompts": "^2.4.2"
+    "prompts": "^2.4.2",
+    "recast": "^0.23.11"
   },
   "license": "MIT"
 }
