@@ -108,7 +108,7 @@ export default function YearsDropdownCustom({
             className="w-[240px] max-w-sm"
           >
             <CarouselContent>
-              {segementDecade.map((decade, index) => (
+              {segementDecade.map((decade) => (
                 <CarouselItem
                   key={decade[0].label}
                   className="flex flex-row items-center justify-center w-full h-full flex-wrap m-2"
