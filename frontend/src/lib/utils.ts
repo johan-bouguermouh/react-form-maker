@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function mergeRefs<T = any>(
+export function mergeRefs<T = any>( // eslint-disable-line @typescript-eslint/no-explicit-any
   ...refs: Array<
     React.MutableRefObject<T> | React.LegacyRef<T> | undefined | null
   >

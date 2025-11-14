@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import {
   isOption,
   type Option,
@@ -68,11 +68,10 @@ const TileSelectorItem = forwardRef<HTMLDivElement, TileSelectorItemProps>(
         onKeyDown={(e) => handleKeyDown(e)}
       >
         <div className="flex items-center justify-center w-6 h-6 mr-2">
-          {icon
-            ? icon
-            : isSelected && (
-                <Check className="w-4 h-4 text-primary-foreground" />
-              )}
+          {icon ||
+            (isSelected && (
+              <Check className="w-4 h-4 text-primary-foreground" />
+            ))}
         </div>
         {useLabel(option)}
       </div>

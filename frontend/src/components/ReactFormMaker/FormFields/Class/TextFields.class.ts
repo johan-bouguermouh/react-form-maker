@@ -1,7 +1,7 @@
+import { z } from 'zod';
 import Field from './FieldFactory/FieldFactory.class';
 import type { FieldReactFormMaker } from '../../interfaces/FieldInterfaces';
 import type { FormFieldEvent } from '../../interfaces/FormFieldEvent';
-import { z } from 'zod';
 
 export class TextField extends Field<FieldReactFormMaker> {
   constructor(name: string, config?: Partial<FieldReactFormMaker>) {
@@ -80,7 +80,7 @@ export class TextField extends Field<FieldReactFormMaker> {
       );
     }
 
-    //this.Children(ConfirmPasswordField);
+    // this.Children(ConfirmPasswordField);
 
     const initialPasswordField = this.getConfig();
 
@@ -95,7 +95,7 @@ export class TextField extends Field<FieldReactFormMaker> {
       zodObject: z.string(),
     };
 
-    const newField = new Field(`passwordWrapper`, {
+    const newField = new Field('passwordWrapper', {
       isDiv: true,
       className: 'flex flex-col',
       fields: [

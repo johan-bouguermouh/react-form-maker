@@ -1,4 +1,5 @@
 import React from 'react';
+import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 import {
   FormField,
   FormItem,
@@ -7,7 +8,6 @@ import {
   FormDescription,
   FormMessage,
 } from '@/components/ui/form';
-import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 import type { FieldParams } from '../interfaces/FieldParams';
 import type { CustomInputFieldElementParams } from '../interfaces/CustomInputFieldElementParams';
 import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
@@ -27,13 +27,13 @@ function FormFieldElement<T extends FieldValues>({
 }: FormFieldElementProps<T>) {
   return (
     <FormField
-      key={'fomr-field-element-' + key}
+      key={`fomr-field-element-${key}`}
       control={form.control}
       name={elementField.inputName as Path<T>}
       render={({ field }) => (
         <FormItem
           className="flex flex-col"
-          key={'formitem' + key}
+          key={`formitem${key}`}
           onBlur={(e: any) => {
             if (elementField.onBlur) {
               e.controlField = field;
@@ -72,7 +72,7 @@ function FormFieldElement<T extends FieldValues>({
             <InpuTComponentCallBack
               zFields={field}
               fieldProps={elementField}
-              indexField={'input' + key}
+              indexField={`input${key}`}
             />
           </FormControl>
           {elementField.description && !elementField.isSecure && (

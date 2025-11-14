@@ -41,13 +41,13 @@ interface StepperFormProps<T extends FieldValues> {
  * @param
  * @returns
  */
-const StepperForm = <T extends FieldValues>({
+function StepperForm<T extends FieldValues>({
   form,
   formfields,
   zObject,
   orientation,
   formFieldsMap: FormFieldsMap,
-}: StepperFormProps<T>) => {
+}: StepperFormProps<T>) {
   const { StepperItemsMap } = useStepperItemsMap(FormFieldsMap);
   return (
     <StepperProvider<T>
@@ -67,6 +67,6 @@ const StepperForm = <T extends FieldValues>({
       </Stepper>
     </StepperProvider>
   );
-};
+}
 
 export default StepperForm;

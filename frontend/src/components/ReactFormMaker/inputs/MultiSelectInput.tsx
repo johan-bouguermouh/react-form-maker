@@ -29,7 +29,7 @@ function MultiSelectInput({ zFields, fieldProps }: MultiSelectInputProps) {
       id={fieldProps.inputName}
       onChange={onChange}
       {...restZfields}
-      defaultValues={value ? value : fieldProps.defaultValues}
+      defaultValues={value || fieldProps.defaultValues}
       options={serializedOptions}
     />
   );

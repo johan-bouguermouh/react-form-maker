@@ -8,7 +8,7 @@ function SelectAutocompleteInput({
   indexField,
 }: FieldParams) {
   const { value, onChange, ...restZfields } = zFields;
-  const options = fieldProps.options;
+  const { options } = fieldProps;
   if (!options) {
     throw new Error(
       `SelectAutocompleteInput: options must be an array of Option objects, received ${JSON.stringify(options)}`,

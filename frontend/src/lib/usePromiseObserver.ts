@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 interface PromiseState<T> {
   loading: boolean;
@@ -46,7 +46,7 @@ export function usePromiseObserver<T, R>(
         .catch((err) => {
           setStates((prevStates) => ({
             ...prevStates,
-            [key]: { loading: false, data: null, error: err },
+            [key]: { loading: false, data: null, error: err }, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
           }));
         });
     },

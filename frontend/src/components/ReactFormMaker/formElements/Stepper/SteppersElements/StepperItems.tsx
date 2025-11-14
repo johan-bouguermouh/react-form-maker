@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils';
 import React from 'react';
-import { useStepper } from '../StepperContext';
 import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useStepper } from '../StepperContext';
 
 const StepperItem = React.forwardRef<
   HTMLDivElement,

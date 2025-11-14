@@ -39,7 +39,6 @@ Le fonctionnement du projet s’articule autour de **quatre grandes étapes** 
 1. **Définition de la configuration du formulaire**
    Le développeur crée un objet de configuration décrivant les champs du formulaire, leurs types, validations et options.
 2. **Analyse et préparation par le hook React Hook Form**Cet objet de configuration est transmis à un hook personnalisé basé sur React Hook Form.Ce hook :
-
    - Analyse la configuration,
    - Génère dynamiquement le schéma de validation Zod adapté,
    - Prépare tous les attributs nécessaires au bon fonctionnement du formulaire (valeurs par défaut, validation, etc.).

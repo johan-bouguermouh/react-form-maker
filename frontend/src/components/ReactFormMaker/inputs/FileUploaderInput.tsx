@@ -1,6 +1,6 @@
 import React from 'react';
-import type { FieldParams } from '../interfaces/FieldParams';
 import type { DropzoneOptions } from 'react-dropzone';
+import type { FieldParams } from '../interfaces/FieldParams';
 import DefaultFileUploader from '../enhancements/FileUploader/variants/DefaultFileUploader';
 
 function isFile(obj: any): boolean {

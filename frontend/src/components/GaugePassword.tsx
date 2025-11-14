@@ -11,10 +11,10 @@ interface GaugePasswordProps {
 function GaugePassword(
   params: CustomInputFieldElementParams<GaugePasswordProps>,
 ) {
-  const { formField, props } = params;
+  const { zFields, props } = params;
 
   // Définir une valeur par défaut pour valuePassword
-  const valuePassword = formField?.value ?? '';
+  const valuePassword = zFields?.value ?? '';
 
   // Appeler les hooks avant toute condition
   const [jogeState, setJogeState] = useState({
@@ -58,7 +58,7 @@ function GaugePassword(
   );
 
   // Vérifier formField après l'appel des hooks
-  if (!formField) return null;
+  if (!zFields) return null;
 
   return (
     <div className="flex gap-2 ">

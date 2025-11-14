@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import type { FieldParams } from '../interfaces/FieldParams';
 import type {
   DateRange,
   DayPickerProps,
@@ -9,6 +8,8 @@ import type {
 } from 'react-day-picker';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { addDays, format, getYear, set, formatDistance } from 'date-fns';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -17,7 +18,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import YearsDropdownCustom from './YearsDropdown';
 
 export function DateRangePicker({ zFields, fieldProps }: FieldParams) {

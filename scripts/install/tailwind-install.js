@@ -37,7 +37,7 @@ function installTailwindInteractive() {
   } catch (error) {
     console.error("❌ Error installing Tailwind CSS:", error.message);
     console.log(
-      "📖 Please install Tailwind manually: https://tailwindcss.com/docs/installation"
+      "📖 Please install Tailwind manually: https://tailwindcss.com/docs/installation",
     );
   }
 }

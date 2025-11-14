@@ -87,7 +87,7 @@ const HeaderStepperItem: HeaderStepperItemInterface = forwardRef<
         <div
           className={`${styles.progressBarPositionClass} ${styles.barProgressClass}`}
           style={ajustHeightProgressBar()}
-        ></div>
+        />
       )}
     </React.Fragment>
   );

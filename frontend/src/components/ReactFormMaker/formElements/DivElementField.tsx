@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { v4 as uuidV4 } from 'uuid';
+import { Slottable } from '@radix-ui/react-slot';
 import type {
   CompositeField,
   DividerReactFormMaker,
 } from '../interfaces/FieldInterfaces';
-import { Slottable } from '@radix-ui/react-slot';
 
 interface DivElementFieldProps {
   elementField: DividerReactFormMaker;

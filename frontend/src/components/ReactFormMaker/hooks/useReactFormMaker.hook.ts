@@ -7,9 +7,9 @@ import {
   type UseFormReturn,
   useForm,
 } from 'react-hook-form';
-import type { CompositeField } from '../interfaces/FieldInterfaces';
 import { z, type ZodType, ZodObject } from 'zod';
 import React from 'react';
+import type { CompositeField } from '../interfaces/FieldInterfaces';
 import {
   isDividerReactFormMaker,
   isFieldReactFormMaker,
@@ -76,8 +76,8 @@ export function useReactFormMaker<T extends FieldValues>(
     createField(element);
   });
 
-  let zodEffect: any = undefined;
-  let formSchema = z.object(zObject);
+  let zodEffect: any; //eslint-disable-line @typescript-eslint/no-explicit-any
+  const formSchema = z.object(zObject);
 
   if ('confirmPassword' in zObject && 'password' in zObject) {
     zodEffect = formSchema
@@ -85,7 +85,7 @@ export function useReactFormMaker<T extends FieldValues>(
         message: 'Les mots de passe ne correspondent pas',
         path: ['confirmPassword'],
       })
-      .transform(({ confirmPassword, ...rest }) => rest);
+      .transform(({ confirmPassword, ...rest }) => rest); //eslint-disable-line @typescript-eslint/no-unused-vars
   }
 
   const form = useForm<T>({
@@ -97,7 +97,7 @@ export function useReactFormMaker<T extends FieldValues>(
   function hasSubmitButton(children: React.ReactNode): boolean {
     return React.Children.toArray(children).some((child) => {
       if (React.isValidElement(child)) {
-        if (child.props.type === 'submit') {
+        if ((child.props.type as string) === 'submit') {
           return true;
         }
         if (child.props.children) {

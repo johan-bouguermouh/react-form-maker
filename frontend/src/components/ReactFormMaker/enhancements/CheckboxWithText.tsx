@@ -1,9 +1,10 @@
 import React from 'react';
+import type { FieldValues } from 'react-hook-form';
 import type { FieldParams } from '../interfaces/FieldParams';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '../../../lib/utils';
 
-function CheckboxWithText(params: FieldParams) {
+function CheckboxWithText(params: FieldParams): JSX.Element {
   const { zFields, fieldProps, indexField } = params;
   const classNameLabel =
     'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70';

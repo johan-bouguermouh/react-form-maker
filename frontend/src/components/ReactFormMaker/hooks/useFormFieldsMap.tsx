@@ -1,16 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import type {
-  CompositeField,
-  FieldReactFormMaker,
-} from '../interfaces/FieldInterfaces';
-import type { FieldParams } from '../interfaces/FieldParams';
+import React, { useCallback } from 'react';
 import type {
   ControllerRenderProps,
   FieldValues,
   Path,
   UseFormReturn,
 } from 'react-hook-form';
-import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
+import type {
+  CompositeField,
+  FieldReactFormMaker,
+} from '../interfaces/FieldInterfaces';
+import type { FieldParams } from '../interfaces/FieldParams';
 import {
   isDividerReactFormMaker,
   isFieldReactFormMaker,
@@ -22,6 +21,7 @@ import InputComponent from '../formElements/InputComponent';
 import { cn } from '@/lib/utils';
 
 interface UseFormFieldsMapReturn<T extends FieldValues> {
+  //eslint-disable-line @typescript-eslint/no-unused-vars
   /**
    * A memoized callback function that renders the `InputComponent` with the provided field parameters.
    */
@@ -29,7 +29,7 @@ interface UseFormFieldsMapReturn<T extends FieldValues> {
     zFields,
     fieldProps,
     indexField,
-  }: FieldParams<T>) => React.ReactElement<typeof InputComponent>;
+  }: FieldParams) => React.ReactElement<typeof InputComponent>;
 
   /**
    * **Generates an array of React elements or null based on the provided data fields.**
@@ -97,10 +97,10 @@ export function useFormFieldsMap<T extends FieldValues>(
       zFields,
       fieldProps,
       indexField,
-    }: FieldParams<T>): React.ReactElement<typeof InputComponent> => (
+    }: FieldParams): React.ReactElement<typeof InputComponent> => (
       <InputComponent
         zFields={zFields as ControllerRenderProps<T, Path<T>>}
-        fieldProps={fieldProps as FieldReactFormMaker}
+        fieldProps={fieldProps}
         indexField={indexField}
       />
     ),
@@ -128,7 +128,7 @@ export function useFormFieldsMap<T extends FieldValues>(
             >
               <FormFieldElement<T>
                 elementField={elementField}
-                index={'FormFieldElement' + elementField.inputName}
+                index={`FormFieldElement${elementField.inputName}`}
                 form={form}
                 InpuTComponentCallBack={InpuTComponentCallBack}
               />

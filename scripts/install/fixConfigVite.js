@@ -42,7 +42,7 @@ export default defineConfig({
 })`;
     fs.writeFileSync("vite.config.ts", viteConfigContent);
     console.log(
-      "✅ Created vite.config.ts with Tailwind CSS plugin and path aliases"
+      "✅ Created vite.config.ts with Tailwind CSS plugin and path aliases",
     );
     return;
   }
@@ -75,8 +75,8 @@ export default defineConfig({
     programBody.unshift(
       astBuilders.importDeclaration(
         [astBuilders.importDefaultSpecifier(astBuilders.identifier("path"))],
-        astBuilders.literal("path")
-      )
+        astBuilders.literal("path"),
+      ),
     );
   }
   if (!hasTailwindImport) {
@@ -84,11 +84,11 @@ export default defineConfig({
       astBuilders.importDeclaration(
         [
           astBuilders.importDefaultSpecifier(
-            astBuilders.identifier("tailwindcss")
+            astBuilders.identifier("tailwindcss"),
           ),
         ],
-        astBuilders.literal("@tailwindcss/vite")
-      )
+        astBuilders.literal("@tailwindcss/vite"),
+      ),
     );
   }
 
@@ -103,7 +103,7 @@ export default defineConfig({
       // Check if plugins array exists
       if (viteConfigObject && viteConfigObject.type === "ObjectExpression") {
         const pluginsProperty = viteConfigObject.properties.find(
-          (property) => property.key?.name === "plugins"
+          (property) => property.key?.name === "plugins",
         );
         if (
           pluginsProperty &&
@@ -113,15 +113,15 @@ export default defineConfig({
           const hasTailwindPlugin = pluginsProperty.value.elements.some(
             (element) =>
               element.type === "CallExpression" &&
-              element.callee.name === "tailwindcss"
+              element.callee.name === "tailwindcss",
           );
           if (!hasTailwindPlugin) {
             // Add tailwindcss() at the beginning of plugins array
             pluginsProperty.value.elements.unshift(
               astBuilders.callExpression(
                 astBuilders.identifier("tailwindcss"),
-                []
-              )
+                [],
+              ),
             );
           }
         }
@@ -141,7 +141,7 @@ export default defineConfig({
       if (viteConfigObject && viteConfigObject.type === "ObjectExpression") {
         // Check if resolve property exists
         const resolveProperty = viteConfigObject.properties.find(
-          (property) => property.key?.name === "resolve"
+          (property) => property.key?.name === "resolve",
         );
         if (!resolveProperty) {
           // No resolve property: add full resolve/alias/@ block
@@ -161,28 +161,28 @@ export default defineConfig({
                         astBuilders.memberExpression(
                           astBuilders.identifier("path"),
                           astBuilders.identifier("resolve"),
-                          false
+                          false,
                         ),
                         [
                           astBuilders.identifier("__dirname"),
                           astBuilders.literal("./src"),
-                        ]
-                      )
+                        ],
+                      ),
                     ),
-                  ])
+                  ]),
                 ),
-              ])
-            )
+              ]),
+            ),
           );
         } else {
           // resolve exists: check for alias property
           const aliasProperty = resolveProperty.value.properties.find(
-            (property) => property.key?.name === "alias"
+            (property) => property.key?.name === "alias",
           );
           if (aliasProperty) {
             // alias exists: check for '@' key
             const hasAliasAt = aliasProperty.value.properties.some(
-              (property) => property.key.value === "@"
+              (property) => property.key.value === "@",
             );
             if (!hasAliasAt) {
               // Add '@' alias
@@ -194,14 +194,14 @@ export default defineConfig({
                     astBuilders.memberExpression(
                       astBuilders.identifier("path"),
                       astBuilders.identifier("resolve"),
-                      false
+                      false,
                     ),
                     [
                       astBuilders.identifier("__dirname"),
                       astBuilders.literal("./src"),
-                    ]
-                  )
-                )
+                    ],
+                  ),
+                ),
               );
             }
           } else {
@@ -218,16 +218,16 @@ export default defineConfig({
                       astBuilders.memberExpression(
                         astBuilders.identifier("path"),
                         astBuilders.identifier("resolve"),
-                        false
+                        false,
                       ),
                       [
                         astBuilders.identifier("__dirname"),
                         astBuilders.literal("./src"),
-                      ]
-                    )
+                      ],
+                    ),
                   ),
-                ])
-              )
+                ]),
+              ),
             );
           }
         }
@@ -240,7 +240,7 @@ export default defineConfig({
   const output = recast.print(viteConfigAst).code;
   fs.writeFileSync(viteConfigPath, output);
   console.log(
-    `✅ Updated ${viteConfigPath} with Tailwind CSS plugin and path aliases`
+    `✅ Updated ${viteConfigPath} with Tailwind CSS plugin and path aliases`,
   );
 }
 

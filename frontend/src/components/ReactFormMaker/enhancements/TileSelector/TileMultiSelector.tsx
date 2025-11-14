@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import { cn } from '@/lib/utils';
 import { type ClassValue } from 'clsx';
+import { cn } from '@/lib/utils';
 import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
 import TileSelectorItem from './TileSelectorItem';
 import {
@@ -112,7 +112,7 @@ const TileMultiSelector = forwardRef<HTMLDivElement, TileMultiSelectorProps>(
         className={cn('flex flex-col p-4', className)}
         onKeyDown={handleKeyDown}
       >
-        {<legend className="text-sm font-semibold">{legend}</legend>}
+        <legend className="text-sm font-semibold">{legend}</legend>
         {options.map((item, index) => {
           const itemValue = isOption(item) ? item.label : item;
           function isExcluded() {
@@ -135,7 +135,7 @@ const TileMultiSelector = forwardRef<HTMLDivElement, TileMultiSelectorProps>(
               ref={(el) => {
                 itemsRef.current[index] = el;
               }}
-              id={'tileMultiSelectorItem-' + itemValue}
+              id={`tileMultiSelectorItem-${itemValue}`}
               icon={props.icon ?? null}
             />
           );

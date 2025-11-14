@@ -10,7 +10,7 @@ const DIST_FILE = path.join(__dirname, "dist", "rfm-file.json");
 // Verify that the distribution file exists
 if (!fs.existsSync(DIST_FILE)) {
   console.error(
-    "❌ We have a probleme with distribution file for own package. If problem persists, please contact the author."
+    "❌ We have a probleme with distribution file for own package. If problem persists, please contact the author.",
   );
   process.exit(1);
 }
@@ -314,7 +314,7 @@ async function configureTypeScriptAliases() {
       tsconfig = JSON.parse(raw);
     } catch (e) {
       console.error(
-        "❌ Erreur de parsing tsconfig.json, création d'un nouveau fichier minimal."
+        "❌ Erreur de parsing tsconfig.json, création d'un nouveau fichier minimal.",
       );
       tsconfig = {};
     }
@@ -330,7 +330,7 @@ async function configureTypeScriptAliases() {
   ] || ["./src/*"];
   fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2));
   console.log(
-    "✅ TypeScript aliases configurés dans tsconfig.json (merge non destructif)"
+    "✅ TypeScript aliases configurés dans tsconfig.json (merge non destructif)",
   );
 
   // Configuration pour tsconfig.app.json (spécifique aux nouveaux projets Vite)
@@ -344,7 +344,7 @@ async function configureTypeScriptAliases() {
       tsconfigApp = JSON.parse(raw);
     } catch (e) {
       console.error(
-        "❌ Erreur de parsing tsconfig.app.json, création d'un nouveau fichier minimal."
+        "❌ Erreur de parsing tsconfig.app.json, création d'un nouveau fichier minimal.",
       );
       tsconfigApp = {};
     }
@@ -362,7 +362,7 @@ async function configureTypeScriptAliases() {
   ] || ["./src/*"];
   fs.writeFileSync(tsconfigAppPath, JSON.stringify(tsconfigApp, null, 2));
   console.log(
-    "✅ TypeScript aliases configurés dans tsconfig.app.json (merge non destructif)"
+    "✅ TypeScript aliases configurés dans tsconfig.app.json (merge non destructif)",
   );
 }
 
@@ -438,7 +438,7 @@ async function main() {
         try {
           execSync(
             "npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias '@/*'",
-            { stdio: "inherit" }
+            { stdio: "inherit" },
           );
           execSync("npx shadcn@latest init", { stdio: "inherit" });
 
@@ -491,14 +491,14 @@ async function main() {
     console.log(
       `   Components Dir: ${componentsDir.exists ? "✅" : "❌"} (${
         componentsDir.path
-      })`
+      })`,
     );
     console.groupEnd();
 
     // Installer Tailwind CSS si nécessaire
     if (!hasTailwind) {
       console.log(
-        "\n⚠️  Tailwind CSS is not installed. ReactFormMaker requires Tailwind CSS."
+        "\n⚠️  Tailwind CSS is not installed. ReactFormMaker requires Tailwind CSS.",
       );
       const installTailwindResponse = await prompts({
         type: "confirm",
@@ -540,21 +540,21 @@ async function main() {
           console.log(`   Tailwind CSS: ${hasTailwind ? "✅" : "❌"}`);
           console.log(`   Installation Method: ${newTailwindDetection.method}`);
           console.log(
-            `   Shadcn Config: ${shadcnConfig.hasConfig ? "✅" : "❌"}`
+            `   Shadcn Config: ${shadcnConfig.hasConfig ? "✅" : "❌"}`,
           );
         } catch (error) {
           console.error("❌ Error installing Tailwind CSS:", error.message);
           console.log(
-            "📖 Please install Tailwind manually: https://tailwindcss.com/docs/installation"
+            "📖 Please install Tailwind manually: https://tailwindcss.com/docs/installation",
           );
           process.exit(1);
         }
       } else {
         console.log(
-          "❌ Cannot proceed without Tailwind CSS. Installation cancelled."
+          "❌ Cannot proceed without Tailwind CSS. Installation cancelled.",
         );
         console.log(
-          "📖 Please install Tailwind first: https://tailwindcss.com/docs/installation"
+          "📖 Please install Tailwind first: https://tailwindcss.com/docs/installation",
         );
         process.exit(0);
       }
@@ -581,17 +581,17 @@ async function main() {
           console.log("🔄 Re-analyzing Shadcn configuration...");
           shadcnConfig = detectShadcnConfig();
           console.log(
-            `   Shadcn Config: ${shadcnConfig.hasConfig ? "✅" : "❌"}`
+            `   Shadcn Config: ${shadcnConfig.hasConfig ? "✅" : "❌"}`,
           );
         } catch (error) {
           console.error("❌ Error initializing Shadcn/ui:", error.message);
           console.log(
-            "⚠️  You can initialize it manually with: npx shadcn@latest init"
+            "⚠️  You can initialize it manually with: npx shadcn@latest init",
           );
         }
       } else {
         console.log(
-          "⚠️  Shadcn/ui not initialized. Component installation may fail."
+          "⚠️  Shadcn/ui not initialized. Component installation may fail.",
         );
       }
     }
@@ -615,7 +615,7 @@ async function main() {
       defaultTargetDir = path.dirname(componentsDir.componentsPath);
       console.log(
         "default components dir from shadcn config:",
-        defaultTargetDir
+        defaultTargetDir,
       );
     }
 
@@ -628,10 +628,10 @@ async function main() {
       (component) => {
         const isInstalled = isShadcnComponentInstalled(
           component,
-          `${componentsDir.path}/ui`
+          `${componentsDir.path}/ui`,
         );
         return !isInstalled;
-      }
+      },
     );
 
     if (presearchComponentNeeded.length === 0) {
@@ -641,7 +641,7 @@ async function main() {
         type: "select",
         name: "installShadcn",
         message: `Install required shadcn components? (${presearchComponentNeeded.join(
-          ", "
+          ", ",
         )})`,
         choices: [
           { title: "No", value: false },
@@ -672,7 +672,7 @@ async function main() {
           { title: "Yes, overwrite existing files", value: true },
         ],
         initial: 0,
-      }
+      },
     );
 
     const response = await prompts(questions);
@@ -697,7 +697,7 @@ async function main() {
       const missingComponents = requiredShadcnComponents.filter((component) => {
         const isInstalled = isShadcnComponentInstalled(
           component,
-          `${componentsDir.path}/ui`
+          `${componentsDir.path}/ui`,
         );
         if (isInstalled) {
           console.log(`   ✓ ${component} already exists, skipping...`);
@@ -712,7 +712,7 @@ async function main() {
         try {
           // Install missing components via npx shadcn add
           console.log(
-            `   Adding components: ${missingComponents.join(", ")}...`
+            `   Adding components: ${missingComponents.join(", ")}...`,
           );
           execSync(`npx shadcn@latest add ${missingComponents.join(" ")}`, {
             stdio: "inherit",
@@ -721,11 +721,11 @@ async function main() {
         } catch (error) {
           console.error(
             "❌ Error installing shadcn components:",
-            error.message
+            error.message,
           );
           console.log("⚠️  You will need to install them manually:");
           console.log(
-            `   npx shadcn@latest add ${missingComponents.join(" ")}`
+            `   npx shadcn@latest add ${missingComponents.join(" ")}`,
           );
         }
       }
@@ -742,12 +742,12 @@ async function main() {
       response.components,
       response.overwrite,
       shadcnConfig,
-      componentsDir
+      componentsDir,
     );
 
     // Messages de fin
     console.log(
-      `\n${colors.green}${colors.bright}${msg.installationComplete}${colors.reset}`
+      `\n${colors.green}${colors.bright}${msg.installationComplete}${colors.reset}`,
     );
 
     console.log(`\n${msg.enjoyDeveloping}`);
@@ -804,7 +804,7 @@ async function installMissingDependencies() {
 
   if (!installDeps) {
     console.log(
-      "⚠️  Installation cancelled. You will need to install manually:"
+      "⚠️  Installation cancelled. You will need to install manually:",
     );
     return;
   } else {
@@ -846,7 +846,7 @@ function createUtilsFile(targetDir) {
     const existingContent = fs.readFileSync(utilsPath, "utf8");
     if (existingContent.includes("mergeRefs")) {
       console.log(
-        "✅ Updated utils.ts already contains mergeRefs and formatBytes"
+        "✅ Updated utils.ts already contains mergeRefs and formatBytes",
       );
       return;
     } else {
@@ -949,7 +949,7 @@ export function formatBytes(
 
   fs.writeFileSync(utilsPath, utilsContent);
   console.log(
-    "✅ utils.ts file created with utility functions (cn, mergeRefs, formatBytes)"
+    "✅ utils.ts file created with utility functions (cn, mergeRefs, formatBytes)",
   );
 }
 
@@ -959,7 +959,7 @@ async function installFiles(
   selectedComponents,
   overwrite,
   shadcnConfig = {},
-  componentsDir = {}
+  componentsDir = {},
 ) {
   let installedCount = 0;
   let skippedCount = 0;
@@ -986,7 +986,7 @@ async function installFiles(
       relativePath,
       targetDir,
       shadcnConfig,
-      componentsDir
+      componentsDir,
     );
     const dir = path.dirname(fullPath);
 
@@ -999,7 +999,7 @@ async function installFiles(
     if (fs.existsSync(fullPath) && !overwrite) {
       //Should be grey and litle logs
       console.log(
-        `\x1b[90mSkipped: ${path.relative(process.cwd(), fullPath)}\x1b[0m`
+        `\x1b[90mSkipped: ${path.relative(process.cwd(), fullPath)}\x1b[0m`,
       );
       skippedCount++;
       continue;
@@ -1015,7 +1015,7 @@ async function installFiles(
   }
 
   console.log(
-    `\n📊 Summary: ${installedCount} files installed, ${skippedCount} skipped`
+    `\n📊 Summary: ${installedCount} files installed, ${skippedCount} skipped`,
   );
 }
 

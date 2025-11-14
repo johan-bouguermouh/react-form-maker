@@ -12,10 +12,15 @@ interface StyleProps {
 
 class HeaderStepperItemStyle {
   opacityClass: string;
+
   cursorClass: string;
+
   barProgressClass: string;
+
   stepDirectionContainerClass: string;
+
   positionLabelClass: string;
+
   progressBarPositionClass: string;
 
   constructor(props: StyleProps) {

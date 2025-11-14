@@ -1,4 +1,6 @@
 import React from 'react';
+import type { UseFormReturn, FieldValues, Path } from 'react-hook-form';
+import { z } from 'zod';
 import type { CompositeField } from '../../interfaces/FieldInterfaces';
 import type {
   orientationMutable,
@@ -6,13 +8,11 @@ import type {
   StepFormState,
   StepperContextProps,
 } from './SteppersElements/StepperContext.interface';
-import type { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 import {
   isFieldReactFormMaker,
   isStepReactFormMaker,
 } from '../../utils/typeGuards/compositeField.TypeGuards';
 import stepReducer, { initialSteps } from './SteppersElements/stepReducer';
-import { z } from 'zod';
 import { usePromiseObserver } from '@/lib/usePromiseObserver';
 import { CommandManager } from '@/lib/commandManager';
 
@@ -58,7 +58,7 @@ function extractFieldNamesFromStep(
  * @param param0
  * @returns
  */
-export const StepperProvider = <T extends FieldValues>({
+export function StepperProvider<T extends FieldValues>({
   children,
   form,
   formfields,
@@ -70,7 +70,7 @@ export const StepperProvider = <T extends FieldValues>({
   formfields: CompositeField[];
   orientation?: 'vertical' | 'horizontal';
   zObject: { [key in keyof T]: z.ZodType<T[key], z.ZodTypeDef, T[key]> };
-}) => {
+}) {
   const [stepIndex, setStepIndex] = React.useState<number>(0);
   const [orientationMutable, setOrientationMutable] =
     React.useState<orientationMutable>({ orientation, isOriginal: true });
@@ -160,7 +160,7 @@ export const StepperProvider = <T extends FieldValues>({
     currentStepIndex: number,
   ): Promise<boolean> => {
     const inputsNames = inputsNamesBySteps[currentStepIndex] as Path<T>[];
-    return await form.trigger(inputsNames);
+    return form.trigger(inputsNames);
   };
 
   const executeStepCompletion = async (currentStepIndex: number) => {
@@ -202,9 +202,11 @@ export const StepperProvider = <T extends FieldValues>({
   const goToStep = async (newStepIndex: number) => {
     if (stepIndex === newStepIndex) {
       return;
-    } else if (steps[newStepIndex].isdisabled) {
+    }
+    if (steps[newStepIndex].isdisabled) {
       return;
-    } else if (stepIndex > newStepIndex) {
+    }
+    if (stepIndex > newStepIndex) {
       setStepIndex(newStepIndex);
       return;
     }
@@ -294,7 +296,7 @@ export const StepperProvider = <T extends FieldValues>({
         goToStep,
         goNextStep,
         goPreviousStep,
-        form: form as UseFormReturn<T>,
+        form,
         getFieldStatesBySteps,
         getPreviousStep,
         getNextStep,
@@ -307,7 +309,7 @@ export const StepperProvider = <T extends FieldValues>({
       {children}
     </StepperContext.Provider>
   );
-};
+}
 
 /**
  * ### Stepper Context Hook

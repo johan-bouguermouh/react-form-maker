@@ -1,8 +1,8 @@
 import React from 'react';
+import { z } from 'zod';
 import type { FieldParams } from '../interfaces/FieldParams';
 import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 import { isOption } from '../utils/typeGuards/optionsFields.TypeGuards';
-import { z } from 'zod';
 import TileMultiSelector, {
   type TileMultiSelectorProps,
 } from '../enhancements/TileSelector/TileMultiSelector';

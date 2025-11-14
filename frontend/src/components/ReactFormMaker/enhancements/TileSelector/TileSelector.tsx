@@ -56,7 +56,7 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
       return itemsRef.current.some((item) => item === activeElement);
     }
 
-    const handleChange = (value: string) => {
+    const handleChange = (value: string | number) => {
       const option = options.find(
         (item) => (isOption(item) ? item.label : item) === value,
       );
@@ -119,7 +119,7 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
         className={cn('flex flex-col p-4', className)}
         onKeyDown={handleKeyDown}
       >
-        {<legend className="text-sm font-semibold">{legend}</legend>}
+        <legend className="text-sm font-semibold">{legend}</legend>
         {options.map((item, index) => {
           const itemValue = isOption(item) ? item.value : item;
           function isExcluded() {
@@ -137,7 +137,7 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
               ref={(el) => {
                 itemsRef.current[index] = el;
               }}
-              id={'tileSelectorItem-' + itemValue}
+              id={`tileSelectorItem-${itemValue}`}
             />
           );
         })}

@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { z } from 'zod';
 import type { FieldParams } from '../interfaces/FieldParams';
 import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 import TileSelector from '../enhancements/TileSelector/TileSelector';
 import { isOption } from '../utils/typeGuards/optionsFields.TypeGuards';
-import { z } from 'zod';
 
 function TileSelectorInput({ zFields, fieldProps, indexField }: FieldParams) {
-  const { value, onChange, ...restZfields } = zFields;
+  // Typage explicite pour éviter l'unsafe destructuring
+  const { value, onChange, ...restZfields } = zFields as {
+    value: string | number;
+    onChange: (val: string | number) => void;
+    [key: string]: unknown;
+  };
 
   function testhandlerOnChange(value: string | number) {
     onChange(value);
@@ -23,10 +28,11 @@ function TileSelectorInput({ zFields, fieldProps, indexField }: FieldParams) {
     let schemaValues: string[] = [];
 
     if (schema instanceof z.ZodEnum) {
-      schemaValues = schema._def.values;
+      schemaValues = schema._def.values; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
     } else if (schema instanceof z.ZodUnion) {
-      schemaValues = schema._def.options.flatMap((option: any) =>
-        option instanceof z.ZodEnum ? option._def.values : [],
+      schemaValues = (schema._def.options as z.ZodEnum<any>[]).flatMap(
+        (option) =>
+          option instanceof z.ZodEnum ? (option._def.values as string[]) : [],
       );
     }
 
@@ -52,7 +58,7 @@ function TileSelectorInput({ zFields, fieldProps, indexField }: FieldParams) {
       id={fieldProps.inputName}
       onClick={testhandlerOnChange}
       {...restZfields}
-      value={value}
+      value={typeof value === 'string' ? value : String(value)}
       defaultValue={fieldProps.defaultValues}
       options={fieldProps.options}
       className={fieldProps.className}
@@ -64,4 +70,4 @@ function TileSelectorInput({ zFields, fieldProps, indexField }: FieldParams) {
   );
 }
 
-export default React.memo(TileSelectorInput);
+export default memo(TileSelectorInput);

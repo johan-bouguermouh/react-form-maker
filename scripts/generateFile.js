@@ -41,7 +41,7 @@ const reactFormMakerDir = path.join(
   "frontend",
   "src",
   "components",
-  "ReactFormMaker"
+  "ReactFormMaker",
 );
 
 const libDir = path.join(root, "frontend", "src", "lib");
@@ -59,7 +59,7 @@ const typographyFile = path.join(uiDir, "Typography.tsx");
 if (fs.existsSync(typographyFile)) {
   files["/components/ui/Typography.tsx"] = fs.readFileSync(
     typographyFile,
-    "utf8"
+    "utf8",
   );
 }
 
@@ -87,7 +87,7 @@ if (!fs.existsSync(distDir)) {
 
 fs.writeFileSync(
   path.resolve(root, "./dist/rfm-file.json"),
-  JSON.stringify(prefixedFiles, null, 2)
+  JSON.stringify(prefixedFiles, null, 2),
 );
 
 console.log("Fichiers exportés pour Sandpack !");

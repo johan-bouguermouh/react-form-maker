@@ -207,7 +207,7 @@ async function main() {
   // Vérifier si le fichier de distribution existe
   if (!fs.existsSync(DIST_FILE)) {
     console.error(
-      "❌ Distribution file not found. Please generate files first with npm run build."
+      "❌ Distribution file not found. Please generate files first with npm run build.",
     );
     process.exit(1);
   }
@@ -237,7 +237,7 @@ async function main() {
       try {
         execSync(
           "npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias '@/*'",
-          { stdio: "inherit" }
+          { stdio: "inherit" },
         );
         execSync("npx shadcn@latest init", { stdio: "inherit" });
 
@@ -312,10 +312,10 @@ async function main() {
   // Vérifier les prérequis
   if (!hasTailwind) {
     console.error(
-      "❌ Tailwind CSS is not installed. ReactFormMaker requires Tailwind CSS."
+      "❌ Tailwind CSS is not installed. ReactFormMaker requires Tailwind CSS.",
     );
     console.log(
-      "📖 Please install Tailwind first: https://tailwindcss.com/docs/installation"
+      "📖 Please install Tailwind first: https://tailwindcss.com/docs/installation",
     );
     process.exit(1);
   }
@@ -368,7 +368,7 @@ async function main() {
     type: "confirm",
     name: "installShadcn",
     message: `Install required shadcn components? (${requiredShadcnComponents.join(
-      ", "
+      ", ",
     )})`,
     initial: !shadcnConfig.hasConfig, // Par défaut oui si pas de config shadcn
   });
@@ -390,7 +390,7 @@ async function main() {
       name: "overwrite",
       message: "Overwrite existing files?",
       initial: false,
-    }
+    },
   );
 
   const response = await prompts(questions);
@@ -414,7 +414,7 @@ async function main() {
     const missingComponents = requiredShadcnComponents.filter((component) => {
       const isInstalled = isShadcnComponentInstalled(
         component,
-        componentsDir.uiPath
+        componentsDir.uiPath,
       );
       if (isInstalled) {
         console.log(`   ✓ ${component} already exists, skipping...`);
@@ -452,7 +452,7 @@ async function main() {
     response.components,
     response.overwrite,
     shadcnConfig,
-    componentsDir
+    componentsDir,
   );
 
   console.log(`\n${msg.installationComplete}`);
@@ -461,7 +461,7 @@ async function main() {
     console.log("1. Installez les dépendances requises :");
     console.log("   npm install react-hook-form zod @hookform/resolvers");
     console.log(
-      "   npm install @radix-ui/react-select @radix-ui/react-checkbox"
+      "   npm install @radix-ui/react-select @radix-ui/react-checkbox",
     );
     console.log("   npm install class-variance-authority clsx tailwind-merge");
     console.log("2. Configurez votre projet avec les composants installés");
@@ -470,7 +470,7 @@ async function main() {
     console.log("1. Install required dependencies:");
     console.log("   npm install react-hook-form zod @hookform/resolvers");
     console.log(
-      "   npm install @radix-ui/react-select @radix-ui/react-checkbox"
+      "   npm install @radix-ui/react-select @radix-ui/react-checkbox",
     );
     console.log("   npm install class-variance-authority clsx tailwind-merge");
     console.log("2. Configure your project with the installed components");
@@ -543,7 +543,7 @@ async function installMissingDependencies() {
 
   if (!installDeps) {
     console.log(
-      "⚠️  Installation annulée. Vous devrez installer manuellement :"
+      "⚠️  Installation annulée. Vous devrez installer manuellement :",
     );
     if (missingDeps.length > 0) {
       console.log(`   npm install ${missingDeps.join(" ")}`);
@@ -571,7 +571,7 @@ async function installMissingDependencies() {
   } catch (error) {
     console.error(
       "❌ Erreur lors de l'installation des dépendances:",
-      error.message
+      error.message,
     );
     console.log("Vous pouvez les installer manuellement :");
     if (missingDeps.length > 0) {
@@ -694,7 +694,7 @@ export function formatBytes(
 
   fs.writeFileSync(utilsPath, utilsContent);
   console.log(
-    "✅ Fichier utils.ts créé avec les fonctions utilitaires (cn, mergeRefs, formatBytes)"
+    "✅ Fichier utils.ts créé avec les fonctions utilitaires (cn, mergeRefs, formatBytes)",
   );
 }
 
@@ -704,7 +704,7 @@ async function installFiles(
   selectedComponents,
   overwrite,
   shadcnConfig = {},
-  componentsDir = {}
+  componentsDir = {},
 ) {
   let installedCount = 0;
   let skippedCount = 0;
@@ -731,7 +731,7 @@ async function installFiles(
       relativePath,
       targetDir,
       shadcnConfig,
-      componentsDir
+      componentsDir,
     );
     const dir = path.dirname(fullPath);
 
@@ -743,7 +743,7 @@ async function installFiles(
     // Vérifier si le fichier existe déjà
     if (fs.existsSync(fullPath) && !overwrite) {
       console.log(
-        `⚠️  Existing file skipped: ${path.relative(process.cwd(), fullPath)}`
+        `⚠️  Existing file skipped: ${path.relative(process.cwd(), fullPath)}`,
       );
       skippedCount++;
       continue;
@@ -759,7 +759,7 @@ async function installFiles(
   }
 
   console.log(
-    `\n📊 Summary: ${installedCount} files installed, ${skippedCount} skipped`
+    `\n📊 Summary: ${installedCount} files installed, ${skippedCount} skipped`,
   );
 }
 
@@ -802,7 +802,7 @@ process.on("SIGINT", () => {
       currentLang === "fr"
         ? "Installation interrompue par l'utilisateur."
         : "Installation interrupted by user."
-    }`
+    }`,
   );
   process.exit(0);
 });
@@ -813,7 +813,7 @@ process.on("unhandledRejection", (error) => {
       currentLang === "fr"
         ? "Erreur lors de l'installation:"
         : "Installation error:"
-    } ${error.message}`
+    } ${error.message}`,
   );
   process.exit(1);
 });

@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
 import { Cross1Icon } from '@radix-ui/react-icons';
+import { cn } from '@/lib/utils';
 import { type Option } from '../../utils/typeGuards/optionsFields.TypeGuards';
 
 export interface BadgeItemParams extends React.ComponentProps<'div'> {

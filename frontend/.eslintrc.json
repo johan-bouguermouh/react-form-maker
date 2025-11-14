@@ -1,8 +1,5 @@
 {
   "extends": [
-    "airbnb",
-    "airbnb/hooks",
-    "airbnb-typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:react/recommended",
@@ -48,8 +45,12 @@
     "react/require-default-props": "off"
   },
   "settings": {
+    "import/extensions": [".js", ".jsx", ".tsx", ".ts"],
     "import/resolver": {
       "typescript": {}
+    },
+    "react": {
+      "version": "detect"
     }
   },
   "overrides": [

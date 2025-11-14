@@ -1,12 +1,3 @@
-import { Button } from '@/components/ui/button';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
-import { cn } from '@/lib/utils';
 import {
   Popover,
   PopoverContent,
@@ -19,6 +10,15 @@ import {
   type DropdownProps,
   useDayPicker,
 } from 'react-day-picker';
+import { cn } from '@/lib/utils';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { Button } from '@/components/ui/button';
 
 export interface YearsDropdownProps extends DropdownProps {
   selectedYear: number;

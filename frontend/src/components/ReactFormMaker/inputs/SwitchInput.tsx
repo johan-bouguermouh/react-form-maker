@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch } from '@/components/ui/switch';
-import { cn } from '../../../lib/utils';
+import { cn } from '../../../lib/utils.ts';
 import type { FieldParams } from '../interfaces/FieldParams';
 
 function SwitchInput({ zFields, fieldProps, indexField }: FieldParams) {
