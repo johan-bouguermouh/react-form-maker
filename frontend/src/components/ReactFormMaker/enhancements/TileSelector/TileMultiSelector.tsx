@@ -107,8 +107,8 @@ const TileMultiSelector = forwardRef<HTMLDivElement, TileMultiSelectorProps>(
         ref={ref}
         id={id}
         aria-disabled={disabled}
-        role="group"
-        aria-labelledby="tile-multi-selector-legend"
+        role="listbox"
+        tabIndex={0}
         className={cn('flex flex-col p-4', className)}
         onKeyDown={handleKeyDown}
       >
