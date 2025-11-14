@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import type { FieldValues } from 'react-hook-form';
 import { v4 as uuidV4 } from 'uuid';
 import type { FieldParams } from '../interfaces/FieldParams';
 import TextInput from '../inputs/TextInput';
@@ -30,7 +29,6 @@ import DateRangeInput from '../inputs/DateRangeInput';
  * @param {Object} params.fieldProps - The properties of the field.
  * @param {string} params.fieldProps.inputType - The type of input to render.
  * @param {React.ReactNode} params.fieldProps.children - The children elements for custom input.
- * @param {number} params.indexField - The index of the field.
  *
  * @returns {JSX.Element} The rendered input component based on the **input type**.
  *
@@ -41,7 +39,6 @@ import DateRangeInput from '../inputs/DateRangeInput';
 function InputComponent(params: FieldParams): JSX.Element {
   const {
     fieldProps: { inputType, customInputFieldElement },
-    indexField,
   } = params;
 
   // const [uuid, setUuid] = useState<string>(uuidV4());
