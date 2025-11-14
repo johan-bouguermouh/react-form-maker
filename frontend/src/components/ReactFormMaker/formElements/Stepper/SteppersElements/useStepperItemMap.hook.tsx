@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import type {
   CompositeField,
   FieldReactFormMaker,
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   ReactFormMakerStep,
 } from '../../../interfaces/FieldInterfaces';
 import { StepperItem } from './StepperItems';
