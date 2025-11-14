@@ -23,6 +23,7 @@
     "prettier"
   ],
   "rules": {
+    "import/no-named-as-default-member": "off",
     "react/prop-types": "off",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "quotes": ["warn", "single"],
