@@ -1,13 +1,14 @@
 import React from 'react';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import type { FieldParams } from '../interfaces/FieldParams';
-import { cn } from '@/lib/utils';
+import { cn, mergeRefs } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 const InputPasswordVisibility = React.forwardRef<HTMLInputElement, FieldParams>(
   ({ zFields, fieldProps, indexField, id }, _ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
+    const mergedRef = mergeRefs(_ref, zFields.ref);
 
     const inputValue: string =
       zFields.value !== undefined ? String(zFields.value) : '';
@@ -21,6 +22,7 @@ const InputPasswordVisibility = React.forwardRef<HTMLInputElement, FieldParams>(
           type={showPassword ? 'text' : 'password'}
           placeholder={fieldProps.placeholder}
           {...zFields}
+          ref={mergedRef}
           value={inputValue}
         />
         <Button
