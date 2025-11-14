@@ -14,8 +14,7 @@ function CheckboxWithText(params: FieldParams): JSX.Element {
       <Checkbox
         key={indexField}
         className={cn(fieldProps.className)}
-        /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-        defaultChecked={zFields.value}
+        defaultChecked={Boolean(zFields.value)}
         id={fieldProps.inputName}
         {...zFields}
         onCheckedChange={(checked: boolean) => {
