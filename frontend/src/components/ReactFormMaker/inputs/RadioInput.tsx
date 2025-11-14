@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import {
   isOption,
   type Option,
-  useValueOption,
+  getValueOption,
 } from '../utils/typeGuards/optionsFields.TypeGuards';
 
 function RadioInput({ zFields, fieldProps, indexField }: FieldParams) {
@@ -20,7 +20,7 @@ function RadioInput({ zFields, fieldProps, indexField }: FieldParams) {
       {fieldProps.options?.map((option: string | Option, index: number) => (
         <div className="flex items-center space-x-2" key={index}>
           <RadioGroupItem
-            key={useValueOption(option)}
+            key={getValueOption(option)}
             value={isOption(option) ? option.label : option}
             id={isOption(option) ? option.label : option}
           />
