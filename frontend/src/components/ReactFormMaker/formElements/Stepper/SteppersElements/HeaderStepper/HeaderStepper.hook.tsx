@@ -80,14 +80,13 @@ export function useHeaderStepper(): HeaderStepperReturn {
     return 270;
   }
 
-  if (typeof window !== 'undefined') {
-    useResizeObserver(navRef, (entry) => {
-      setSize({
-        width: calculateNavWidth(entry),
-        height: calculateNavHeight(),
-      });
+  useResizeObserver(navRef, (entry) => {
+    if (typeof window === 'undefined' || !navRef.current) return;
+    setSize({
+      width: calculateNavWidth(entry),
+      height: calculateNavHeight(),
     });
-  }
+  });
 
   return {
     navRef,
