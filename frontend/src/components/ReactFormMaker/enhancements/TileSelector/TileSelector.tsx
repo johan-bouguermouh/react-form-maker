@@ -29,15 +29,12 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
   (props, ref) => {
     const {
       options,
-      onSelect,
-      onChange,
       onClick,
       defaultValue,
       className,
       disabled,
       id,
       legend,
-      label,
       itemClassName,
       excludes,
     } = props;
@@ -114,8 +111,8 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
         ref={ref}
         id={id}
         aria-disabled={disabled}
-        role="radiogroup"
-        aria-labelledby="tile-selector-legend"
+        role="listbox"
+        tabIndex={0}
         className={cn('flex flex-col p-4', className)}
         onKeyDown={handleKeyDown}
       >
