@@ -5,6 +5,7 @@ import {
   type MultiSelectParams,
   MultiSelect,
 } from '../enhancements/MultiSelect/MultiSelect';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 interface MultiSelectInputProps
   extends FieldParams,
