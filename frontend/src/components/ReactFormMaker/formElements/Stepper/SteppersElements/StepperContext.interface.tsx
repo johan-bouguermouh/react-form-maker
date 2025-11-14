@@ -7,6 +7,7 @@ import type { ReactFormMakerStep } from '../../../interfaces/FieldInterfaces';
  *
  * _Cette interface résume l'état d'un champs selon le formContext de React Hook Form_
  */
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export interface FieldState<T> {
   /**
    * @type {boolean}
@@ -80,7 +81,7 @@ export interface FieldStatesDetail<T> {
    * _The value of the field is the value entered by the user in the field._
    * _This value can be the default value applied by the program._
    */
-  value: any;
+  value: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   /**
    * @type {FieldState<T>}
