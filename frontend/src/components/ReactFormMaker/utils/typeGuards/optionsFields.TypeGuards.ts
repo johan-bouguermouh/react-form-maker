@@ -21,7 +21,7 @@ export function isOption(element: string | Option): element is Option {
  * @returns {string | number} The value of the option.
  * _If the option is a string, it returns the string itself._
  */
-export function useValueOption(option: string | Option) {
+export function getValueOption(option: string | Option) {
   return isOption(option) ? option.value : option;
 }
 
