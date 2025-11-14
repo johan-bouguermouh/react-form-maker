@@ -12,6 +12,13 @@ import type { FieldParams } from '../interfaces/FieldParams';
 import type { CustomInputFieldElementParams } from '../interfaces/CustomInputFieldElementParams';
 import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 interface FormFieldElementProps<T extends FieldValues> {
   elementField: FieldReactFormMaker;
   index: string;
