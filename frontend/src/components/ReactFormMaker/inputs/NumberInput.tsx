@@ -11,6 +11,11 @@ function NumberInput({ zFields, fieldProps, indexField }: FieldParams) {
       type="number"
       placeholder={fieldProps.placeholder}
       {...zFields}
+      value={
+        zFields.value !== undefined && zFields.value !== null
+          ? Number(zFields.value)
+          : ''
+      }
     />
   );
 }
