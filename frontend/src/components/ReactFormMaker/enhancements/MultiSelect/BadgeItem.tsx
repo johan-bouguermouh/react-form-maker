@@ -10,7 +10,7 @@ export interface BadgeItemParams extends React.ComponentProps<'div'> {
 }
 
 const BadgeItem = forwardRef<HTMLDivElement, BadgeItemParams>((props, ref) => {
-  const { option, onRemove, className, ...rest } = props;
+  const { option, onRemove, className } = props;
 
   const [isHovered, setIsHovered] = React.useState(false);
 
