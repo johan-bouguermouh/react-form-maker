@@ -20,8 +20,10 @@ import FormFieldElement from '../formElements/FormFieldElement';
 import InputComponent from '../formElements/InputComponent';
 import { cn } from '@/lib/utils';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 interface UseFormFieldsMapReturn<T extends FieldValues> {
-  //eslint-disable-line @typescript-eslint/no-unused-vars
+  /* eslint-enable @typescript-eslint/no-unused-vars */
+
   /**
    * A memoized callback function that renders the `InputComponent` with the provided field parameters.
    */
@@ -68,7 +70,7 @@ interface UseFormFieldsMapReturn<T extends FieldValues> {
    * @callback FieldsetMap
    * - - -
    * @example
-   * ``` javascript
+   * ```typescript
    * const fields = [
    *   { type: 'fieldset', ... },
    *   { type: 'fieldset', ... }
@@ -89,7 +91,7 @@ interface UseFormFieldsMapReturn<T extends FieldValues> {
   ) => (React.ReactElement<'fieldset'> | null)[];
 }
 
-export function useFormFieldsMap<T extends FieldValues>(
+export function useFormFieldsMap<T extends FieldValues>( //@typescript-eslint/no-unused-vars
   form: UseFormReturn<T>,
 ): UseFormFieldsMapReturn<T> {
   const InpuTComponentCallBack = useCallback(
@@ -121,11 +123,7 @@ export function useFormFieldsMap<T extends FieldValues>(
         }
         if (isFieldReactFormMaker(elementField)) {
           return (
-            <div
-              role="form-field-element"
-              className="mb-4"
-              key={`form-field-${index}`}
-            >
+            <div className="mb-4" key={`form-field-${index}`}>
               <FormFieldElement<T>
                 elementField={elementField}
                 index={`FormFieldElement${elementField.inputName}`}
