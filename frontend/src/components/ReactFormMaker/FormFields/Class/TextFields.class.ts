@@ -20,7 +20,7 @@ export class TextField extends Field<FieldReactFormMaker> {
       console.warn('You must set a zod object before using this method');
       return this;
     }
-    this.zodObject = this.zodObject.refine((data) => regex.test(data), {
+    this.zodObject = this.zodObject.refine((data: string) => regex.test(data), {
       message: 'Invalid input',
     });
     return this;

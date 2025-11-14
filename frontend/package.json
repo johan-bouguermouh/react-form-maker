@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
-    "format": "prettier --write 'src/**/*.{js,ts,tsx}'"
+    "format": "prettier --write 'src/**/*.{js,ts,tsx}'",
+    "report": "npx eslint ./src/components/ReactFormMaker --format html --output-file eslint-report.html  "
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

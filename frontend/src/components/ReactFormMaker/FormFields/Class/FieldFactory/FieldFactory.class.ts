@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z, ZodNumber, ZodString, ZodType, type ZodTypeDef } from 'zod';
 import React from 'react';
 import type {
@@ -258,11 +259,12 @@ export default class Field<T extends FieldReactFormMaker> {
     }
 
     zodObject.refine(
-      (data) => {
+      (data: any) => {
         if (isComplexeOption) {
           options = options as Option[];
           return options.some((option) => option.value === data);
         }
+        /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
         return options.includes(data);
       },
       {
@@ -651,7 +653,7 @@ export default class Field<T extends FieldReactFormMaker> {
               } else {
                 ctx.addIssue({
                   code: z.ZodIssueCode.custom,
-                  message: "You must provide a 'from' and 'to' date",
+                  message: `You must provide a 'from' and 'to' date`,
                 });
               }
             });
@@ -1064,6 +1066,7 @@ export default class Field<T extends FieldReactFormMaker> {
       inputName: this.inputName,
       label: this.label,
       placeholder: this.placeholder,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       defaultValues: this.defaultValues,
       zodObject: this.zodObject,
       inputType: this.inputType,
@@ -1222,6 +1225,7 @@ export default class Field<T extends FieldReactFormMaker> {
    * @returns
    */
   setDefaultValues(value: any): this {
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
     this.defaultValues = value;
     return this;
   }
@@ -1246,3 +1250,5 @@ export default class Field<T extends FieldReactFormMaker> {
     return this;
   }
 }
+
+/* eslint-enable @typescript-eslint/no-explicit-any */

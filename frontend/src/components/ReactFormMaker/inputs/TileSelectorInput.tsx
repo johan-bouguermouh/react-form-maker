@@ -30,6 +30,7 @@ function TileSelectorInput({ zFields, fieldProps, indexField }: FieldParams) {
     if (schema instanceof z.ZodEnum) {
       schemaValues = schema._def.values; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
     } else if (schema instanceof z.ZodUnion) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       schemaValues = (schema._def.options as z.ZodEnum<any>[]).flatMap(
         (option) =>
           option instanceof z.ZodEnum ? (option._def.values as string[]) : [],
@@ -58,8 +59,8 @@ function TileSelectorInput({ zFields, fieldProps, indexField }: FieldParams) {
       id={fieldProps.inputName}
       onClick={testhandlerOnChange}
       {...restZfields}
-      value={typeof value === 'string' ? value : String(value)}
-      defaultValue={fieldProps.defaultValues}
+      value={String(value)}
+      defaultValue={String(fieldProps.defaultValues as string | number)}
       options={fieldProps.options}
       className={fieldProps.className}
       disabled={fieldProps.disabled}
