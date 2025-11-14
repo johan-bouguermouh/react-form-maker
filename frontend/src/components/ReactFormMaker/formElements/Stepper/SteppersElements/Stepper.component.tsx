@@ -3,7 +3,7 @@ import type { FieldValues } from 'react-hook-form';
 import useResizeObserver from '@react-hook/resize-observer';
 import { cn } from '@/lib/utils';
 import { useStepper } from '../StepperContext';
-
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 interface StepperProps<T extends FieldValues> {
   children: ReactNode;
 }
