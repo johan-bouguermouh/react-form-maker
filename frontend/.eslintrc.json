@@ -23,6 +23,7 @@
     "prettier"
   ],
   "rules": {
+    "react/prop-types": "off",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "quotes": ["warn", "single"],
     "react/jsx-props-no-spreading": "off", // Allow props spreading in JSX only for
