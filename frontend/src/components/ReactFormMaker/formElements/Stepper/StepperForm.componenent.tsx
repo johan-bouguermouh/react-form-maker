@@ -2,6 +2,7 @@ import React from 'react';
 import type { FieldValues, UseFormReturn } from 'react-hook-form';
 import type {
   CompositeField,
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   ReactFormMakerStep,
 } from '../../interfaces/FieldInterfaces';
 import { StepperProvider } from './StepperContext';
@@ -14,7 +15,7 @@ import { useStepperItemsMap } from './SteppersElements/useStepperItemMap.hook';
 interface StepperFormProps<T extends FieldValues> {
   form: UseFormReturn<T>;
   formfields: CompositeField[];
-  zObject: any;
+  zObject: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   orientation: 'horizontal' | 'vertical';
   formFieldsMap: (dataField: CompositeField[]) => (React.JSX.Element | null)[];
 }
@@ -53,7 +54,7 @@ function StepperForm<T extends FieldValues>({
     <StepperProvider<T>
       form={form}
       formfields={formfields}
-      zObject={zObject}
+      zObject={zObject} // eslint-disable-line @typescript-eslint/no-unsafe-assignment
       orientation={orientation}
     >
       <Stepper<T>>
