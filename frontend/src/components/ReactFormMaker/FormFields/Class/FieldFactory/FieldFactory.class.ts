@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { z, ZodNumber, ZodString, ZodType, type ZodTypeDef } from 'zod';
+import { z, ZodString, ZodType, type ZodTypeDef } from 'zod';
 import React from 'react';
 import type {
   DividerReactFormMaker,
@@ -653,7 +653,7 @@ export default class Field<T extends FieldReactFormMaker> {
               } else {
                 ctx.addIssue({
                   code: z.ZodIssueCode.custom,
-                  message: `You must provide a 'from' and 'to' date`,
+                  message: "You must provide a 'from' and 'to' date",
                 });
               }
             });
@@ -794,7 +794,8 @@ export default class Field<T extends FieldReactFormMaker> {
         .transform((data) => Number(data));
     }
     this.zodObject = zodObject;
-    this.zodObject as ZodNumber;
+    // this.zodObject as ZodNumber;
+    this.inputType = 'number';
     return this;
   }
 
