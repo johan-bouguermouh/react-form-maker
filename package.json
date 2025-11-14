@@ -1,6 +1,6 @@
 {
   "name": "rfm-toolkit",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "React Form Maker toolkit is a tool designed to simplify the creation and editing of simple, repetitive forms. It is based on a straightforward JSON approach, where all the necessary information for inserting form fields is provided.React Form Maker combines the power of React Hook Form and Zod to ensure robust state management and integrated form validation.The project is built on top of ShadCN and the Radix UI library, allowing every developer to easily customize the behavior and UI of their components at the root level.",
   "bin": {
     "rfm-toolkit": "./install.js"
