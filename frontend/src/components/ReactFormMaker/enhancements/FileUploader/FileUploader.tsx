@@ -232,6 +232,8 @@ export const FileUploader = forwardRef<
         <div
           ref={ref}
           tabIndex={0}
+          role="button"
+          aria-label="Zone de dépôt de fichiers"
           onKeyDownCapture={handleKeyDown}
           className={cn(
             'grid w-full focus:outline-none overflow-hidden ',
