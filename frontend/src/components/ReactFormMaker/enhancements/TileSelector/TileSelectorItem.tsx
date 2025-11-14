@@ -33,11 +33,11 @@ const TileSelectorItem = forwardRef<HTMLDivElement, TileSelectorItemProps>(
       className,
     );
 
-    function useValue(option: string | Option): string | number {
+    function getValue(option: string | Option): string | number {
       return isOption(option) ? option.value : option;
     }
 
-    function useLabel(option: string | Option) {
+    function getLabel(option: string | Option) {
       return isOption(option) ? option.label : option;
     }
 
@@ -48,7 +48,7 @@ const TileSelectorItem = forwardRef<HTMLDivElement, TileSelectorItemProps>(
           e.stopPropagation();
           return;
         }
-        onSelect(useValue(option));
+        onSelect(getValue(option));
       }
     };
 
@@ -57,15 +57,16 @@ const TileSelectorItem = forwardRef<HTMLDivElement, TileSelectorItemProps>(
         id={id}
         ref={ref}
         className={TileSelectorItemStyle}
-        role="radio"
+        role="option"
         aria-disabled={disabled}
         aria-checked={isSelected}
         tabIndex={disabled ? -1 : 0}
         onClick={() => {
           if (disabled) return;
-          onSelect(useValue(option));
+          onSelect(getValue(option));
         }}
         onKeyDown={(e) => handleKeyDown(e)}
+        aria-selected={isSelected}
       >
         <div className="flex items-center justify-center w-6 h-6 mr-2">
           {icon ||
@@ -73,10 +74,12 @@ const TileSelectorItem = forwardRef<HTMLDivElement, TileSelectorItemProps>(
               <Check className="w-4 h-4 text-primary-foreground" />
             ))}
         </div>
-        {useLabel(option)}
+        {getLabel(option)}
       </div>
     );
   },
 );
+
+TileSelectorItem.displayName = 'TileSelectorItem';
 
 export default TileSelectorItem;
