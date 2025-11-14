@@ -38,7 +38,7 @@ interface FooterStepperReactHookFormProps extends Omit<ButtonProps, 'variant'> {
 const FooterStepperReactHookForm = React.forwardRef<
   HTMLButtonElement,
   FooterStepperReactHookFormProps
->(({ className = '', variant = 'default' }, ref) => {
+>(({ variant = 'default' }, ref) => {
   const {
     getFieldStatesBySteps,
     goNextStep,
