@@ -1,5 +1,4 @@
 import React from 'react';
-import type { FieldValues } from 'react-hook-form';
 import type { FieldParams } from '../interfaces/FieldParams';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '../../../lib/utils';
@@ -15,6 +14,7 @@ function CheckboxWithText(params: FieldParams): JSX.Element {
       <Checkbox
         key={indexField}
         className={cn(fieldProps.className)}
+        /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
         defaultChecked={zFields.value}
         id={fieldProps.inputName}
         {...zFields}
