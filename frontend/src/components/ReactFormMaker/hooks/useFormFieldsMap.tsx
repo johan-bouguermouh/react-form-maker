@@ -1,10 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import {
+import React, { useCallback } from 'react';
+import type {
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+  UseFormReturn,
+} from 'react-hook-form';
+import type {
   CompositeField,
   FieldReactFormMaker,
 } from '../interfaces/FieldInterfaces';
-import { FieldParams } from '../interfaces/FieldParams';
-import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
+import type { FieldParams } from '../interfaces/FieldParams';
 import {
   isDividerReactFormMaker,
   isFieldReactFormMaker,
@@ -12,16 +17,13 @@ import {
 } from '../utils/typeGuards/compositeField.TypeGuards';
 import DivElementField from '../formElements/DivElementField';
 import FormFieldElement from '../formElements/FormFieldElement';
-import {
-  ControllerRenderProps,
-  FieldValues,
-  Path,
-  UseFormReturn,
-} from 'react-hook-form';
 import InputComponent from '../formElements/InputComponent';
 import { cn } from '@/lib/utils';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 interface UseFormFieldsMapReturn<T extends FieldValues> {
+  /* eslint-enable @typescript-eslint/no-unused-vars */
+
   /**
    * A memoized callback function that renders the `InputComponent` with the provided field parameters.
    */
@@ -29,7 +31,7 @@ interface UseFormFieldsMapReturn<T extends FieldValues> {
     zFields,
     fieldProps,
     indexField,
-  }: FieldParams<T>) => React.ReactElement<typeof InputComponent>;
+  }: FieldParams) => React.ReactElement<typeof InputComponent>;
 
   /**
    * **Generates an array of React elements or null based on the provided data fields.**
@@ -68,7 +70,7 @@ interface UseFormFieldsMapReturn<T extends FieldValues> {
    * @callback FieldsetMap
    * - - -
    * @example
-   * ``` javascript
+   * ```typescript
    * const fields = [
    *   { type: 'fieldset', ... },
    *   { type: 'fieldset', ... }
@@ -89,7 +91,7 @@ interface UseFormFieldsMapReturn<T extends FieldValues> {
   ) => (React.ReactElement<'fieldset'> | null)[];
 }
 
-export function useFormFieldsMap<T extends FieldValues>(
+export function useFormFieldsMap<T extends FieldValues>( //@typescript-eslint/no-unused-vars
   form: UseFormReturn<T>,
 ): UseFormFieldsMapReturn<T> {
   const InpuTComponentCallBack = useCallback(
@@ -97,10 +99,10 @@ export function useFormFieldsMap<T extends FieldValues>(
       zFields,
       fieldProps,
       indexField,
-    }: FieldParams<T>): React.ReactElement<typeof InputComponent> => (
+    }: FieldParams): React.ReactElement<typeof InputComponent> => (
       <InputComponent
         zFields={zFields as ControllerRenderProps<T, Path<T>>}
-        fieldProps={fieldProps as FieldReactFormMaker}
+        fieldProps={fieldProps}
         indexField={indexField}
       />
     ),
@@ -109,25 +111,22 @@ export function useFormFieldsMap<T extends FieldValues>(
 
   const FormFieldsMap = useCallback(
     (dataField: CompositeField[]) => {
-      const uuids = useGenerateUUIDs<CompositeField>(dataField);
-
       return dataField?.map((elementField: CompositeField, index) => {
         if (isDividerReactFormMaker(elementField)) {
           return (
             <DivElementField
-              key={uuids ? uuids[index] : index}
+              key={`divider-${index}`}
               elementField={elementField}
-              uuid={uuids[index]}
               FormFieldsMap={FormFieldsMap}
             />
           );
         }
         if (isFieldReactFormMaker(elementField)) {
           return (
-            <div role="form-field-element" className="mb-4" key={uuids[index]}>
+            <div className="mb-4" key={`form-field-${index}`}>
               <FormFieldElement<T>
                 elementField={elementField}
-                index={'FormFieldElement' + uuids[index] + index}
+                index={`FormFieldElement${elementField.inputName}`}
                 form={form}
                 InpuTComponentCallBack={InpuTComponentCallBack}
               />
@@ -144,18 +143,16 @@ export function useFormFieldsMap<T extends FieldValues>(
     (
       formfields: CompositeField[],
     ): (React.ReactElement<'fieldset'> | null)[] => {
-      const uuids = useGenerateUUIDs<CompositeField>(formfields);
-
       return formfields.map((element, index) => {
         if (isReactFormMakerFieldset(element)) {
           return (
             <fieldset
-              key={uuids ? 'fieldset' + uuids[index] : 'fieldset' + index}
+              key={`fieldset-${index}`}
               className={cn({ hidden: element.isHide }, element.className)}
             >
               {element.legend && (
                 <legend
-                  key={uuids[index] + 'legend'}
+                  key={`fieldset-legend-${index}`}
                   className={cn(
                     'text-lg font-bold pb-3',
                     element.legendClassName,

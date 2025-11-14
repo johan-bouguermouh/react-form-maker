@@ -1,15 +1,16 @@
 'use client';
+/* eslint-disable import/no-named-as-default-member */
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  DefaultValues,
-  FieldValues,
+  type FieldValues,
+  type DefaultValues,
+  type UseFormReturn,
   useForm,
-  UseFormReturn,
 } from 'react-hook-form';
-import { z, ZodType, ZodObject, any } from 'zod';
+import { z, type ZodType, ZodObject } from 'zod';
 import React from 'react';
-import { CompositeField } from '../interfaces/FieldInterfaces';
+import type { CompositeField } from '../interfaces/FieldInterfaces';
 import {
   isDividerReactFormMaker,
   isFieldReactFormMaker,
@@ -72,20 +73,27 @@ export function useReactFormMaker<T extends FieldValues>(
     }
   }
 
-  formfieldsAttributes.forEach((element: any) => {
+  formfieldsAttributes.forEach((element: CompositeField) => {
     createField(element);
   });
 
-  let zodEffect: any = undefined;
-  let formSchema = z.object(zObject);
+  let zodEffect: any; //eslint-disable-line @typescript-eslint/no-explicit-any
+  const formSchema = z.object(zObject);
 
   if ('confirmPassword' in zObject && 'password' in zObject) {
+    // Typage plus précis pour data
     zodEffect = formSchema
-      .refine((data) => data.password === data.confirmPassword, {
-        message: 'Les mots de passe ne correspondent pas',
-        path: ['confirmPassword'],
-      })
-      .transform(({ confirmPassword, ...rest }) => rest);
+      .refine(
+        (data: Record<string, unknown>) =>
+          data.password === data.confirmPassword,
+        {
+          message: 'Les mots de passe ne correspondent pas',
+          path: ['confirmPassword'],
+        },
+      )
+      .transform(
+        ({ confirmPassword, ...rest }: Record<string, unknown>) => rest, //eslint-disable-line @typescript-eslint/no-unused-vars
+      );
   }
 
   const form = useForm<T>({
@@ -94,18 +102,32 @@ export function useReactFormMaker<T extends FieldValues>(
     mode: 'all',
   });
 
-  function hasSubmitButton(children: React.ReactNode): boolean {
-    return React.Children.toArray(children).some((child) => {
-      if (React.isValidElement(child)) {
-        if (child.props.type === 'submit') {
-          return true;
+  function hasSubmitButton(_childrenArg: React.ReactNode): boolean {
+    // Typage sécurisé pour child
+    return React.Children.toArray(_childrenArg).some(
+      (
+        child:
+          | string
+          | number
+          | bigint
+          | React.ReactElement<any, string | React.JSXElementConstructor<any>> //eslint-disable-line @typescript-eslint/no-explicit-any
+          | Iterable<React.ReactNode>
+          | React.ReactPortal
+          | Promise<React.AwaitedReactNode>,
+      ) => {
+        /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+        if (React.isValidElement(child)) {
+          if ((child.props.type as string) === 'submit') {
+            return true;
+          }
+          if (child.props.children) {
+            return hasSubmitButton(child.props.children as React.ReactNode);
+          }
         }
-        if (child.props.children) {
-          return hasSubmitButton(child.props.children);
-        }
-      }
-      return false;
-    });
+        return false;
+      },
+      /** eslint-enable @typescript-eslint/no-unsafe-member-access */
+    );
   }
 
   return {
@@ -116,3 +138,4 @@ export function useReactFormMaker<T extends FieldValues>(
     hasSubmitButton,
   };
 }
+/* eslint-enable import/no-named-as-default-member */

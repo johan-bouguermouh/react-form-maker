@@ -33,6 +33,7 @@ function NavigationStepper() {
       {steps.map((step, index) => {
         return (
           <HeaderStepperItem
+            key={`stepper-header-item-${step.stepName}`}
             step={step}
             index={index}
             size={size}

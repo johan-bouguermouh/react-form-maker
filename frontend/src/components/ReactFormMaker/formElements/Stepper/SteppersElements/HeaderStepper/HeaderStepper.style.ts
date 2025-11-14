@@ -15,6 +15,7 @@ interface StyleProps {
  */
 class HeaderStepperStyle {
   navClass: string;
+
   navStyle: React.CSSProperties;
 
   constructor(props: StyleProps) {

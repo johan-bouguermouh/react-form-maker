@@ -1,6 +1,7 @@
 import { StepElement } from '../../StepperContext.interface';
 import { SizeElement } from '../HeaderStepper.hook';
-import { ReactFormMakerStep } from '@/components/ReactFormMaker/interfaces/FieldInterfaces';
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+import type { ReactFormMakerStep } from '@/components/ReactFormMaker/interfaces/FieldInterfaces';
 
 /**
  * **Properties for the HeaderStepperItem component**

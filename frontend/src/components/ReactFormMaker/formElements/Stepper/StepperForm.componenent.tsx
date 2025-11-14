@@ -1,12 +1,13 @@
 import React from 'react';
-import { FieldValues, UseFormReturn } from 'react-hook-form';
+import type { FieldValues, UseFormReturn } from 'react-hook-form';
+import type {
+  CompositeField,
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  ReactFormMakerStep,
+} from '../../interfaces/FieldInterfaces';
 import { StepperProvider } from './StepperContext';
 import { StepperContent } from './SteppersElements/StepperContent';
 import FooterStepperReactHookForm from './SteppersElements/FooterSteppers.component';
-import {
-  CompositeField,
-  ReactFormMakerStep,
-} from '../../interfaces/FieldInterfaces';
 import { Stepper } from './SteppersElements/Stepper.component';
 import NavigationStepper from './SteppersElements/HeaderStepper/HeaderStepper.componenent';
 import { useStepperItemsMap } from './SteppersElements/useStepperItemMap.hook';
@@ -14,7 +15,7 @@ import { useStepperItemsMap } from './SteppersElements/useStepperItemMap.hook';
 interface StepperFormProps<T extends FieldValues> {
   form: UseFormReturn<T>;
   formfields: CompositeField[];
-  zObject: any;
+  zObject: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   orientation: 'horizontal' | 'vertical';
   formFieldsMap: (dataField: CompositeField[]) => (React.JSX.Element | null)[];
 }
@@ -41,19 +42,19 @@ interface StepperFormProps<T extends FieldValues> {
  * @param
  * @returns
  */
-const StepperForm = <T extends FieldValues>({
+function StepperForm<T extends FieldValues>({
   form,
   formfields,
   zObject,
   orientation,
   formFieldsMap: FormFieldsMap,
-}: StepperFormProps<T>) => {
+}: StepperFormProps<T>) {
   const { StepperItemsMap } = useStepperItemsMap(FormFieldsMap);
   return (
     <StepperProvider<T>
       form={form}
       formfields={formfields}
-      zObject={zObject}
+      zObject={zObject} // eslint-disable-line @typescript-eslint/no-unsafe-assignment
       orientation={orientation}
     >
       <Stepper<T>>
@@ -67,6 +68,6 @@ const StepperForm = <T extends FieldValues>({
       </Stepper>
     </StepperProvider>
   );
-};
+}
 
 export default StepperForm;

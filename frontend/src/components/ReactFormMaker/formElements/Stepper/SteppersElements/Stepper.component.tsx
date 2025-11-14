@@ -1,9 +1,9 @@
-import React, { ReactNode, useEffect } from 'react';
-import { FieldValues } from 'react-hook-form';
+import React, { type ReactNode, useEffect } from 'react';
+import type { FieldValues } from 'react-hook-form';
 import useResizeObserver from '@react-hook/resize-observer';
 import { cn } from '@/lib/utils';
 import { useStepper } from '../StepperContext';
-
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 interface StepperProps<T extends FieldValues> {
   children: ReactNode;
 }
@@ -27,10 +27,10 @@ interface StepperProps<T extends FieldValues> {
  * @param param0
  * @returns
  */
-const Stepper = <T extends FieldValues>({
+function Stepper<T extends FieldValues>({
   children,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & StepperProps<T>) => {
+}: React.HTMLAttributes<HTMLDivElement> & StepperProps<T>) {
   const { orientation: stepperOrientation, shiftOrientation } = useStepper();
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const [cnOrientation, setCnOrientation] =
@@ -56,6 +56,6 @@ const Stepper = <T extends FieldValues>({
       {children}
     </div>
   );
-};
+}
 
 export { Stepper };

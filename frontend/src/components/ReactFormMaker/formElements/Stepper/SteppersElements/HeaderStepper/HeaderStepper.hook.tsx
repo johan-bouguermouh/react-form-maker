@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
-import { useStepper } from '../../StepperContext';
 import useResizeObserver from '@react-hook/resize-observer';
-import { StepElement } from '../StepperContext.interface';
+import { useStepper } from '../../StepperContext';
+import type { StepElement } from '../StepperContext.interface';
 
 interface HeaderStepperReturn {
   /**
@@ -60,36 +60,33 @@ export function useHeaderStepper(): HeaderStepperReturn {
         return sum + (el?.offsetHeight || 0) + 24;
       }, 0);
       return Math.floor(totalHeight);
-    } else {
-      const heights = stepElements.current
-        .filter((el) => el !== null)
-        .map((el) => el!.offsetHeight || 150);
-
-      if (heights.length === 0) {
-        return 150;
-      }
-
-      const maxHeight: number = Math.max(...heights);
-      return Math.floor(maxHeight);
     }
+    const heights = stepElements.current
+      .filter((el) => el !== null)
+      .map((el) => el.offsetHeight || 150);
+
+    if (heights.length === 0) {
+      return 150;
+    }
+
+    const maxHeight: number = Math.max(...heights);
+    return Math.floor(maxHeight);
   };
 
   function calculateNavWidth(entry: ResizeObserverEntry) {
     if (orientation === 'horizontal') {
       return entry.contentRect.width;
-    } else {
-      return 270;
     }
+    return 270;
   }
 
-  if (typeof window !== 'undefined') {
-    useResizeObserver(navRef, (entry) => {
-      setSize({
-        width: calculateNavWidth(entry),
-        height: calculateNavHeight(),
-      });
+  useResizeObserver(navRef, (entry) => {
+    if (typeof window === 'undefined' || !navRef.current) return;
+    setSize({
+      width: calculateNavWidth(entry),
+      height: calculateNavHeight(),
     });
-  }
+  });
 
   return {
     navRef,

@@ -1,7 +1,5 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 import {
   Dispatch,
   SetStateAction,
@@ -15,12 +13,14 @@ import {
 } from 'react';
 import {
   useDropzone,
-  DropzoneState,
-  FileRejection,
-  DropzoneOptions,
+  type DropzoneState,
+  type FileRejection,
+  type DropzoneOptions,
 } from 'react-dropzone';
 import { toast } from 'sonner';
 import { Trash2 as RemoveIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
 import { buttonVariants } from '@/components/ui/button';
 
 type DirectionOptions = 'rtl' | 'ltr' | undefined;
@@ -207,9 +207,7 @@ export const FileUploader = forwardRef<
       setIsLOF(false);
     }, [value, maxFiles]);
 
-    const opts = dropzoneOptions
-      ? dropzoneOptions
-      : { accept, maxFiles, maxSize, multiple };
+    const opts = dropzoneOptions || { accept, maxFiles, maxSize, multiple };
 
     const dropzoneState = useDropzone({
       ...opts,
@@ -234,6 +232,8 @@ export const FileUploader = forwardRef<
         <div
           ref={ref}
           tabIndex={0}
+          role="button"
+          aria-label="Zone de dépôt de fichiers"
           onKeyDownCapture={handleKeyDown}
           className={cn(
             'grid w-full focus:outline-none overflow-hidden ',

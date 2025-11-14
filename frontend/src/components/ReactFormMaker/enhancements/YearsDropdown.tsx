@@ -1,12 +1,3 @@
-import { Button } from '@/components/ui/button';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
-import { cn } from '@/lib/utils';
 import {
   Popover,
   PopoverContent,
@@ -14,7 +5,20 @@ import {
 } from '@radix-ui/react-popover';
 import { ChevronDown } from 'lucide-react';
 import React from 'react';
-import { DropdownOption, DropdownProps, useDayPicker } from 'react-day-picker';
+import {
+  type DropdownOption,
+  type DropdownProps,
+  useDayPicker,
+} from 'react-day-picker';
+import { cn } from '@/lib/utils';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { Button } from '@/components/ui/button';
 
 export interface YearsDropdownProps extends DropdownProps {
   selectedYear: number;
@@ -104,7 +108,7 @@ export default function YearsDropdownCustom({
             className="w-[240px] max-w-sm"
           >
             <CarouselContent>
-              {segementDecade.map((decade, index) => (
+              {segementDecade.map((decade) => (
                 <CarouselItem
                   key={decade[0].label}
                   className="flex flex-row items-center justify-center w-full h-full flex-wrap m-2"

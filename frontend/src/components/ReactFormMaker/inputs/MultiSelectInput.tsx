@@ -1,10 +1,11 @@
 import React from 'react';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { isOption } from '../utils/typeGuards/optionsFields.TypeGuards';
 import {
+  type MultiSelectParams,
   MultiSelect,
-  MultiSelectParams,
 } from '../enhancements/MultiSelect/MultiSelect';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 interface MultiSelectInputProps
   extends FieldParams,
@@ -29,7 +30,7 @@ function MultiSelectInput({ zFields, fieldProps }: MultiSelectInputProps) {
       id={fieldProps.inputName}
       onChange={onChange}
       {...restZfields}
-      defaultValues={value ? value : fieldProps.defaultValues}
+      defaultValues={value || fieldProps.defaultValues}
       options={serializedOptions}
     />
   );

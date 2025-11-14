@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-import {
+import type {
   CompositeField,
   FieldReactFormMaker,
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   ReactFormMakerStep,
 } from '../../../interfaces/FieldInterfaces';
 import { StepperItem } from './StepperItems';
-import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
 import { isStepReactFormMaker } from '../../../utils/typeGuards/compositeField.TypeGuards';
 import { H3, Lead } from '@/components/ui/Typography';
 
@@ -43,13 +43,11 @@ export function useStepperItemsMap(
     (
       formfields: CompositeField[],
     ): (React.ReactElement<typeof StepperItem> | null)[] => {
-      const uuids = useGenerateUUIDs<CompositeField>(formfields);
-
       return formfields.map((element, index) => {
         if (isStepReactFormMaker(element)) {
           return (
             <StepperItem
-              key={uuids[index]}
+              key={`stepper-${element.stepName}-${index}`}
               className={`${element.className} ${element.isHide ? 'hidden' : ''}`}
             >
               <H3 className={element?.legendClassName}>{element.stepName}</H3>

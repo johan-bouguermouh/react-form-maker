@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import { type ClassValue } from 'clsx';
 import { cn } from '@/lib/utils';
 import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
 import TileSelectorItem from './TileSelectorItem';
 import {
   isOption,
-  Option,
+  type Option,
 } from '../../utils/typeGuards/optionsFields.TypeGuards';
-import { ClassValue } from 'clsx';
 
 export interface TileMultiSelectorProps {
   options: string[] | Option[];
@@ -107,12 +107,12 @@ const TileMultiSelector = forwardRef<HTMLDivElement, TileMultiSelectorProps>(
         ref={ref}
         id={id}
         aria-disabled={disabled}
-        role="group"
-        aria-labelledby="tile-multi-selector-legend"
+        role="listbox"
+        tabIndex={0}
         className={cn('flex flex-col p-4', className)}
         onKeyDown={handleKeyDown}
       >
-        {<legend className="text-sm font-semibold">{legend}</legend>}
+        <legend className="text-sm font-semibold">{legend}</legend>
         {options.map((item, index) => {
           const itemValue = isOption(item) ? item.label : item;
           function isExcluded() {
@@ -135,7 +135,7 @@ const TileMultiSelector = forwardRef<HTMLDivElement, TileMultiSelectorProps>(
               ref={(el) => {
                 itemsRef.current[index] = el;
               }}
-              id={'tileMultiSelectorItem-' + itemValue}
+              id={`tileMultiSelectorItem-${itemValue}`}
               icon={props.icon ?? null}
             />
           );

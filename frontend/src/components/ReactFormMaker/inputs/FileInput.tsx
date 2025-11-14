@@ -1,9 +1,9 @@
 import React from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { Input } from '@/components/ui/input';
-import { FieldParams } from '../interfaces/FieldParams';
 
 function FileInput({ zFields, fieldProps, indexField }: FieldParams) {
-  const { value, onChange, ...restZfields } = zFields;
+  const { onChange, ...restZfields } = zFields;
   return (
     <Input
       className={fieldProps.className}

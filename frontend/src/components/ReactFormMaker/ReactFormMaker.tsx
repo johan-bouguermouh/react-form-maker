@@ -1,12 +1,12 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
+import type { FieldValues } from 'react-hook-form';
 import { Slottable } from '@radix-ui/react-slot';
 import React, { useCallback } from 'react';
-import { FieldValues } from 'react-hook-form';
+import type { ReactFormMakerParams } from './interfaces/FormParams';
+import { Button } from '@/components/ui/button';
+import { Form } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
-import { ReactFormMakerParams } from './interfaces/FormParams';
 import mapChildrenWithForm from './formElements/mapChildrenWithForm';
 import validateStepperFormFields from './utils/validators/formValidators';
 import useFormHandlers from './hooks/useFormHandlers.hook';
@@ -78,6 +78,7 @@ export default function ReactFormMaker<T extends FieldValues>({
     return (
       <Form {...form}>
         <form
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={form.handleSubmit(onValid, onInvalid)}
           className={cn(
             ' flex flex-col gap-4 p-4 rounded-lg shadow-lg mx-auto mt-4 bg-white w-5/6 h-full min-h-80 overflow-hidden',
@@ -99,6 +100,7 @@ export default function ReactFormMaker<T extends FieldValues>({
   return (
     <Form {...form}>
       <form
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onSubmit={form.handleSubmit(onValid, onInvalid)}
         className={className}
       >

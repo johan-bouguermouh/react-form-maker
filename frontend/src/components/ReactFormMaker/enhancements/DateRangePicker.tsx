@@ -1,10 +1,15 @@
 'use client';
 
 import * as React from 'react';
+import type {
+  DateRange,
+  DayPickerProps,
+  DropdownProps,
+} from 'react-day-picker';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { addDays, format, getYear, set, formatDistance } from 'date-fns';
-import { DateRange, DayPickerProps, DropdownProps } from 'react-day-picker';
-
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -13,14 +18,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { FieldParams } from '../interfaces/FieldParams';
 import YearsDropdownCustom from './YearsDropdown';
 
 export function DateRangePicker({ zFields, fieldProps }: FieldParams) {
+  const defaultRange = fieldProps?.defaultValues as DateRange | undefined;
+
   const [date, setDate] = React.useState<DateRange>({
-    from: fieldProps?.defaultValues?.from || addDays(new Date(), 1),
-    to: fieldProps?.defaultValues?.to || addDays(new Date(), 2),
+    from: defaultRange?.from || addDays(new Date(), 1),
+    to: defaultRange?.to || addDays(new Date(), 2),
   });
   const [selectedYearFrom, setSelectedYearFrom] = React.useState<number>(
     getYear(new Date()),

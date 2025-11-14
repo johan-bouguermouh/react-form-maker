@@ -1,6 +1,6 @@
 import React from 'react';
 import InputPasswordVisibility from '../enhancements/InputPasswordVisibility';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
 
 function PasswordInput({ zFields, fieldProps, indexField }: FieldParams) {
   return (

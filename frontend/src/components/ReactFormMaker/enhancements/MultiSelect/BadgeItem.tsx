@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { Option } from '../../utils/typeGuards/optionsFields.TypeGuards';
+import { cn } from '@/lib/utils';
+import { type Option } from '../../utils/typeGuards/optionsFields.TypeGuards';
 
 export interface BadgeItemParams extends React.ComponentProps<'div'> {
   option: Option | undefined;
@@ -10,7 +10,7 @@ export interface BadgeItemParams extends React.ComponentProps<'div'> {
 }
 
 const BadgeItem = forwardRef<HTMLDivElement, BadgeItemParams>((props, ref) => {
-  const { option, onRemove, className, ...rest } = props;
+  const { option, onRemove, className } = props;
 
   const [isHovered, setIsHovered] = React.useState(false);
 

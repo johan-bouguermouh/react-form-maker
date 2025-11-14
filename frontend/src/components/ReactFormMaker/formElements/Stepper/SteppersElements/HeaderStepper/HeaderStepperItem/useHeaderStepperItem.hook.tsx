@@ -1,10 +1,10 @@
 // useHeaderStepperItem.hook.ts
 import { useCallback, useRef, useImperativeHandle, createElement } from 'react';
+import { Circle, CircleCheck, CircleDashed, CircleDotIcon } from 'lucide-react';
 import HeaderStepperItemStyle from './HeaderStepperItem.style';
 import { useStepper } from '@/components/ReactFormMaker/formElements/Stepper/StepperContext';
-import { Circle, CircleCheck, CircleDashed, CircleDotIcon } from 'lucide-react';
-import { SizeElement } from '../HeaderStepper.hook';
-import { StepElement } from '../../StepperContext.interface';
+import { type SizeElement } from '../HeaderStepper.hook';
+import { type StepElement } from '../../StepperContext.interface';
 
 interface UseHeaderStepperItemProps {
   step: StepElement;
@@ -16,7 +16,6 @@ interface UseHeaderStepperItemProps {
 export function useHeaderStepperItem({
   step,
   size,
-  index,
   ref,
 }: UseHeaderStepperItemProps) {
   const { stepName, stepIndex, legend, isNext, isDone, isdisabled, isCurrent } =
@@ -63,8 +62,8 @@ export function useHeaderStepperItem({
     const heightBar =
       localRef.current !== null
         ? {
-            'min-height': localRef.current.offsetHeight.toString() + 'px',
-            'max-height': localRef.current.offsetHeight.toString() + 'px',
+            'min-height': `${localRef.current.offsetHeight.toString()}px`,
+            'max-height': `${localRef.current.offsetHeight.toString()}px`,
           }
         : { flex: 1 };
     return heightBar;

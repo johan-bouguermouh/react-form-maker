@@ -1,12 +1,13 @@
-import { FieldError, FieldValues, UseFormReturn } from 'react-hook-form';
+import type { FieldError, FieldValues, UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
-import { ReactFormMakerStep } from '../../../interfaces/FieldInterfaces';
+import type { ReactFormMakerStep } from '../../../interfaces/FieldInterfaces';
 
 /**
  * **Define the structure of a field state in the stepper context**
  *
  * _Cette interface résume l'état d'un champs selon le formContext de React Hook Form_
  */
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export interface FieldState<T> {
   /**
    * @type {boolean}
@@ -80,7 +81,7 @@ export interface FieldStatesDetail<T> {
    * _The value of the field is the value entered by the user in the field._
    * _This value can be the default value applied by the program._
    */
-  value: any;
+  value: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   /**
    * @type {FieldState<T>}

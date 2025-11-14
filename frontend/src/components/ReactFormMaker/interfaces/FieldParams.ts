@@ -1,6 +1,6 @@
-import { ClassValue } from 'clsx';
-import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
-import { FieldReactFormMaker } from './FieldInterfaces';
+import type { ClassValue } from 'clsx';
+import type { ControllerRenderProps, Path } from 'react-hook-form';
+import type { FieldReactFormMaker } from './FieldInterfaces';
 
 /**
  * @description
@@ -37,14 +37,14 @@ import { FieldReactFormMaker } from './FieldInterfaces';
  * | ref      | true       | RefCallBack | The ref of the input field. |
  *
  */
-export interface FieldParams<T extends FieldValues> {
+export interface FieldParams {
   /**
    * @description
    * The register of the input field.
    * This is the register of the input field that will be displayed.
    * Is a representation of the input field in the form and interprets the input field of zodObject.
    */
-  zFields: ControllerRenderProps<T, Path<T>>;
+  zFields: ControllerRenderProps<any, Path<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
   /**
    * @description
    * The fieldProps of the input field.

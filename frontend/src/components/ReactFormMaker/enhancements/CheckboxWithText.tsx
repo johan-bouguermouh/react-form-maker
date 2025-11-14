@@ -1,9 +1,9 @@
 import React from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '../../../lib/utils';
-import { FieldParams } from '../interfaces/FieldParams';
 
-function CheckboxWithText(params: FieldParams) {
+function CheckboxWithText(params: FieldParams): JSX.Element {
   const { zFields, fieldProps, indexField } = params;
   const classNameLabel =
     'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70';
@@ -14,7 +14,7 @@ function CheckboxWithText(params: FieldParams) {
       <Checkbox
         key={indexField}
         className={cn(fieldProps.className)}
-        defaultChecked={zFields.value}
+        defaultChecked={Boolean(zFields.value)}
         id={fieldProps.inputName}
         {...zFields}
         onCheckedChange={(checked: boolean) => {

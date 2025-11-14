@@ -1,11 +1,8 @@
-import {
+import type {
   DividerReactFormMaker,
   FieldReactFormMaker,
   ReactFormMakerFieldset,
 } from '../../interfaces/FieldInterfaces';
-import { isCompositeField } from '../../utils/typeGuards/compositeField.TypeGuards';
-import Field from './FieldFactory/FieldFactory.class';
-import { TextField } from './TextFields.class';
 
 type includedField =
   | FieldReactFormMaker
@@ -68,14 +65,19 @@ type includedField =
  */
 export default class FieldSet<T extends Partial<ReactFormMakerFieldset>> {
   fieldset: string = '';
+
   legend?: string;
+
   legendClassName?: string;
+
   className?: string;
+
   fields?: (
     | FieldReactFormMaker
     | DividerReactFormMaker
     | ReactFormMakerFieldset
   )[];
+
   isHide?: boolean;
 
   constructor(formName: string, entries: T, fields: includedField[]) {
@@ -91,7 +93,7 @@ export default class FieldSet<T extends Partial<ReactFormMakerFieldset>> {
       return entries;
     }
 
-    let newDivider = {
+    const newDivider = {
       isDiv: true,
       className: 'w-full flex gap-4 justify-between',
       fields: [],

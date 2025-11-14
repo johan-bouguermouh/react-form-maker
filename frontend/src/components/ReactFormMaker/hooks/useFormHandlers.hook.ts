@@ -1,5 +1,5 @@
 // hooks/useFormHandlers.ts
-import {
+import type {
   SubmitHandler,
   SubmitErrorHandler,
   FieldErrors,

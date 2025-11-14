@@ -138,8 +138,8 @@ new Field("username").text().setValidation(
     .max(20, "Username cannot exceed 20 characters")
     .regex(
       /^[a-zA-Z0-9_]+$/,
-      "Username can only contain letters, numbers, and underscores"
-    )
+      "Username can only contain letters, numbers, and underscores",
+    ),
 );
 ```
 
@@ -191,7 +191,7 @@ new FieldSet(
   },
   [
     // Fields here will be organized in the fieldset
-  ]
+  ],
 );
 ```
 
@@ -204,7 +204,6 @@ The project's functioning is built around **four main stages**:
 
 2. **Analysis and preparation by React Hook Form hook**
    This configuration object is transmitted to a custom hook based on React Hook Form. This hook:
-
    - Analyzes the configuration,
    - Dynamically generates the appropriate Zod validation schema,
    - Prepares all necessary attributes for proper form functioning (default values, validation, etc.).

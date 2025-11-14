@@ -1,9 +1,14 @@
 import React from 'react';
-import { Input } from '@/components/ui/input';
-import { FieldParams } from '../interfaces/FieldParams';
+import type { FieldParams } from '../interfaces/FieldParams';
+import { Input } from 'components/ui/input';
 
 function TextInput({ zFields, fieldProps, indexField }: FieldParams) {
-  const { value, onChange, ...restZfields } = zFields;
+  /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+  const { value } = zFields;
+
+  if (value === undefined || value === null) {
+    zFields.value = '';
+  }
   return (
     <Input
       id={fieldProps.inputName}

@@ -2,123 +2,148 @@
 
 ## Introduction
 
-React Form Maker est un outil destiné à faciliter le travail d'édition de formulaire simple et répétitif. Il se base sur un approche de JSON simple avec les informations utile à l'insertion des champs lier au formulaire.
-React Form Maker allie la force de React Hook Form & Zod pour assurer un state mangement robuste tout en integrant un validation de formulaire.
-React Form Maker est basé sur ShadCn et la librairie Radix Ui permettant à chaque développeur la possibiliter de modifier à la racine le comportement et l'UI de leurs composant.
+React Form Maker is a tool designed to simplify the creation of simple and repetitive forms. It is based on a straightforward JSON approach, where all the necessary information for inserting form fields is provided in a configuration object.
+React Form Maker leverages the power of React Hook Form & Zod to ensure robust state management and integrated form validation.
+React Form Maker is built on ShadCn and the Radix UI library, allowing every developer to customize the behavior and UI of their components at the root level.
 
-## Philosophie
+## Philosophy
 
-Ce projet vise à :
+This project aims to:
 
-- **Normaliser l'UI** des formulaires grâce à des composants réutilisables et cohérents.
-- **Centraliser la logique métier** et la configuration des champs dans des objets ou du JSON, plutôt que dans le JSX.
-- **Réduire la quantité de code à écrire** pour chaque formulaire, tout en gardant la puissance de React Hook Form et Zod pour la gestion du contexte et la validation.
-- **Faciliter la personnalisation** et la gestion de cas complexes (champs conditionnels, validations avancées, etc.) sans complexifier le code JSX.
+- **Standardize the UI** of forms using reusable and consistent components.
+- **Centralize business logic** and field configuration in objects or JSON, rather than in JSX.
+- **Reduce the amount of code to write** for each form, while retaining the power of React Hook Form and Zod for context management and validation.
+- **Facilitate customization** and the handling of complex cases (conditional fields, advanced validations, etc.) without making JSX code more complex.
 
-## Concepts clés
+## Key Concepts
 
-**React Form Maker** adopte un pattern **configuration-driven UI **: l'intégralité du formulaire est décrite par une configuration métier, permettant de générer dynamiquement des composants intelligents et cohérents, tout en gardant la logique métier centralisée et factorisée.
+**React Form Maker** adopts a **configuration-driven UI** pattern: the entire form is described by a business configuration, enabling dynamic generation of smart and consistent components, while keeping business logic centralized and factored.
 
-**ReactFormMaker** propose une architecture où la configuration métier pilote la génération de formulaires, tout en s'appuyant sur une base UI solide et normalisée grâce à shadcn/ui.
-Cette approche garantit des formulaires cohérents, personnalisables et faciles à maintenir, tout en limitant la verbosité du code JSX.
+**ReactFormMaker** offers an architecture where business configuration drives form generation, relying on a solid and normalized UI foundation thanks to shadcn/ui.
+This approach ensures forms are consistent, customizable, and easy to maintain, while limiting JSX code verbosity.
 
-## Utilisation du Composant `ReactFormMaker`
+## Using the `ReactFormMaker` Component
 
-### Props du Composant
+### Component Props
 
-Voici la liste des props acceptées par le composant `ReactFormMaker` :
+Here is the list of props accepted by the `ReactFormMaker` component:
 
 - **`formfields`**
-    - Type : `CompositeField[]`
-    - Requis : Oui
-    - Description : Un tableau de définitions de champs de formulaire utilisées pour générer le formulaire. Chaque objet dans le tableau configure un champ ou un groupe de champs (fieldset).
-    - Exemple :
-      ```typescript
-      const formfields = [
-        { name: 'username', type: 'text', label: 'Username', validation: { required: true } },
-        { name: 'email', type: 'email', label: 'Email', validation: { required: true, isEmail: true } }
-      ];
-      ```
+  - Type: `CompositeField[]`
+  - Required: Yes
+  - Description: An array of form field definitions used to generate the form. Each object in the array configures a field or a group of fields (fieldset).
+  - Example:
+    ```typescript
+    const formfields = [
+      {
+        name: 'username',
+        type: 'text',
+        label: 'Username',
+        validation: { required: true },
+      },
+      {
+        name: 'email',
+        type: 'email',
+        label: 'Email',
+        validation: { required: true, isEmail: true },
+      },
+    ];
+    ```
 
 - **`onSubmit`**
-    - Type : `(data: T | false, errors: FieldErrors<T> | false) => void`
-    - Requis : Oui
-    - Description : Fonction de rappel déclenchée lors de la soumission du formulaire. Elle reçoit les données du formulaire si la validation réussit, ou les erreurs si la validation échoue.
-    - Exemple :
-      ```typescript
-      function handleSubmit(data, errors) {
-        if (data) {
-          console.log("Formulaire soumis avec succès:", data);
-        } else {
-          console.error("Erreurs de validation:", errors);
-        }
+  - Type: `(data: T | false, errors: FieldErrors<T> | false) => void`
+  - Required: Yes
+  - Description: Callback function triggered on form submission. It receives the form data if validation succeeds, or the errors if validation fails.
+  - Example:
+    ```typescript
+    function handleSubmit(data, errors) {
+      if (data) {
+        console.log('Form submitted successfully:', data);
+      } else {
+        console.error('Validation errors:', errors);
       }
-      ```
+    }
+    ```
 
 - **`className`**
-    - Type : `string`
-    - Requis : Optionnel
-    - Description : Classe CSS optionnelle pour le conteneur du formulaire. Permet de personnaliser le style du formulaire.
+  - Type: `string`
+  - Required: Optional
+  - Description: Optional CSS class for the form container. Allows you to customize the form style.
 
 - **`footerClassName`**
-    - Type : `string`
-    - Requis : Optionnel
-    - Valeur par défaut : `'flex justify-end gap-4'`
-    - Description : Classe CSS optionnelle pour la section du pied de page du formulaire, où se trouvent généralement les boutons d'action.
+  - Type: `string`
+  - Required: Optional
+  - Default value: `'flex justify-end gap-4'`
+  - Description: Optional CSS class for the form footer section, where action buttons are usually placed.
 
 - **`children`**
-    - Type : `React.ReactNode`
-    - Requis : Optionnel
-    - Description : Enfants React optionnels à rendre à l'intérieur du formulaire. Utile pour insérer des éléments personnalisés ou des boutons d'action supplémentaires dans le pied de page.
+  - Type: `React.ReactNode`
+  - Required: Optional
+  - Description: Optional React children to render inside the form. Useful for inserting custom elements or additional action buttons in the footer.
 
 - **`btnTextSubmit`**
-    - Type : `string`
-    - Requis : Optionnel
-    - Valeur par défaut : `'Submit'`
-    - Description : Texte à afficher sur le bouton de soumission principal du formulaire.
+  - Type: `string`
+  - Required: Optional
+  - Default value: `'Submit'`
+  - Description: Text to display on the main submit button of the form.
 
 - **`btnSubmitClassName`**
-    - Type : `string`
-    - Requis : Optionnel
-    - Description : Classe CSS optionnelle pour le bouton de soumission principal.
+  - Type: `string`
+  - Required: Optional
+  - Description: Optional CSS class for the main submit button.
 
 - **`stepper`**
-    - Type : `boolean`
-    - Requis : Optionnel
-    - Valeur par défaut : `false`
-    - Description : Si `true`, le formulaire sera rendu sous forme de "stepper" (formulaire multi-étapes). Chaque `fieldset` de premier niveau dans `formfields` sera traité comme une étape.
+  - Type: `boolean`
+  - Required: Optional
+  - Default value: `false`
+  - Description: If `true`, the form will be rendered as a stepper (multi-step form). Each top-level `fieldset` in `formfields` will be treated as a step.
 
 - **`orientation`**
-    - Type : `'horizontal' | 'vertical'`
-    - Requis : Optionnel
-    - Valeur par défaut : `'horizontal'`
-    - Description : Définit l'orientation du stepper (horizontal ou vertical). Utilisé uniquement si `stepper` est à `true`.
+  - Type: `'horizontal' | 'vertical'`
+  - Required: Optional
+  - Default value: `'horizontal'`
+  - Description: Sets the orientation of the stepper (horizontal or vertical). Used only if `stepper` is `true`.
 
-### Exemples d'Utilisation
+### Usage Examples
 
-#### Exemple simple avec des champs de base
+#### Simple Example with Basic Fields
 
 ```tsx
-import ReactFormMaker from './ReactFormMaker'; // Ajustez le chemin d'importation
+import ReactFormMaker from './ReactFormMaker'; // Adjust the import path
 import { FieldValues } from 'react-hook-form';
-import { z } from 'zod'; // Assurez-vous d'importer Zod
+import { z } from 'zod'; // Make sure to import Zod
 
 const MyForm = () => {
   const formFieldsDefinition = [
-    { inputName: 'firstName', inputType: 'text', label: 'Prénom', zodObject: z.string().min(1, 'Le prénom est requis') },
-    { inputName: 'lastName', inputType: 'text', label: 'Nom', zodObject: z.string().min(1, 'Le nom est requis') },
-    { inputName: 'age', inputType: 'number', label: 'Âge', zodObject: z.number().min(18, 'Vous devez avoir au moins 18 ans') }
+    {
+      inputName: 'firstName',
+      inputType: 'text',
+      label: 'First Name',
+      zodObject: z.string().min(1, 'First name is required'),
+    },
+    {
+      inputName: 'lastName',
+      inputType: 'text',
+      label: 'Last Name',
+      zodObject: z.string().min(1, 'Last name is required'),
+    },
+    {
+      inputName: 'age',
+      inputType: 'number',
+      label: 'Age',
+      zodObject: z.number().min(18, 'You must be at least 18 years old'),
+    },
   ];
 
   const handleSubmit = (data: FieldValues) => {
-    console.log('Données soumises:', data);
+    console.log('Submitted data:', data);
   };
 
   return (
     <ReactFormMaker
       formfields={formFieldsDefinition}
       onSubmit={handleSubmit}
-      btnTextSubmit="Envoyer"
+      btnTextSubmit="Send"
       className="my-custom-form"
     />
   );
@@ -127,37 +152,43 @@ const MyForm = () => {
 export default MyForm;
 ```
 
-#### Exemple avec des enfants personnalisés
+#### Example with Custom Children
 
-Vous pouvez passer des boutons ou d'autres éléments React comme enfants. Ils seront rendus dans le pied de page du formulaire. Si un bouton de type `submit` est passé comme enfant, le bouton de soumission par défaut ne sera pas affiché.
+You can pass buttons or other React elements as children. They will be rendered in the form footer. If a `submit` button is passed as a child, the default submit button will not be displayed.
 
 ```tsx
-import ReactFormMaker from './ReactFormMaker'; // Ajustez le chemin d'importation
-import { Button } from '@/components/ui/button'; // Assurez-vous d'avoir un composant Button
+import ReactFormMaker from './ReactFormMaker'; // Adjust the import path
+import { Button } from '@/components/ui/button'; // Make sure you have a Button component
 import { FieldValues } from 'react-hook-form';
-import { z } from 'zod'; // Assurez-vous d'importer Zod
+import { z } from 'zod'; // Make sure to import Zod
 
 const FormWithCustomFooter = () => {
   const formFieldsDefinition = [
-    { inputName: 'feedback', inputType: 'textarea', label: 'Votre avis', zodObject: z.string().max(200, 'Maximum 200 caractères') }
+    {
+      inputName: 'feedback',
+      inputType: 'textarea',
+      label: 'Your feedback',
+      zodObject: z.string().max(200, 'Maximum 200 characters'),
+    },
   ];
 
   const handleSubmit = (data: FieldValues) => {
-    console.log('Avis soumis:', data);
+    console.log('Feedback submitted:', data);
   };
 
   const handleReset = () => {
-    // Logique pour réinitialiser le formulaire (nécessite accès à l'instance de formulaire)
-    console.log('Formulaire réinitialisé');
+    // Logic to reset the form (requires access to the form instance)
+    console.log('Form reset');
   };
 
   return (
-    <ReactFormMaker
-      formfields={formFieldsDefinition}
-      onSubmit={handleSubmit}
-    >
-      <Button type="submit" variant="secondary">Soumettre l'avis</Button>
-      <Button type="button" variant="outline" onClick={handleReset}>Réinitialiser</Button>
+    <ReactFormMaker formfields={formFieldsDefinition} onSubmit={handleSubmit}>
+      <Button type="submit" variant="secondary">
+        Submit Feedback
+      </Button>
+      <Button type="button" variant="outline" onClick={handleReset}>
+        Reset
+      </Button>
     </ReactFormMaker>
   );
 };
@@ -165,47 +196,72 @@ const FormWithCustomFooter = () => {
 export default FormWithCustomFooter;
 ```
 
-#### Exemple avec le mode `stepper`
+#### Example with `stepper` Mode
 
-Pour utiliser le mode stepper, vous devez structurer `formfields` avec des objets implémentant `ReactFormMakerStep` (qui sont essentiellement des `ReactFormMakerFieldset` avec des propriétés additionnelles pour le stepper).
+To use the stepper mode, you need to structure `formfields` with objects implementing `ReactFormMakerStep` (which are essentially `ReactFormMakerFieldset` objects with additional stepper properties).
 
 ```tsx
-import ReactFormMaker from './ReactFormMaker'; // Ajustez le chemin d'importation
+import ReactFormMaker from './ReactFormMaker'; // Adjust the import path
 import { FieldValues } from 'react-hook-form';
-import { z } from 'zod'; // Assurez-vous d'importer Zod
+import { z } from 'zod'; // Make sure to import Zod
 
 const StepperFormExample = () => {
   const stepperFormFields = [
     {
-      stepName: 'step1', // Propriété de ReactFormMakerStep
-      isStep: true,      // Propriété de ReactFormMakerStep
-      legend: 'Étape 1: Informations personnelles',
+      stepName: 'step1', // ReactFormMakerStep property
+      isStep: true, // ReactFormMakerStep property
+      legend: 'Step 1: Personal Information',
       fields: [
-        { inputName: 'username', inputType: 'text', label: 'Nom d\'utilisateur', zodObject: z.string().min(1) },
-        { inputName: 'email', inputType: 'email', label: 'Email', zodObject: z.string().email() }
-      ]
+        {
+          inputName: 'username',
+          inputType: 'text',
+          label: 'Username',
+          zodObject: z.string().min(1),
+        },
+        {
+          inputName: 'email',
+          inputType: 'email',
+          label: 'Email',
+          zodObject: z.string().email(),
+        },
+      ],
     },
     {
       stepName: 'step2',
       isStep: true,
-      legend: 'Étape 2: Adresse',
+      legend: 'Step 2: Address',
       fields: [
-        { inputName: 'address', inputType: 'text', label: 'Adresse', zodObject: z.string().min(1) },
-        { inputName: 'city', inputType: 'text', label: 'Ville', zodObject: z.string().min(1) }
-      ]
+        {
+          inputName: 'address',
+          inputType: 'text',
+          label: 'Address',
+          zodObject: z.string().min(1),
+        },
+        {
+          inputName: 'city',
+          inputType: 'text',
+          label: 'City',
+          zodObject: z.string().min(1),
+        },
+      ],
     },
     {
       stepName: 'step3',
       isStep: true,
-      legend: 'Étape 3: Confirmation',
+      legend: 'Step 3: Confirmation',
       fields: [
-        { inputName: 'confirm', inputType: 'checkbox', label: 'Je confirme mes informations', zodObject: z.boolean().refine(val => val === true) }
-      ]
-    }
+        {
+          inputName: 'confirm',
+          inputType: 'checkbox',
+          label: 'I confirm my information',
+          zodObject: z.boolean().refine((val) => val === true),
+        },
+      ],
+    },
   ];
 
   const handleSubmit = (data: FieldValues) => {
-    console.log('Données du stepper soumises:', data);
+    console.log('Stepper data submitted:', data);
   };
 
   return (
@@ -213,8 +269,8 @@ const StepperFormExample = () => {
       formfields={stepperFormFields}
       onSubmit={handleSubmit}
       stepper={true}
-      orientation="vertical" // ou "horizontal"
-      btnTextSubmit="Finaliser"
+      orientation="vertical" // or "horizontal"
+      btnTextSubmit="Finish"
     />
   );
 };
@@ -222,302 +278,308 @@ const StepperFormExample = () => {
 export default StepperFormExample;
 ```
 
-## Configuration des Champs de Formulaire
+## Form Field Configuration
 
-La prop `formfields` est essentielle pour `ReactFormMaker`. C'est un tableau d'objets qui définit la structure et le comportement de votre formulaire. Chaque objet dans ce tableau peut être un champ individuel, un groupe de champs (fieldset), un séparateur, ou une étape de formulaire (si `stepper` est activé).
+The `formfields` prop is essential for `ReactFormMaker`. It is an array of objects that defines the structure and behavior of your form. Each object in this array can be an individual field, a group of fields (fieldset), a separator, or a form step (if `stepper` is enabled).
 
-### Interface `CompositeField`
+### `CompositeField` Interface
 
-`CompositeField` est une interface de base dont héritent la plupart des autres configurations de champs. Elle fournit des propriétés communes pour les éléments composables du formulaire.
+`CompositeField` is a base interface that most other field configurations inherit from. It provides common properties for composable form elements.
 
-| Propriété  | Type                                                                 | Description                                                                                                                               |
-| :--------- | :------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| `classname`| `string` (optionnel)                                                 | Classe CSS pour styliser l'élément.                                                                                                       |
-| `fields`   | `(FieldReactFormMaker \| DividerReactFormMaker \| ReactFormMakerFieldset)[]` (optionnel) | Un tableau d'éléments enfants (champs, diviseurs, ou fieldsets). Recommandé pour `ReactFormMakerFieldset`.                                  |
-| `isHide`   | `boolean` (optionnel)                                                | Si `true`, masque l'élément. Utile pour cacher des champs conditionnellement.                                                              |
+| Property    | Type                                                                                    | Description                                                                                            |
+| :---------- | :-------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------- |
+| `classname` | `string` (optional)                                                                     | CSS class for styling the element.                                                                     |
+| `fields`    | `(FieldReactFormMaker \| DividerReactFormMaker \| ReactFormMakerFieldset)[]` (optional) | An array of child elements (fields, dividers, or fieldsets). Recommended for `ReactFormMakerFieldset`. |
+| `isHide`    | `boolean` (optional)                                                                    | If `true`, hides the element. Useful for conditionally hiding fields.                                  |
 
-### Interface `FieldReactFormMaker`
+### `FieldReactFormMaker` Interface
 
-Cette interface définit un champ de formulaire standard (input, select, etc.). Elle hérite de `CompositeField`.
+This interface defines a standard form field (input, select, etc.). It inherits from `CompositeField`.
 
-| Propriété                | Type                                                              | Requis    | Description                                                                                                                                                             |
-| :----------------------- | :---------------------------------------------------------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `inputName`              | `string`                                                          | Oui       | Nom unique du champ, utilisé comme clé dans les données du formulaire.                                                                                                   |
-| `label`                  | `string`                                                          | Optionnel | Texte affiché au-dessus ou à côté du champ.                                                                                                                              |
-| `placeholder`            | `string`                                                          | Optionnel | Texte indicatif affiché dans le champ lorsqu'il est vide.                                                                                                             |
-| `inputType`              | `InputType`                                                       | Oui       | Type de champ à afficher (voir la section "Types de Champs (`InputType`)" ci-dessous).                                                                                     |
-| `zodObject`              | `ZodType<any>`                                                    | Optionnel | Schéma de validation Zod pour ce champ. Recommandé pour une validation robuste.                                                                                          |
-| `defaultValues`          | `any`                                                             | Optionnel | Valeur par défaut du champ.                                                                                                                                               |
-| `options`                | `string[] \| { value: string \| number; label: string }[]`        | Optionnel | Options pour les champs de type `select`, `radio`, `checkbox`, `tileSelector`, `tileMultiSelector`. Requis si `inputType` est l'un de ces types.                               |
-| `className`              | `string`                                                          | Optionnel | Classe CSS pour styliser l'élément du champ lui-même.                                                                                                                    |
-| `disabled`               | `boolean`                                                         | Optionnel | Si `true`, désactive le champ.                                                                                                                                          |
-| `description`            | `string`                                                          | Optionnel | Texte descriptif affiché sous ou à côté du champ pour fournir des informations supplémentaires.                                                                         |
-| `isSecure`               | `boolean`                                                         | Optionnel | Si `true`, masque le champ (par exemple, pour des raisons de sécurité, bien que `isHide` soit plus courant pour le masquage dynamique).                                  |
-| `onChange`               | `(event: FormFieldEvent) => void`                                 | Optionnel | Fonction de rappel exécutée lorsque la valeur du champ change. L'objet `event` contient une propriété `form` pour interagir avec l'état du formulaire.                   |
-| `onBlur`                 | `(event: FormFieldEvent) => void`                                 | Optionnel | Fonction de rappel exécutée lorsque le champ perd le focus.                                                                                                                |
-| `onSelect` (ou `onFocus`) | `(event: FormFieldEvent) => void`                                 | Optionnel | Fonction de rappel exécutée lorsque le champ obtient le focus.                                                                                                             |
-| `onClick`                | `(event: FormFieldEvent) => void`                                 | Optionnel | Fonction de rappel exécutée lors d'un clic sur le champ (pertinent pour certains types de champs).                                                                      |
-| `customInputFieldElement`| `React.ReactNode`                                                 | Optionnel | Permet de remplacer le rendu par défaut du champ par un composant React personnalisé. Doit être un élément de champ valide compatible avec React Hook Form.                 |
-| `children`               | `React.ReactNode`                                                 | Optionnel | Enfants React à afficher à l'intérieur de la structure du champ (par exemple, après le champ lui-même mais avant la description).                                         |
-| `props`                  | `Record<string, any>`                                             | Optionnel | Propriétés supplémentaires à passer directement à l'élément d'input HTML sous-jacent.                                                                                   |
+| Property                  | Type                                                       | Required | Description                                                                                                                                       |
+| :------------------------ | :--------------------------------------------------------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `inputName`               | `string`                                                   | Yes      | Unique name of the field, used as the key in the form data.                                                                                       |
+| `label`                   | `string`                                                   | Optional | Text displayed above or beside the field.                                                                                                         |
+| `placeholder`             | `string`                                                   | Optional | Placeholder text displayed in the field when empty.                                                                                               |
+| `inputType`               | `InputType`                                                | Yes      | Type of field to display (see "Field Types (`InputType`)" below).                                                                                 |
+| `zodObject`               | `ZodType<any>`                                             | Optional | Zod validation schema for this field. Recommended for robust validation.                                                                          |
+| `defaultValues`           | `any`                                                      | Optional | Default value of the field.                                                                                                                       |
+| `options`                 | `string[] \| { value: string \| number; label: string }[]` | Optional | Options for `select`, `radio`, `checkbox`, `tileSelector`, `tileMultiSelector` fields. Required if `inputType` is one of these types.             |
+| `className`               | `string`                                                   | Optional | CSS class to style the field element itself.                                                                                                      |
+| `disabled`                | `boolean`                                                  | Optional | If `true`, disables the field.                                                                                                                    |
+| `description`             | `string`                                                   | Optional | Descriptive text displayed under or beside the field to provide additional information.                                                           |
+| `isSecure`                | `boolean`                                                  | Optional | If `true`, masks the field (e.g., for password fields, though `isHide` is more common for dynamic hiding).                                        |
+| `onChange`                | `(event: FormFieldEvent) => void`                          | Optional | Callback function executed when the field value changes. The `event` object contains a `form` property to interact with the form state.           |
+| `onBlur`                  | `(event: FormFieldEvent) => void`                          | Optional | Callback function executed when the field loses focus.                                                                                            |
+| `onSelect` (or `onFocus`) | `(event: FormFieldEvent) => void`                          | Optional | Callback function executed when the field gains focus.                                                                                            |
+| `onClick`                 | `(event: FormFieldEvent) => void`                          | Optional | Callback function executed on a click on the field (relevant for certain field types).                                                            |
+| `customInputFieldElement` | `React.ReactNode`                                          | Optional | Allows replacing the default rendering of the field with a custom React component. Must be a valid field element compatible with React Hook Form. |
+| `children`                | `React.ReactNode`                                          | Optional | React children to display inside the field structure (e.g., after the field itself but before the description).                                   |
+| `props`                   | `Record<string, any>`                                      | Optional | Additional properties to pass directly to the underlying HTML input element.                                                                      |
 
-#### Types de Champs (`InputType`)
+#### Field Types (`InputType`)
 
-| Type                 | Description                                                                                                |
-| :------------------- | :--------------------------------------------------------------------------------------------------------- |
-| `text`               | Champ de saisie de texte standard.                                                                         |
-| `password`           | Champ de saisie de mot de passe (masque les caractères).                                                   |
-| `select`             | Liste déroulante pour une sélection unique. Nécessite la prop `options`.                                  |
-| `selectAutocomplete` | Liste déroulante avec auto-complétion. Nécessite la prop `options`.                                         |
-| `multiSelect`        | Liste déroulante pour des sélections multiples. Nécessite la prop `options`.                                |
-| `textarea`           | Zone de texte multiligne.                                                                                  |
-| `date`               | Sélecteur de date.                                                                                         |
-| `dateRange`          | Sélecteur de plage de dates.                                                                               |
-| `radio`              | Boutons radio pour une sélection unique parmi plusieurs options. Nécessite la prop `options`.             |
-| `checkbox`           | Case à cocher unique (pour une valeur booléenne) ou groupe de cases (si `options` est fourni).            |
-| `switch`             | Interrupteur à bascule (généralement pour une valeur booléenne).                                           |
-| `file`               | Champ de téléversement de fichier standard.                                                                |
-| `fileDropZone`       | Zone de glisser-déposer pour le téléversement de fichiers.                                                 |
-| `number`             | Champ de saisie numérique.                                                                                 |
-| `custom`             | Utilisé lorsque vous fournissez un `customInputFieldElement`.                                               |
-| `tileSelector`       | Sélecteur de tuiles pour une sélection unique. Nécessite la prop `options`.                               |
-| `tileMultiSelector`  | Sélecteur de tuiles pour des sélections multiples. Nécessite la prop `options`.                             |
-| `phoneNumber`        | Champ de saisie de numéro de téléphone (peut inclure un formatage spécifique).                               |
+| Type                 | Description                                                                              |
+| :------------------- | :--------------------------------------------------------------------------------------- |
+| `text`               | Standard text input field.                                                               |
+| `password`           | Password input field (masks characters).                                                 |
+| `select`             | Dropdown list for single selection. Requires `options` prop.                             |
+| `selectAutocomplete` | Dropdown list with autocomplete. Requires `options` prop.                                |
+| `multiSelect`        | Dropdown list for multiple selections. Requires `options` prop.                          |
+| `textarea`           | Multi-line text area.                                                                    |
+| `date`               | Date picker.                                                                             |
+| `dateRange`          | Date range picker.                                                                       |
+| `radio`              | Radio buttons for single selection among multiple options. Requires `options` prop.      |
+| `checkbox`           | Single checkbox (for a boolean value) or group of checkboxes (if `options` is provided). |
+| `switch`             | Toggle switch (usually for a boolean value).                                             |
+| `file`               | Standard file upload field.                                                              |
+| `fileDropZone`       | Drag-and-drop area for file uploads.                                                     |
+| `number`             | Numeric input field.                                                                     |
+| `custom`             | Used when providing a `customInputFieldElement`.                                         |
+| `tileSelector`       | Tile selector for single selection. Requires `options` prop.                             |
+| `tileMultiSelector`  | Tile selector for multiple selections. Requires `options` prop.                          |
+| `phoneNumber`        | Phone number input (may include specific formatting).                                    |
 
-### Interface `DividerReactFormMaker`
+### `DividerReactFormMaker` Interface
 
-Utilisée pour insérer des séparateurs ou des éléments de structuration non interactifs dans le formulaire. Hérite de `CompositeField`.
+Used to insert separators or non-interactive structuring elements in the form. Inherits from `CompositeField`.
 
-| Propriété  | Type                                                                 | Requis    | Description                                                                                                                             |
-| :--------- | :------------------------------------------------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-| `isDiv`    | `boolean`                                                            | Oui       | Doit être `true`. Indique que cet élément est un diviseur/conteneur structurel.                                                        |
-| `className`| `string`                                                             | Optionnel | Classe CSS pour styliser le diviseur.                                                                                                   |
-| `isHide`   | `boolean`                                                            | Optionnel | Si `true`, masque le diviseur.                                                                                                          |
-| `fields`   | `(FieldReactFormMaker \| DividerReactFormMaker \| ReactFormMakerFieldset)[]` | Optionnel | Permet d'imbriquer d'autres éléments à l'intérieur de ce diviseur, créant une structure de groupe.                                   |
-| `children` | `JSX.Element`                                                        | Optionnel | Contenu JSX personnalisé à afficher à l'intérieur du diviseur.                                                                          |
+| Property    | Type                                                                         | Required | Description                                                                      |
+| :---------- | :--------------------------------------------------------------------------- | :------- | :------------------------------------------------------------------------------- |
+| `isDiv`     | `boolean`                                                                    | Yes      | Must be `true`. Indicates that this element is a divider/structural container.   |
+| `className` | `string`                                                                     | Optional | CSS class for styling the divider.                                               |
+| `isHide`    | `boolean`                                                                    | Optional | If `true`, hides the divider.                                                    |
+| `fields`    | `(FieldReactFormMaker \| DividerReactFormMaker \| ReactFormMakerFieldset)[]` | Optional | Allows nesting other elements inside this divider, creating a grouped structure. |
+| `children`  | `JSX.Element`                                                                | Optional | Custom JSX content to display inside the divider.                                |
 
-### Interface `ReactFormMakerFieldset`
+### `ReactFormMakerFieldset` Interface
 
-Permet de grouper logiquement des champs sous un titre commun (`legend`). Hérite de `CompositeField`.
+Allows logically grouping fields under a common title (`legend`). Inherits from `CompositeField`.
 
-| Propriété        | Type                                                                 | Requis    | Description                                                                                             |
-| :--------------- | :------------------------------------------------------------------- | :-------- | :------------------------------------------------------------------------------------------------------ |
-| `fieldset`       | `string`                                                             | Oui       | Nom unique pour le fieldset (principalement pour l'organisation interne, pas pour les données du formulaire). |
-| `legend`         | `string`                                                             | Optionnel | Titre affiché pour le groupe de champs.                                                                 |
-| `legendClassName`| `string`                                                             | Optionnel | Classe CSS pour styliser la légende.                                                                    |
-| `className`      | `string`                                                             | Optionnel | Classe CSS pour styliser l'élément fieldset.                                                            |
-| `fields`         | `(FieldReactFormMaker \| DividerReactFormMaker \| ReactFormMakerFieldset)[]` | Optionnel | Tableau des champs, diviseurs ou autres fieldsets imbriqués dans ce groupe.                             |
-| `isHide`         | `boolean`                                                            | Optionnel | Si `true`, masque l'ensemble du fieldset.                                                               |
+| Property          | Type                                                                         | Required | Description                                                                         |
+| :---------------- | :--------------------------------------------------------------------------- | :------- | :---------------------------------------------------------------------------------- |
+| `fieldset`        | `string`                                                                     | Yes      | Unique name for the fieldset (mainly for internal organization, not for form data). |
+| `legend`          | `string`                                                                     | Optional | Title displayed for the group of fields.                                            |
+| `legendClassName` | `string`                                                                     | Optional | CSS class for styling the legend.                                                   |
+| `className`       | `string`                                                                     | Optional | CSS class for styling the fieldset element.                                         |
+| `fields`          | `(FieldReactFormMaker \| DividerReactFormMaker \| ReactFormMakerFieldset)[]` | Optional | Array of nested fields, dividers, or fieldsets within this group.                   |
+| `isHide`          | `boolean`                                                                    | Optional | If `true`, hides the entire fieldset.                                               |
 
-### Interface `ReactFormMakerStep`
+### `ReactFormMakerStep` Interface
 
-Définit une étape dans un formulaire de type "stepper". Cette interface hérite de `CompositeField` et partage de nombreuses propriétés avec `ReactFormMakerFieldset`, mais ajoute des fonctionnalités spécifiques au stepper. Elle est utilisée lorsque la prop `stepper` de `ReactFormMaker` est à `true`.
+Defines a step in a "stepper" form. This interface inherits from `CompositeField` and shares many properties with `ReactFormMakerFieldset`, but adds step-specific functionalities. It is used when the `stepper` prop of `ReactFormMaker` is set to `true`.
 
-| Propriété               | Type                                                                                 | Requis    | Description                                                                                                                                                                                             |
-| :---------------------- | :----------------------------------------------------------------------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `stepName`              | `string`                                                                             | Oui       | Nom unique de l'étape, utilisé pour l'identification et la navigation.                                                                                                                                  |
-| `isStep`                | `boolean`                                                                            | Optionnel | Doit être `true` pour indiquer que cet élément est une étape du stepper.                                                                                                                                |
-| `legend`                | `string`                                                                             | Optionnel | Titre de l'étape, affiché en haut de l'étape.                                                                                                                                                           |
-| `legendClassName`       | `string`                                                                             | Optionnel | Classe CSS pour styliser la légende de l'étape.                                                                                                                                                         |
-| `className`             | `string`                                                                             | Optionnel | Classe CSS pour styliser le conteneur de l'étape.                                                                                                                                                       |
-| `fields`                | `(FieldReactFormMaker \| DividerReactFormMaker \| ReactFormMakerFieldset)[]`           | Optionnel | Tableau des champs, diviseurs ou fieldsets contenus dans cette étape.                                                                                                                                     |
-| `isHide`                | `boolean`                                                                            | Optionnel | Si `true`, masque l'étape.                                                                                                                                                                              |
-| `children`              | `React.ReactNode`                                                                    | Optionnel | Enfants React personnalisés à afficher dans le contenu de l'étape.                                                                                                                                      |
-| `disabledBefore`        | `boolean`                                                                            | Optionnel | Si `true` (par défaut `false`), désactive le bouton "Précédent" et la navigation vers les étapes précédentes via l'en-tête du stepper.                                                                 |
-| `isStrict`              | `boolean`                                                                            | Optionnel | Si `true` (par défaut `false`), l'utilisateur ne peut pas passer à l'étape suivante tant que tous les champs de l'étape actuelle ne sont pas valides selon leur `zodObject`.                               |
-| `onBeforeNextStep`      | `(data: { submissionState: StepFormState<any>; form: UseFormReturn<any>; }) => Promise<boolean>` | Optionnel | Fonction asynchrone exécutée avant de passer à l'étape suivante (après validation). Doit retourner `true` pour autoriser le passage, `false` pour l'empêcher. Permet des logiques de validation avancées. |
-| `IconStep`              | `React.ComponentType<any>`                                                           | Optionnel | Composant React personnalisé pour l'icône de l'étape dans l'indicateur de progression du stepper.                                                                                                       |
-| `buttonNextContent`     | `string`                                                                             | Optionnel | Texte personnalisé pour le bouton "Suivant" de cette étape.                                                                                                                                             |
-| `buttonPreviousContent` | `string`                                                                             | Optionnel | Texte personnalisé pour le bouton "Précédent" de cette étape.                                                                                                                                           |
-| `additionalButtons`     | `React.ReactNode`                                                                    | Optionnel | Éléments JSX supplémentaires (par exemple, des boutons) à afficher dans le pied de page de l'étape, après les boutons de navigation standard.                                                              |
-| `footerClassName`       | `string \| string[]`                                                                   | Optionnel | Classe(s) CSS pour styliser le pied de page de l'étape.                                                                                                                                                 |
+| Property                | Type                                                                                             | Required | Description                                                                                                                                                                                |
+| :---------------------- | :----------------------------------------------------------------------------------------------- | :------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `stepName`              | `string`                                                                                         | Yes      | Unique name of the step, used for identification and navigation.                                                                                                                           |
+| `isStep`                | `boolean`                                                                                        | Optional | Must be `true` to indicate that this element is a step in the stepper.                                                                                                                     |
+| `legend`                | `string`                                                                                         | Optional | Title of the step, displayed at the top of the step.                                                                                                                                       |
+| `legendClassName`       | `string`                                                                                         | Optional | CSS class for styling the step legend.                                                                                                                                                     |
+| `className`             | `string`                                                                                         | Optional | CSS class for styling the step container.                                                                                                                                                  |
+| `fields`                | `(FieldReactFormMaker \| DividerReactFormMaker \| ReactFormMakerFieldset)[]`                     | Optional | Array of fields, dividers, or fieldsets contained in this step.                                                                                                                            |
+| `isHide`                | `boolean`                                                                                        | Optional | If `true`, hides the step.                                                                                                                                                                 |
+| `children`              | `React.ReactNode`                                                                                | Optional | Custom React children to display in the step content.                                                                                                                                      |
+| `disabledBefore`        | `boolean`                                                                                        | Optional | If `true` (default `false`), disables the "Previous" button and navigation to previous steps via the stepper header.                                                                       |
+| `isStrict`              | `boolean`                                                                                        | Optional | If `true` (default `false`), the user cannot proceed to the next step until all fields in the current step are valid according to their `zodObject`.                                       |
+| `onBeforeNextStep`      | `(data: { submissionState: StepFormState<any>; form: UseFormReturn<any>; }) => Promise<boolean>` | Optional | Asynchronous function executed before proceeding to the next step (after validation). Must return `true` to allow proceeding, `false` to prevent it. Allows for advanced validation logic. |
+| `IconStep`              | `React.ComponentType<any>`                                                                       | Optional | Custom React component for the step icon in the stepper's progress indicator.                                                                                                              |
+| `buttonNextContent`     | `string`                                                                                         | Optional | Custom text for the "Next" button of this step.                                                                                                                                            |
+| `buttonPreviousContent` | `string`                                                                                         | Optional | Custom text for the "Previous" button of this step.                                                                                                                                        |
+| `additionalButtons`     | `React.ReactNode`                                                                                | Optional | Additional JSX elements (e.g., buttons) to display in the step footer, after the standard navigation buttons.                                                                              |
+| `footerClassName`       | `string \| string[]`                                                                             | Optional | CSS class(es) for styling the step footer.                                                                                                                                                 |
 
-### Exemples de Configuration de Champs
+### Field Configuration Examples
 
 ```typescript
-import { z } from 'zod'; // Assurez-vous d'importer Zod pour les exemples de validation
+import { z } from 'zod'; // Make sure to import Zod for examples
 
 export const formFieldsExamples = [
-  // 1. Champ texte simple
+  // 1. Simple text field
   {
     inputName: 'username',
-    label: 'Nom d\'utilisateur',
+    label: 'Username',
     inputType: 'text',
-    placeholder: 'Entrez votre nom d\'utilisateur',
-    zodObject: z.string().min(3, 'Le nom d\'utilisateur doit contenir au moins 3 caractères.'),
-    description: 'Votre nom d\'utilisateur public.'
+    placeholder: 'Enter your username',
+    zodObject: z
+      .string()
+      .min(3, 'Username must be at least 3 characters long.'),
+    description: 'Your public username.',
   },
 
-  // 2. Champ select avec des options
+  // 2. Select field with options
   {
     inputName: 'country',
-    label: 'Pays',
+    label: 'Country',
     inputType: 'select',
     options: [
       { value: 'fr', label: 'France' },
       { value: 'ca', label: 'Canada' },
-      { value: 'us', label: 'États-Unis' }
+      { value: 'us', label: 'United States' },
     ],
-    zodObject: z.string().nonempty('Veuillez sélectionner un pays.'),
-    defaultValues: 'fr'
+    zodObject: z.string().nonempty('Please select a country.'),
+    defaultValues: 'fr',
   },
 
-  // 3. Champ checkbox
+  // 3. Checkbox field
   {
     inputName: 'subscribe',
-    label: 'S\'abonner à la newsletter',
+    label: 'Subscribe to newsletter',
     inputType: 'checkbox',
     zodObject: z.boolean(),
-    defaultValues: true
+    defaultValues: true,
   },
 
-  // 4. Groupe de cases à cocher (options pour un même inputName)
+  // 4. Group of checkboxes (options for the same inputName)
   {
     inputName: 'interests',
-    label: 'Vos centres d\'intérêt',
+    label: 'Your interests',
     inputType: 'checkbox',
     options: [
-      { value: 'tech', label: 'Technologie' },
+      { value: 'tech', label: 'Technology' },
       { value: 'sport', label: 'Sport' },
-      { value: 'music', label: 'Musique' }
+      { value: 'music', label: 'Music' },
     ],
-    zodObject: z.array(z.string()).min(1, 'Veuillez sélectionner au moins un intérêt.'),
-    description: 'Cochez tout ce qui s\'applique.'
+    zodObject: z
+      .array(z.string())
+      .min(1, 'Please select at least one interest.'),
+    description: 'Check all that apply.',
   },
 
-  // 5. Utilisation de ReactFormMakerFieldset pour grouper des champs
+  // 5. Using ReactFormMakerFieldset to group fields
   {
-    fieldset: 'userProfile', // Nom du fieldset
-    legend: 'Profil Utilisateur',
+    fieldset: 'userProfile', // Fieldset name
+    legend: 'User Profile',
     className: 'user-profile-fieldset',
     fields: [
       {
         inputName: 'firstName',
-        label: 'Prénom',
+        label: 'First Name',
         inputType: 'text',
-        zodObject: z.string().min(1, 'Le prénom est requis.')
+        zodObject: z.string().min(1, 'First name is required.'),
       },
       {
         inputName: 'lastName',
-        label: 'Nom de famille',
+        label: 'Last Name',
         inputType: 'text',
-        zodObject: z.string().min(1, 'Le nom de famille est requis.')
-      }
-    ]
+        zodObject: z.string().min(1, 'Last name is required.'),
+      },
+    ],
   },
 
-  // 6. Utilisation de ReactFormMakerStep (pour un formulaire avec stepper={true})
-  // Ceci serait un élément du tableau `formfields` principal
+  // 6. Using ReactFormMakerStep (for a form with stepper={true})
+  // This would be an element of the main `formfields` array
   {
     stepName: 'personalInfo',
     isStep: true,
-    legend: 'Informations Personnelles',
+    legend: 'Personal Information',
     fields: [
       {
         inputName: 'fullName',
-        label: 'Nom complet',
+        label: 'Full Name',
         inputType: 'text',
-        zodObject: z.string().min(2, 'Le nom complet est requis.')
+        zodObject: z.string().min(2, 'Full name is required.'),
       },
       {
         inputName: 'birthDate',
-        label: 'Date de naissance',
+        label: 'Date of Birth',
         inputType: 'date',
-        zodObject: z.date().refine(date => date < new Date(), 'La date doit être dans le passé.')
-      }
+        zodObject: z
+          .date()
+          .refine((date) => date < new Date(), 'Date must be in the past.'),
+      },
     ],
-    // Propriétés spécifiques au step
+    // Step-specific properties
     isStrict: true,
-    buttonNextContent: 'Suivant : Adresse'
-  }
+    buttonNextContent: 'Next: Address',
+  },
 ];
 ```
 
-## Définition Programmatique des Champs avec `FieldFactory`
+## Programmatic Field Definition with `FieldFactory`
 
-Dans de nombreux générateurs de formulaires, la configuration initiale se fait souvent sous forme de JSON (ou d'objets littéraux JavaScript). Si cette approche est universelle et flexible, elle atteint vite ses limites :
+In many form generators, the initial configuration is often done in JSON format (or JavaScript literal objects). While this approach is universal and flexible, it quickly reaches its limits:
 
-- Les formulaires complexes deviennent difficiles à lire et à maintenir.
-- La logique métier (validation, comportements dynamiques) se retrouve dispersée ou dupliquée.
-- L’absence de typage fort et d’outils d’autocomplétion nuit à la robustesse du code.
+- Complex forms become hard to read and maintain.
+- Business logic (validation, dynamic behaviors) gets scattered or duplicated.
+- The lack of strong typing and autocompletion tools harms code robustness.
 
-**`FieldFactory`** répond à ces problématiques en proposant une approche orientée objet pour la définition des champs de formulaire. Elle sert de classe de base à des classes spécialisées (par exemple, `TextField`, `SelectField`, `PasswordField`, etc.), offrant plusieurs avantages :
+**`FieldFactory`** addresses these issues by offering an object-oriented approach to defining form fields. It serves as a base class for specialized classes (e.g., `TextField`, `SelectField`, `PasswordField`, etc.), providing several advantages :
 
--   **Configuration Fluide et Lisible** : Grâce au chaînage de méthodes (method chaining), la configuration des champs devient plus déclarative et expressive.
-    ```typescript
-    const emailField = new TextField('email')
-      .setLabel('Adresse email')
-      .isEmail() // Méthode spécifique à TextField pour appliquer une validation d'email
-      .setPlaceholder('Entrez votre email')
-      .setRequired('L'adresse email est obligatoire.');
-    ```
--   **Centralisation de la Logique Métier et Validation** : Chaque classe spécialisée (par exemple, `TextField`) peut embarquer ses propres règles de validation Zod et logiques de comportement. Par exemple, la méthode `.isEmail()` sur une instance de `TextField` pourrait automatiquement configurer le `zodObject` approprié pour la validation d'emails. Cela évite la duplication et garantit la cohérence.
--   **Extensibilité Facilitée** : Ajouter un nouveau type de champ ou une nouvelle règle de validation devient plus simple. Il suffit de créer une nouvelle classe héritant de `FieldFactory` (ou d'une autre classe de champ) ou d'ajouter une nouvelle méthode à une classe existante.
--   **Meilleure Expérience Développeur** : L'utilisation de classes et de TypeScript offre un typage fort, une autocomplétion avancée dans les IDEs, et une documentation intégrée via les TSDoc, réduisant les erreurs et augmentant la productivité.
--   **Configuration Évolutive** : Pour des besoins simples, la configuration par objets littéraux reste possible. Mais pour des formulaires complexes, l'approche orientée objet avec `FieldFactory` permet une structuration plus poussée sans sacrifier la lisibilité ni la maintenabilité.
+- **Fluent and Readable Configuration** : Thanks to method chaining, field configuration becomes more declarative and expressive.
+  ```typescript
+  const emailField = new TextField('email')
+    .setLabel('Email Address')
+    .isEmail() // Specific method for email validation
+    .setPlaceholder('Enter your email')
+    .setRequired('Email is required.');
+  ```
+- **Centralized Business Logic and Validation** : Each specialized class (e.g., `TextField`) can encapsulate its own Zod validation rules and behavior logics. For example, the `.isEmail()` method on a `TextField` instance could automatically set up the appropriate `zodObject` for email validation. This avoids duplication and ensures consistency.
+- **Easier Extensibility** : Adding a new field type or validation rule becomes simpler. You just need to create a new class inheriting from `FieldFactory` (or another field class) or add a new method to an existing class.
+- **Better Developer Experience** : Using classes and TypeScript provides strong typing, advanced autocompletion in IDEs, and integrated documentation via TSDoc, reducing errors and increasing productivity.
+- **Scalable Configuration** : For simple needs, literal object configuration remains possible. But for complex forms, the object-oriented approach with `FieldFactory` allows for deeper structuring without sacrificing readability or maintainability.
 
-### Usage et Utilité
+### Usage and Utility
 
-`FieldFactory` et ses classes dérivées permettent de :
+`FieldFactory` and its derived classes allow you to :
 
-1.  **Définir des champs de formulaire de façon déclarative et expressive.**
-2.  **Centraliser la logique métier et la validation** au sein des classes de champ.
-3.  **Faciliter la maintenance et l’évolution** de la configuration des formulaires.
-4.  **Bénéficier d’un typage fort et d’une autocomplétion avancée.**
+1.  **Define form fields in a declarative and expressive way.**
+2.  **Centralize business logic and validation** within field classes.
+3.  **Facilitate maintenance and evolution** of form configuration.
+4.  **Benefit from strong typing and advanced autocompletion.**
 
-### Exemple d'Utilisation avec `TextField`
+### Example Usage with `TextField`
 
-La classe `TextField` (située dans `frontend/src/components/ReactFormMaker/FormFields/Class/TextFields.class.ts`) est un exemple de classe dérivée de `FieldFactory`. Voici comment l'utiliser pour définir des champs de texte et les intégrer dans `ReactFormMaker` :
+The `TextField` class (located in `frontend/src/components/ReactFormMaker/FormFields/Class/TextFields.class.ts`) is an example of a class derived from `FieldFactory`. Here is how to use it to define text fields and integrate them into `ReactFormMaker` :
 
 ```typescript
-// Assurez-vous que le chemin d'importation est correct
+// Make sure the import path is correct
 import { TextField } from './frontend/src/components/ReactFormMaker/FormFields/Class/TextFields.class';
-import ReactFormMaker from './frontend/src/components/ReactFormMaker/ReactFormMaker'; // Ajustez le chemin
+import ReactFormMaker from './frontend/src/components/ReactFormMaker/ReactFormMaker'; // Adjust the path
 import { FieldValues } from 'react-hook-form';
-import { z } from 'zod'; // Importation de Zod pour d'autres champs si nécessaire
+import { z } from 'zod'; // Import Zod for other fields if necessary
 
-// Définition des champs en utilisant la classe TextField
-const usernameField = new TextField('username') // 'username' est le inputName
-  .setLabel('Nom d\'utilisateur')
-  .setPlaceholder('Votre nom d\'utilisateur unique')
-  .setRequired('Le nom d\'utilisateur est requis.') // Applique une validation Zod simple
-  .setMinLength(5, 'Doit contenir au moins 5 caractères.');
+// Define fields using the TextField class
+const usernameField = new TextField('username') // 'username' is the inputName
+  .setLabel('Username')
+  .setPlaceholder('Your unique username')
+  .setRequired('Username is required.') // Applies a simple Zod validation
+  .setMinLength(5, 'Must be at least 5 characters long.');
 
 const emailField = new TextField('userEmail')
-  .setLabel('Adresse Email')
-  .isEmail() // Applique la validation Zod pour email et met un placeholder par défaut
-  .setRequired('L\'email est obligatoire.');
+  .setLabel('Email Address')
+  .isEmail() // Applies the Zod validation for email and sets a default placeholder
+  .setRequired('Email is required.');
 
 const websiteField = new TextField('userWebsite')
-  .setLabel('Site Web (optionnel)')
-  .isUrl() // Applique la validation Zod pour URL et un comportement onSelect
-  .setZodObject(z.string().url().optional()); // Permet de surcharger ou affiner le ZodObject
+  .setLabel('Website (optional)')
+  .isUrl() // Applies the Zod validation for URL and a onSelect behavior
+  .setZodObject(z.string().url().optional()); // Allows overriding or refining the ZodObject
 
-// Les objets de champ configurés peuvent être directement utilisés dans formfields.
-// La méthode .getConfig() de la classe FieldFactory retourne l'objet FieldReactFormMaker.
+// The configured field objects can be directly used in formfields.
+// The FieldFactory class's .getConfig() method returns the FieldReactFormMaker object.
 const myFormFields = [
   usernameField.getConfig(),
   emailField.getConfig(),
   websiteField.getConfig(),
-  // Vous pouvez toujours mélanger avec des objets de configuration littéraux
+  // You can still mix with literal configuration objects
   {
     inputName: 'age',
     inputType: 'number',
-    label: 'Âge',
+    label: 'Age',
     zodObject: z.number().min(18)
   }
 ];
 
 const MyComponentUsingFieldFactory = () => {
   const handleSubmit = (data: FieldValues) => {
-    console.log('Données du formulaire:', data);
+    console.log('Form data:', data);
   };
 
   return (
     <ReactFormMaker
       formfields={myFormFields}
       onSubmit={handleSubmit}
-      btnTextSubmit="Soumettre"
+      btnTextSubmit="Submit"
     />
   );
 };
@@ -525,87 +587,88 @@ const MyComponentUsingFieldFactory = () => {
 export default MyComponentUsingFieldFactory;
 ```
 
-Cette approche favorise une meilleure organisation et réutilisabilité de la configuration de vos champs de formulaire, surtout pour les applications de grande taille.
+This approach promotes better organization and reusability of your form field configuration, especially for large applications.
 
-## Personnalisation du Style
+## Style Customization
 
-La majorité des champs du formulaire et le composant `ReactFormMaker` lui-même s'appuient sur la bibliothèque de composants **ShadCN/UI**, qui est basée sur **Tailwind CSS**. L'objectif est de centraliser la gestion des styles pour garantir cohérence et maintenabilité, tout en offrant plusieurs niveaux de personnalisation pour s'adapter à des besoins spécifiques.
+Most form fields and the `ReactFormMaker` component itself rely on the **ShadCN/UI** component library, which is based on **Tailwind CSS**. The goal is to centralize style management to ensure consistency and maintainability, while offering multiple levels of customization to adapt to specific needs.
 
-### Bonnes pratiques pour la personnalisation du style
+### Best practices for style customization
 
-Voici les approches recommandées pour personnaliser l'apparence de vos formulaires :
+Here are the recommended approaches to customize the appearance of your forms:
 
-1.  **Centralisation via la configuration Tailwind (`tailwind.config.ts`)**
-    *   **Description** : C'est la méthode à privilégier pour des modifications globales et cohérentes. En ajustant votre fichier `tailwind.config.ts` (ou `tailwind.config.js`, `postcss.config.mjs` selon votre configuration), vous pouvez redéfinir les couleurs primaires, les polices, les espacements, etc., qui seront appliqués à l'ensemble de votre UI, y compris les composants ShadCN utilisés par `ReactFormMaker`.
-    *   **Avantage** : Maintient une cohérence stylistique à travers toute votre application.
+1.  **Centralization via Tailwind configuration (`tailwind.config.ts`)**
+    - **Description** : This is the preferred method for global and consistent modifications. By adjusting your `tailwind.config.ts` (or `tailwind.config.js`, `postcss.config.mjs` depending on your setup), you can redefine primary colors, fonts, spacings, etc., that will be applied across your entire UI, including ShadCN components used by `ReactFormMaker`.
+    - **Advantage** : Maintains stylistic consistency throughout your application.
 
-2.  **Surcharge des composants ShadCN/UI (dans le dossier `ui`)**
-    *   **Description** : Lorsque vous initialisez ShadCN/UI dans votre projet (via la commande `npx shadcn-ui@latest init`), les composants que vous choisissez d'utiliser (comme `Button`, `Input`, `Select`, etc.) sont ajoutés à votre code base, typiquement dans un dossier `components/ui`. `ReactFormMaker` utilise ces composants. Vous pouvez directement modifier le code de ces composants pour des ajustements plus spécifiques qui ne sont pas possibles via la configuration Tailwind seule.
-    *   **Avantage** : Contrôle fin sur l'apparence et le comportement des composants de base.
-    *   **Note** : Soyez conscient que si vous mettez à jour les composants ShadCN via leur CLI (`add` pour un composant existant), vos modifications locales pourraient être écrasées. Gérez ces composants comme faisant partie de votre code source.
+2.  **Overriding ShadCN/UI components (in the `ui` folder)**
+    - **Description** : When you initialize ShadCN/UI in your project (via `npx shadcn-ui@latest init`), the components you choose to use (like `Button`, `Input`, `Select`, etc.) are added to your code base, typically in a `components/ui` folder. `ReactFormMaker` uses these components. You can directly modify the code of these components for more specific adjustments that may not be possible via Tailwind configuration alone.
+    - **Advantage** : Fine control over the appearance and behavior of base components.
+    - **Note** : Be aware that if you update ShadCN components via their CLI (`add` for an existing component), your local changes may be overwritten. Manage these components as part of your source code.
 
-3.  **Ajustement des styles des composants spécifiques au projet (`ReactFormMaker/enhancements` et autres)**
-    *   **Description** : `ReactFormMaker` peut contenir des composants internes ou des "enhancements" (améliorations) qui ne sont pas directement des composants ShadCN/UI bruts. Si ces composants ont leurs propres fichiers de style ou permettent des props de style, vous pouvez les ajuster là. Le chemin exact peut varier, mais explorez la structure du dossier `ReactFormMaker` pour de tels composants.
-    *   **Avantage** : Permet de cibler des éléments spécifiques à la logique de `ReactFormMaker`.
+3.  **Adjusting styles of project-specific components (`ReactFormMaker/enhancements` and others)**
+    - **Description** : `ReactFormMaker` may contain internal components or "enhancements" that are not directly raw ShadCN/UI components. If these components have their own style files or allow style props, you can adjust them there. The exact path may vary, but explore the `ReactFormMaker` folder structure for such components.
+    - **Advantage** : Targets specific elements to the logic of `ReactFormMaker`.
 
-4.  **Personnalisation ponctuelle via la prop `className`**
-    *   **Description** :
-        *   **Sur le composant `ReactFormMaker`** : La prop `className` permet d'appliquer des classes Tailwind (ou CSS globales) au conteneur principal du formulaire. La prop `footerClassName` cible spécifiquement le pied de page du formulaire.
-        *   **Sur les définitions de champs (`formfields`)** : Chaque objet champ dans le tableau `formfields` (qu'il s'agisse d'un `FieldReactFormMaker`, `ReactFormMakerFieldset`, etc.) peut accepter une prop `className` (ou `classname` pour `CompositeField` et ses dérivés comme `ReactFormMakerFieldset`, `legendClassName` pour les légendes de fieldset). Ces classes sont appliquées à l'élément wrapper du champ ou à l'élément spécifique.
-    *   **Utilisation de `cn`** : Il est recommandé d'utiliser une fonction utilitaire comme `cn` (souvent fournie par ShadCN/UI, basée sur `clsx` et `tailwind-merge`) pour construire vos chaînes de `className`. `cn` permet de fusionner intelligemment les classes Tailwind, de gérer les classes conditionnelles et d'éviter les conflits de classes.
-        ```typescript
-        // Exemple dans la configuration d'un champ
-        {
-          inputName: 'email',
-          inputType: 'text',
-          label: 'Email',
-          className: cn('border-blue-500', { 'bg-gray-100': isDisabled })
-        }
-        ```
-    *   **Avantage** : Idéal pour des ajustements spécifiques à un champ ou à un formulaire sans affecter les autres. Très flexible pour des changements dynamiques basés sur l'état.
+4.  **One-off customization via the `className` prop**
+    - **Description** :
+      - **On the `ReactFormMaker` component** : The `className` prop allows applying Tailwind (or global CSS) classes to the main container of the form. The `footerClassName` specifically targets the footer of the form.
+      - **On field definitions (`formfields`)** : Each field object in the `formfields` array (whether a `FieldReactFormMaker`, `ReactFormMakerFieldset`, etc.) can accept a `className` (or `classname` for `CompositeField` and its derivatives like `ReactFormMakerFieldset`, `legendClassName` for fieldset legends). These classes are applied to the wrapper element of the field or to the specific element.
+    - **Using `cn`** : It is recommended to use a utility function like `cn` (often provided by ShadCN/UI, based on `clsx` and `tailwind-merge`) to build your `className` strings. `cn` intelligently merges Tailwind classes, handles conditional classes, and avoids class conflicts.
+      ```typescript
+      // Example in field configuration
+      {
+        inputName: 'email',
+        inputType: 'text',
+        label: 'Email',
+        className: cn('border-blue-500', { 'bg-gray-100': isDisabled })
+      }
+      ```
+    - **Advantage** : Ideal for specific adjustments to a field or form without affecting others. Very flexible for dynamic changes based on state.
 
-En combinant ces approches, vous pouvez obtenir un contrôle précis sur l'apparence de vos formulaires générés par `ReactFormMaker`, tout en maintenant une base de style cohérente et facile à gérer.
+By combining these approaches, you can achieve precise control over the appearance of your forms generated by `ReactFormMaker`, while maintaining a consistent and easy-to-manage style base.
 
-## Aspects Avancés
+## Advanced Aspects
 
-Cette section couvre des fonctionnalités plus avancées de `ReactFormMaker`, destinées aux utilisateurs souhaitant étendre ou personnaliser en profondeur le comportement de leurs formulaires.
+This section covers more advanced features of `ReactFormMaker`, intended for users looking to extend or deeply customize the behavior of their forms.
 
-### Hooks Personnalisés
+### Custom Hooks
 
-`ReactFormMaker` utilise en interne plusieurs hooks React pour gérer sa logique. Bien que leur utilisation directe ne soit généralement pas nécessaire pour la plupart des cas d'usage, les connaître peut être utile pour des scénarios d'extension ou de débogage avancé.
+`ReactFormMaker` internally uses several React hooks to manage its logic. While direct use is generally not necessary for most use cases, knowing them can be useful for advanced extension or debugging scenarios.
 
--   **`useReactFormMaker<T extends FieldValues>(formfieldsAttributes: CompositeField[])`**
-    *   **Rôle** : Ce hook est au cœur de la génération du formulaire. Il prend la configuration `formfields`, initialise `react-hook-form` (y compris la génération du schéma Zod à partir des `zodObject` des champs et la gestion des valeurs par défaut), et retourne l'instance du formulaire (`form`), le schéma Zod généré (`formSchema`), les valeurs par défaut (`dataFieldsDefaultValues`), l'objet Zod brut (`zObject`), et une fonction utilitaire `hasSubmitButton` pour détecter si un bouton de soumission est déjà présent parmi les enfants.
-    *   **Utilité principale** : Gère toute la logique d'initialisation de `react-hook-form` et la transformation de la configuration `formfields` en un schéma Zod utilisable. Principalement utilisé en interne par le composant `ReactFormMaker`.
+- **`useReactFormMaker<T extends FieldValues>(formfieldsAttributes: CompositeField[])`**
+  - **Role** : This hook is at the core of form generation. It takes the `formfields` configuration, initializes `react-hook-form` (including generating the Zod schema from fields' `zodObject` and managing default values), and returns the form instance (`form`), the generated Zod schema (`formSchema`), default values (`dataFieldsDefaultValues`), the raw Zod object (`zObject`), and a utility function `hasSubmitButton` to detect if a submit button is already present among the children.
+  - **Main utility** : Manages all the initialization logic of `react-hook-form` and transforms the `formfields` configuration into a usable Zod schema. Mainly used internally by the `ReactFormMaker` component.
 
--   **`useFormHandlers<T extends FieldValues>({ onSubmit: (data, errors) => void })`**
-    *   **Rôle** : Ce hook simplifie la gestion des callbacks de soumission de `react-hook-form`. Il prend une unique fonction `onSubmit` (celle que vous passez à `ReactFormMaker`) et la divise en deux gestionnaires : `onValid` (pour les soumissions réussies) et `onInvalid` (pour les soumissions échouées à cause d'erreurs de validation).
-    *   **Utilité principale** : Fournit les fonctions `onValid` et `onInvalid` que `react-hook-form` attend pour sa propre fonction `handleSubmit`. Utilisé en interne pour brancher votre callback `onSubmit` au système de soumission de `react-hook-form`.
+- **`useFormHandlers<T extends FieldValues>({ onSubmit: (data, errors) => void })`**
+  - **Role** : This hook simplifies handling `react-hook-form` submit callbacks. It takes a single `onSubmit` function (the one you pass to `ReactFormMaker`) and splits it into two handlers: `onValid` (for successful submissions) and `onInvalid` (for submissions failed due to validation errors).
+  - **Main utility** : Provides the `onValid` and `onInvalid` functions that `react-hook-form` expects for its own `handleSubmit` function. Used internally to wire your `onSubmit` callback to `react-hook-form`'s submit system.
 
--   **`useFormFieldsMap<T extends FieldValues>(form: UseFormReturn<T>)`**
-    *   **Rôle** : Ce hook est responsable du rendu récursif des champs de formulaire et des fieldsets. Il retourne des fonctions (`FormFieldsMap`, `FieldsetMap`) qui itèrent sur la configuration `formfields` et affichent les composants de champ appropriés (comme `FormFieldElement`, `DivElementField`) ou les fieldsets. Il retourne également `InpuTComponentCallBack`, une fonction mémoïsée pour rendre le `InputComponent` utilisé pour chaque champ.
-    *   **Utilité principale** : Gère la logique de mapping de la configuration des champs vers les éléments JSX rendus. C'est le moteur de rendu dynamique des champs. Principalement pour usage interne.
+- **`useFormFieldsMap<T extends FieldValues>(form: UseFormReturn<T>)`**
+  - **Role** : This hook is responsible for the recursive rendering of form fields and fieldsets. It returns functions (`FormFieldsMap`, `FieldsetMap`) that iterate over the `formfields` configuration and display the appropriate field components (like `FormFieldElement`, `DivElementField`) or fieldsets. It also returns `InpuTComponentCallBack`, a memoized function to render the `InputComponent` used for each field.
+  - **Main utility** : Manages the mapping logic of field configuration to rendered JSX elements. This is the dynamic rendering engine of the fields. Mainly for internal use.
 
-Ces hooks encapsulent la complexité de l'intégration avec `react-hook-form` et la logique de rendu dynamique. Pour étendre `ReactFormMaker`, il est généralement préférable de créer des types de champs personnalisés ou d'utiliser les props de configuration existantes plutôt que d'interagir directement avec ces hooks, sauf si vous construisez une fonctionnalité de formulaire très spécifique.
+These hooks encapsulate the complexity of integrating with `react-hook-form` and the dynamic rendering logic. To extend `ReactFormMaker`, it is generally better to create custom field types or use the existing configuration props rather than interacting directly with these hooks, unless you are building a very specific form functionality.
 
-### Gestion des Événements sur les Champs
+### Event Handling on Fields
 
-Vous pouvez attacher des gestionnaires d'événements directement à vos champs lors de leur configuration dans le tableau `formfields`. Les événements courants comme `onChange`, `onBlur`, et `onClick` sont supportés.
+You can attach event handlers directly to your fields when configuring them in the `formfields` array. Common events like `onChange`, `onBlur`, and `onClick` are supported.
 
-Ces fonctions de rappel reçoivent un objet `FormFieldEvent` qui contient deux propriétés :
--   `event`: L'événement brut du navigateur (par exemple, `React.ChangeEvent<HTMLInputElement>`, `React.FocusEvent<HTMLInputElement>`).
--   `form`: L'instance complète de `react-hook-form` (`UseFormReturn<T>`). Cela vous donne un accès direct à toutes les méthodes de `react-hook-form` (comme `setValue`, `getValue`, `trigger`, `formState`, etc.) à l'intérieur de votre gestionnaire d'événements.
+These callback functions receive a `FormFieldEvent` object that contains two properties :
 
-Pour la signature exacte et plus de détails sur `FormFieldEvent`, référez-vous à la documentation de l'interface `FieldReactFormMaker` (section "Events").
+- `event`: The raw browser event (e.g., `React.ChangeEvent<HTMLInputElement>`, `React.FocusEvent<HTMLInputElement>`).
+- `form`: The complete `react-hook-form` instance (`UseFormReturn<T>`). This gives you direct access to all methods of `react-hook-form` (like `setValue`, `getValue`, `trigger`, `formState`, etc.) inside your event handler.
 
-#### Exemple d'utilisation de `onChange`
+For the exact signature and more details on `FormFieldEvent`, refer to the documentation of the `FieldReactFormMaker` interface (see "Events" section).
+
+#### Example using `onChange`
 
 ```typescript
-import { FormFieldEvent } from './frontend/src/components/ReactFormMaker/interfaces/FormFieldEvent'; // Ajustez le chemin
+import { FormFieldEvent } from './frontend/src/components/ReactFormMaker/interfaces/FormFieldEvent'; // Adjust the path
 import { FieldValues } from 'react-hook-form';
 import { z } from 'zod';
 
-// Supposons que TFormData est votre type de données de formulaire
+// Suppose TFormData is your form data type
 interface TFormData extends FieldValues {
   firstName: string;
   lastName?: string;
@@ -617,13 +680,13 @@ const handleFirstNameChange = (fieldEvent: FormFieldEvent<TFormData>) => {
   const { event, form } = fieldEvent;
   const newValue = (event.target as HTMLInputElement).value;
 
-  console.log(`Le prénom est maintenant : ${newValue}`);
+  console.log(`First name is now: ${newValue}`);
 
-  // Exemple d'interaction avec react-hook-form :
-  // Mettre à jour dynamiquement un autre champ
+  // Example of interacting with react-hook-form :
+  // Dynamically update another field
   form.setValue('lastName', newValue + ' Smith');
 
-  // Déclencher la validation pour un autre champ
+  // Trigger validation for another field
   if (newValue.length > 2) {
     form.trigger('lastName');
   }
@@ -632,14 +695,14 @@ const handleFirstNameChange = (fieldEvent: FormFieldEvent<TFormData>) => {
 const handleNicknameVisibility = (fieldEvent: FormFieldEvent<TFormData>) => {
   const { event, form } = fieldEvent;
   const isChecked = (event.target as HTMLInputElement).checked;
-  // Vous pourriez utiliser form.setValue pour afficher/masquer ou activer/désactiver le champ nickname
-  // ou simplement gérer l'état localement si le champ nickname est conditionnellement rendu
-  console.log(`Afficher le surnom : ${isChecked}`);
+  // You could use form.setValue to show/hide or enable/disable the nickname field
+  // or just manage it locally if the nickname field is conditionally rendered
+  console.log(`Show nickname: ${isChecked}`);
   if (!isChecked) {
-    form.setValue('nickname', ''); // Effacer le surnom si la case est décochée
-    form.unregister('nickname'); // Optionnel: dé-enregistrer le champ pour qu'il ne soit pas soumis
+    form.setValue('nickname', ''); // Clear nickname if unchecked
+    form.unregister('nickname'); // Optional: unregister the field so it's not submitted
   } else {
-    form.register('nickname'); // Enregistrer le champ s'il était dé-enregistré
+    form.register('nickname'); // Register the field if it was unregistered
   }
 };
 
@@ -647,354 +710,31 @@ export const formFieldsWithEvents: Array<FieldReactFormMaker> = [
   {
     inputName: 'firstName',
     inputType: 'text',
-    label: 'Prénom',
+    label: 'First Name',
     zodObject: z.string().min(1),
     onChange: handleFirstNameChange,
   },
   {
     inputName: 'hasNickname',
     inputType: 'checkbox',
-    label: 'Avez-vous un surnom ?',
+    label: 'Do you have a nickname?',
     onChange: handleNicknameVisibility,
     zodObject: z.boolean().optional(),
   },
   {
     inputName: 'nickname',
     inputType: 'text',
-    label: 'Surnom (si applicable)',
-    // Ce champ pourrait être masqué/affiché conditionnellement en fonction de 'hasNickname'
-    // en utilisant la propriété 'isHide' et en la mettant à jour via form.setValue dans handleNicknameVisibility,
-    // ou en gérant cela dans le rendu JSX de votre composant.
-    // Pour cet exemple, nous supposons qu'il est toujours visible mais sa valeur est gérée.
+    label: 'Nickname (if applicable)',
+    // This field could be hidden/shown conditionally based on 'hasNickname'
+    // using the 'isHide' property and updating it via form.setValue in handleNicknameVisibility,
+    // or by managing it in the JSX rendering of your component.
+    // For this example, we assume it's always visible but its value is managed.
     zodObject: z.string().optional(),
-  }
-  // ... autres champs
+  },
+  // ... other fields
 ];
 
-// Utilisez ensuite formFieldsWithEvents dans <ReactFormMaker formfields={formFieldsWithEvents} ... />
+// Then use formFieldsWithEvents in <ReactFormMaker formfields={formFieldsWithEvents} ... />
 ```
 
-Dans cet exemple, `handleFirstNameChange` est appelée chaque fois que la valeur du champ "firstName" change. Elle a accès à l'événement du navigateur et à l'instance complète du formulaire `react-hook-form`, permettant des logiques complexes et des interactions entre champs. De même, `handleNicknameVisibility` réagit aux changements de la case à cocher pour potentiellement manipuler la visibilité ou l'état du champ "nickname".
-L'utilisation de `form.setValue`, `form.trigger`, `form.register`, `form.unregister` etc., à l'intérieur de ces gestionnaires d'événements permet une grande flexibilité pour créer des formulaires dynamiques et interactifs.
-
-## Exemples Complets
-
-Cette section fournit des exemples plus complets illustrant comment combiner les différentes configurations de champs et les props du composant `ReactFormMaker` pour construire des formulaires courants.
-
-### Exemple 1: Formulaire d'Inscription Complet
-
-Cet exemple montre un formulaire d'inscription typique avec validation.
-
-**Configuration des champs (`formfields`) :**
-
-```typescript
-import { z } from 'zod';
-import { FieldReactFormMaker, ReactFormMakerFieldset } from './interfaces/FieldInterfaces'; // Ajustez le chemin
-
-// Schéma Zod global pour la validation croisée des mots de passe
-const registrationSchema = z.object({
-  username: z.string().min(3, "Le nom d'utilisateur doit faire au moins 3 caractères."),
-  email: z.string().email("Adresse email invalide."),
-  password: z.string().min(8, "Le mot de passe doit faire au moins 8 caractères."),
-  confirmPassword: z.string(),
-  acceptTerms: z.boolean().refine(val => val === true, {
-    message: "Vous devez accepter les conditions d'utilisation.",
-  }),
-}).refine(data => data.password === data.confirmPassword, {
-  message: "Les mots de passe ne correspondent pas.",
-  path: ["confirmPassword"], // Erreur associée au champ confirmPassword
-});
-
-
-// Définition des champs pour ReactFormMaker
-// Note: La validation croisée des mots de passe est gérée par le schéma global `registrationSchema`
-// qui sera passé au resolver de react-hook-form.
-// Les `zodObject` individuels ici sont pour la validation par champ.
-
-export const registrationFormFields: (FieldReactFormMaker | ReactFormMakerFieldset)[] = [
-  {
-    fieldset: 'accountInfo',
-    legend: 'Informations du Compte',
-    className: 'mb-6',
-    fields: [
-      {
-        inputName: 'username',
-        label: 'Nom d\'utilisateur',
-        inputType: 'text',
-        placeholder: 'ex: supercoder',
-        zodObject: registrationSchema.shape.username, // Référence au schéma Zod
-        description: 'Sera affiché sur votre profil public.'
-      },
-      {
-        inputName: 'email',
-        label: 'Adresse Email',
-        inputType: 'text', // inputType 'email' pourrait aussi être utilisé si un composant spécifique est mappé
-        placeholder: 'vous@exemple.com',
-        zodObject: registrationSchema.shape.email,
-      },
-    ],
-  },
-  {
-    fieldset: 'security',
-    legend: 'Sécurité',
-    fields: [
-      {
-        inputName: 'password',
-        label: 'Mot de passe',
-        inputType: 'password',
-        placeholder: '********',
-        zodObject: registrationSchema.shape.password,
-      },
-      {
-        inputName: 'confirmPassword',
-        label: 'Confirmer le mot de passe',
-        inputType: 'password',
-        placeholder: '********',
-        // Le zodObject ici est simple, la vérification de correspondance est dans le schéma global.
-        zodObject: z.string().min(1, "Veuillez confirmer le mot de passe."),
-      },
-    ],
-  },
-  {
-    inputName: 'acceptTerms',
-    label: 'J\'accepte les conditions d\'utilisation et la politique de confidentialité.',
-    inputType: 'checkbox',
-    zodObject: registrationSchema.shape.acceptTerms,
-    className: 'mt-4 items-start' // Ajustement pour aligner le label avec la checkbox
-  }
-];
-```
-
-**Utilisation dans un composant React :**
-
-```tsx
-import React from 'react';
-import ReactFormMaker from './ReactFormMaker'; // Ajustez le chemin d'importation
-import { registrationFormFields } from './path-to/registrationFormFields'; // Ajustez le chemin
-import { FieldValues } from 'react-hook-form';
-// import { z } from 'zod'; // Zod est déjà utilisé dans registrationFormFields.ts
-
-// Définissez le type de données attendu par votre formulaire, si vous utilisez TypeScript
-interface RegistrationFormData extends FieldValues {
-  username: string;
-  email: string;
-  password?: string; // Le mot de passe peut être optionnel après soumission pour ne pas le renvoyer
-  confirmPassword?: string;
-  acceptTerms: boolean;
-}
-
-const RegistrationForm = () => {
-  const handleSubmit = (data: RegistrationFormData | false, errors: FieldValues | false) => {
-    if (data) {
-      console.log('Formulaire d\'inscription soumis avec succès:', data);
-      // Envoyer les données au backend, sans les mots de passe si possible
-      const { password, confirmPassword, ...submissionData } = data;
-      console.log('Données à envoyer:', submissionData);
-    } else {
-      console.error('Erreurs de validation:', errors);
-    }
-  };
-
-  return (
-    <div className="max-w-lg mx-auto p-4 shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">Créer un compte</h2>
-      <ReactFormMaker<RegistrationFormData>
-        formfields={registrationFormFields}
-        onSubmit={handleSubmit}
-        btnTextSubmit="S'inscrire"
-        // Vous pourriez passer le schéma Zod global ici si ReactFormMaker le permettait
-        // directement, ou vous assurer que useReactFormMaker.hook.ts le construit
-        // correctement en interne, y compris le .refine pour la validation croisée.
-        // Pour l'instant, on suppose que le hook interne gère la création du schéma
-        // à partir des zodObjects des champs et applique le .refine() si nécessaire.
-        // La validation croisée des mots de passe est gérée par le schéma Zod
-        // lors de l'initialisation de react-hook-form dans `useReactFormMaker.hook.ts`.
-        // Le hook doit être capable de détecter la présence des champs `password` et `confirmPassword`
-        // et d'ajouter la validation `.refine` au schéma global.
-      />
-    </div>
-  );
-};
-
-export default RegistrationForm;
-```
-
-**Explication :**
--   Le fichier `registrationFormFields.ts` (nommé hypothétiquement) définit la structure du formulaire.
--   Nous utilisons `ReactFormMakerFieldset` pour grouper les champs "Informations du Compte" et "Sécurité".
--   Chaque champ a son propre `zodObject` pour la validation individuelle.
--   **Important pour la confirmation du mot de passe** : La validation directe que `password` et `confirmPassword` correspondent est généralement effectuée au niveau du schéma Zod global utilisé par `react-hook-form`. Le hook `useReactFormMaker` devrait être conçu pour construire ce schéma global en combinant les `zodObject` individuels et en y ajoutant des raffinements (`.refine()`) pour les validations croisées. Dans l'exemple de `registrationFormFields`, nous avons défini un `registrationSchema` complet, et les `zodObject` des champs font référence aux shapes de ce schéma. Le hook `useReactFormMaker` est supposé utiliser ce schéma Zod complet (avec le `.refine`) lors de l'initialisation de `useForm` avec `zodResolver`.
--   Le composant `RegistrationForm` instancie `ReactFormMaker` avec cette configuration et une fonction `handleSubmit`.
-
-### Exemple 2: Formulaire à Étapes (Stepper) Détaillé
-
-Cet exemple étend le concept de formulaire à étapes, montrant une structure plus complexe avec des validations par étape.
-
-**Configuration des champs (`formfields`) pour le stepper :**
-
-```typescript
-import { z } from 'zod';
-import { ReactFormMakerStep, FieldReactFormMaker } from './interfaces/FieldInterfaces'; // Ajustez le chemin
-
-export const detailedStepperFormFields: ReactFormMakerStep[] = [
-  {
-    stepName: 'personalInfo',
-    isStep: true,
-    legend: 'Étape 1: Vos Informations Personnelles',
-    fields: [
-      {
-        inputName: 'firstName',
-        label: 'Prénom',
-        inputType: 'text',
-        zodObject: z.string().min(2, 'Le prénom est requis (minimum 2 caractères).'),
-        placeholder: 'Jean',
-      },
-      {
-        inputName: 'lastName',
-        label: 'Nom de famille',
-        inputType: 'text',
-        zodObject: z.string().min(2, 'Le nom est requis (minimum 2 caractères).'),
-        placeholder: 'Dupont',
-      },
-    ],
-    isStrict: true, // L'utilisateur doit valider cette étape pour continuer
-  },
-  {
-    stepName: 'contactInfo',
-    isStep: true,
-    legend: 'Étape 2: Comment vous Contacter',
-    fields: [
-      {
-        inputName: 'email',
-        label: 'Adresse Email',
-        inputType: 'text', // ou 'email'
-        zodObject: z.string().email('Adresse email invalide.'),
-        placeholder: 'jean.dupont@email.com',
-      },
-      {
-        inputName: 'phoneNumber',
-        label: 'Numéro de téléphone (optionnel)',
-        inputType: 'phoneNumber', // Type spécifique pour potentiellement un composant customisé
-        zodObject: z.string().optional().refine(val => !val || /^[0-9+\s()-]*$/.test(val), {
-            message: "Numéro de téléphone invalide.",
-        }),
-        placeholder: '06 12 34 56 78',
-      },
-    ],
-    isStrict: true,
-  },
-  {
-    stepName: 'preferences',
-    isStep: true,
-    legend: 'Étape 3: Vos Préférences',
-    fields: [
-      {
-        inputName: 'newsletter',
-        label: 'Souhaitez-vous vous abonner à notre newsletter ?',
-        inputType: 'radio',
-        options: [
-          { value: 'yes', label: 'Oui, avec plaisir !' },
-          { value: 'no', label: 'Non merci.' },
-        ],
-        zodObject: z.enum(['yes', 'no'], { required_error: "Veuillez faire un choix." }),
-        defaultValues: 'no',
-      },
-      {
-        inputName: 'preferredContact',
-        label: 'Comment préférez-vous être contacté(e) ?',
-        inputType: 'select',
-        options: [
-          { value: '', label: 'Sélectionnez une option...' },
-          { value: 'email', label: 'Par Email' },
-          { value: 'phone', label: 'Par Téléphone (si fourni)' },
-        ],
-        zodObject: z.string().nonempty("Veuillez sélectionner une méthode de contact."),
-        isHide: (form) => { // Exemple de champ conditionnel basé sur les valeurs du formulaire
-          return !form?.watch('email') && !form?.watch('phoneNumber');
-        }
-      },
-    ],
-  },
-  {
-    stepName: 'summary',
-    isStep: true,
-    legend: 'Étape 4: Résumé et Soumission',
-    // Ce champ pourrait utiliser un composant personnalisé pour afficher un résumé
-    // ou simplement un champ de type 'custom' avec du contenu informatif.
-    // Pour la simplicité, nous ajoutons une simple checkbox de confirmation.
-    fields: [
-        {
-            inputName: 'finalConfirmation',
-            label: 'Je confirme que toutes les informations sont correctes et je souhaite soumettre ma demande.',
-            inputType: 'checkbox',
-            zodObject: z.boolean().refine(val => val === true, {
-                message: "Veuillez confirmer pour soumettre."
-            })
-        }
-    ],
-    // onBeforeNextStep: async (data) => { console.log("Dernière vérification avant soumission", data); return true; }
-  }
-];
-```
-
-**Utilisation dans un composant React :**
-
-```tsx
-import React from 'react';
-import ReactFormMaker from './ReactFormMaker'; // Ajustez le chemin
-import { detailedStepperFormFields } from './path-to/detailedStepperFormFields'; // Ajustez le chemin
-import { FieldValues } from 'react-hook-form';
-
-interface DetailedStepperFormData extends FieldValues {
-  // Définissez les types pour chaque champ si vous le souhaitez
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber?: string;
-  newsletter: 'yes' | 'no';
-  preferredContact: 'email' | 'phone' | '';
-  finalConfirmation: boolean;
-}
-
-const DetailedStepperForm = () => {
-  const handleSubmit = (data: DetailedStepperFormData | false, errors: FieldValues | false) => {
-    if (data) {
-      console.log('Formulaire à étapes soumis avec succès:', data);
-      // Traitement des données finales
-    } else {
-      console.error('Erreurs de validation dans le stepper:', errors);
-      // Peut-être naviguer vers la première étape avec une erreur si nécessaire
-    }
-  };
-
-  return (
-    <div className="w-full mx-auto py-8 px-4">
-      <h2 className="text-3xl font-bold mb-8 text-center">Formulaire Multi-Étapes</h2>
-      <ReactFormMaker<DetailedStepperFormData>
-        formfields={detailedStepperFormFields}
-        onSubmit={handleSubmit}
-        stepper={true}
-        orientation="horizontal" // ou "vertical"
-        btnTextSubmit="Soumettre la Demande" // Texte du bouton sur la dernière étape
-        className="bg-white p-6 rounded-xl shadow-xl" // Style pour le conteneur du stepper
-      />
-    </div>
-  );
-};
-
-export default DetailedStepperForm;
-```
-
-**Points Clés de la Configuration du Stepper :**
--   Chaque objet dans le tableau `detailedStepperFormFields` est une configuration d'étape (`ReactFormMakerStep`).
--   `stepName` : Un identifiant unique pour l'étape.
--   `isStep: true` : Indique que cet objet définit une étape.
--   `legend` : Le titre de l'étape.
--   `fields` : Un tableau de configurations de champs (`FieldReactFormMaker`) pour cette étape spécifique.
--   `isStrict: true` : (Optionnel) Si défini à `true` sur une étape, l'utilisateur ne pourra pas passer à l'étape suivante tant que tous les champs de l'étape actuelle ne sont pas valides selon leurs `zodObject`.
--   La prop `stepper={true}` sur `<ReactFormMaker>` active le mode stepper.
--   `orientation` peut être `"horizontal"` ou `"vertical"`.
--   Le `btnTextSubmit` sera affiché sur le bouton de la dernière étape. Les étapes intermédiaires auront des boutons "Suivant" et "Précédent" (textes personnalisables via les props de `ReactFormMakerStep` comme `buttonNextContent`).
--   La propriété `isHide` sur un champ peut être une fonction qui reçoit l'instance du formulaire `react-hook-form`, permettant de masquer/afficher des champs dynamiquement en fonction d'autres valeurs du formulaire (par exemple, `form.watch('fieldName')`).
-
-Ces exemples illustrent la flexibilité de `ReactFormMaker` pour créer à la fois des formulaires simples et des formulaires multi-étapes plus complexes, en s'appuyant sur une configuration déclarative.
+In this example, `handleFirstNameChange` is called whenever the value of the "firstName" field changes. It has access to the browser event and the complete `react-hook-form` instance, allowing for complex logics and interactions between fields. Similarly, `handleNicknameVisibility` reacts to the checkbox changes to potentially manipulate the visibility or state of the "nickname" field.

@@ -1,4 +1,4 @@
-import {
+import type {
   CompositeField,
   DividerReactFormMaker,
   FieldReactFormMaker,

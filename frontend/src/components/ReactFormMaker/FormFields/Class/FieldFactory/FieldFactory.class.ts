@@ -1,22 +1,22 @@
-import { z, ZodNumber, ZodString, ZodType, ZodTypeDef } from 'zod';
-import {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { z, ZodString, ZodType, type ZodTypeDef } from 'zod';
+import React from 'react';
+import type {
   DividerReactFormMaker,
   FieldReactFormMaker,
   InputType,
   ReactFormMakerFieldset,
 } from '../../../interfaces/FieldInterfaces';
-import { FormFieldEvent } from '../../../interfaces/FormFieldEvent';
+import type { FormFieldEvent } from '../../../interfaces/FormFieldEvent';
+import type { CustomInputFieldElementParams } from '@/components/ReactFormMaker/interfaces/CustomInputFieldElementParams';
+import type { Option } from '@/components/ReactFormMaker/utils/typeGuards/optionsFields.TypeGuards';
 
 import {
   isBetween,
   islaterThan,
   isOlderThan,
-  SimpleDurationValues,
+  type SimpleDurationValues,
 } from '../../../utils/validators/dateValidators';
-import { CustomInputFieldElementParams } from '@/components/ReactFormMaker/interfaces/CustomInputFieldElementParams';
-import React from 'react';
-import { Option } from '@/components/ReactFormMaker/utils/typeGuards/optionsFields.TypeGuards';
-import { FieldValue } from 'react-hook-form';
 
 /**
  * Represents a condition where a value must be in the past.
@@ -160,31 +160,52 @@ function stringifyDuration(duration: SimpleDurationValues): string {
  */
 export default class Field<T extends FieldReactFormMaker> {
   inputName: string;
+
   label?: string;
+
   placeholder?: string;
+
   defaultValues: any;
+
   zodObject: ZodType<any, ZodTypeDef, any> | undefined;
+
   inputType: InputType = 'text';
+
   // defaultValue?: any;
   options?: string[] | Option[];
+
   className?: string;
+
   isHide?: boolean;
+
   disabled?: boolean | undefined;
+
   fields?: (
     | FieldReactFormMaker
     | DividerReactFormMaker
     | ReactFormMakerFieldset
   )[];
+
   legend?: string;
+
   legendClassName?: string;
+
   description?: string;
+
   isSecure?: boolean;
+
   children?: React.ReactNode;
+
   customInputFieldElement?: React.ReactNode;
+
   props?: Record<string, any>;
+
   onBlur?: ((event: FormFieldEvent) => void) | undefined;
+
   onSelect?: ((event: FormFieldEvent) => void) | undefined;
+
   onChange?: ((event: FormFieldEvent) => void) | undefined;
+
   onClick?: ((event: FormFieldEvent) => void) | undefined;
 
   constructor(name: string, entries?: Partial<T>) {
@@ -223,7 +244,7 @@ export default class Field<T extends FieldReactFormMaker> {
     hasMultipleInput?: boolean,
   ): ZodType<any, ZodTypeDef, any> {
     hasMultipleInput = hasMultipleInput || false;
-    //define options type
+    // define options type
     const isComplexeOption =
       typeof options[0] === 'object' && options[0].hasOwnProperty('value');
     let zodObject: ZodType<any, ZodTypeDef, any>;
@@ -238,13 +259,13 @@ export default class Field<T extends FieldReactFormMaker> {
     }
 
     zodObject.refine(
-      (data) => {
+      (data: any) => {
         if (isComplexeOption) {
           options = options as Option[];
           return options.some((option) => option.value === data);
-        } else {
-          return options.includes(data);
         }
+        /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
+        return options.includes(data);
       },
       {
         message: 'Invalid option selected',
@@ -281,11 +302,12 @@ export default class Field<T extends FieldReactFormMaker> {
         if (typeof type === 'object' && 'type' in type) {
           if (type.type === 'olderThan') {
             return z.date().refine((date) => isOlderThan(date, type.value), {
-              message: `Date must be later than ${stringifyDuration(type.value)} ago`,
+              message: `Date must be later than ${stringifyDuration(type?.value)} ago`,
             });
-          } else if (type.type === 'laterThan') {
+          }
+          if (type.type === 'laterThan') {
             return z.date().refine((date) => islaterThan(date, type.value), {
-              message: `Date must be older than ${stringifyDuration(type.value)} away`,
+              message: `Date must be older than ${stringifyDuration(type?.value)} away`,
             });
           }
         } else if (type instanceof ZodType) {
@@ -395,7 +417,7 @@ export default class Field<T extends FieldReactFormMaker> {
    * @param {ZodType<any, ZodTypeDef, String>} [zodObject] - Optional Zod schema object for validation. If not provided, defaults to a string schema.
    * @returns {this} The current instance of the class for method chaining.
    */
-  public text(zodObject?: ZodType<any, ZodTypeDef, String>): this {
+  public text(zodObject?: ZodType<any, ZodTypeDef, string>): this {
     if (!zodObject || zodObject === undefined) {
       zodObject = z.string();
     }
@@ -419,7 +441,7 @@ export default class Field<T extends FieldReactFormMaker> {
    * @info > If you use key name `password` exactly, and second password type with namekey `confirmPassword`, the form will automaticly check if the two passwords are the same. The seconde password will be deleted from returned data for security reason.
    * @returns The current instance of the class for method chaining.
    */
-  public password(zodObject?: ZodType<any, ZodTypeDef, String>): this {
+  public password(zodObject?: ZodType<any, ZodTypeDef, string>): this {
     if (!zodObject || zodObject === undefined) {
       zodObject = z
         .string()
@@ -428,7 +450,7 @@ export default class Field<T extends FieldReactFormMaker> {
         })
         .refine(
           (data) => {
-            //regex password submition
+            // regex password submition
             return data.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
           },
           {
@@ -503,7 +525,7 @@ export default class Field<T extends FieldReactFormMaker> {
    * @param {ZodType<any, ZodTypeDef, String>} [zodObject] - Optional Zod validation schema for the textarea input. If not provided, defaults to a string schema.
    * @returns {this} The current instance of the class for method chaining.
    */
-  public textarea(zodObject?: ZodType<any, ZodTypeDef, String>): this {
+  public textarea(zodObject?: ZodType<any, ZodTypeDef, string>): this {
     if (!zodObject || zodObject === undefined) {
       zodObject = z.string();
     }
@@ -609,76 +631,74 @@ export default class Field<T extends FieldReactFormMaker> {
         from: z.date(),
         to: z.date(),
       });
-    } else {
-      if (typeof zodObject === 'object' && 'type' in zodObject) {
-        const { type, value } = zodObject;
-        switch (type) {
-          case 'isBetween':
-            zodObject = z
-              .object({
-                from: z.date(),
-                to: z.date(),
-              })
-              .superRefine((data, ctx) => {
-                const { from, to } = data;
-                if (from && to) {
-                  const constrainIsRespected = isBetween(from, to, value);
-                  if (!constrainIsRespected) {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message: `The difference between the chosen dates must be less than ${stringifyDuration(value)}`,
-                    });
-                  }
-                } else {
+    } else if (typeof zodObject === 'object' && 'type' in zodObject) {
+      const { type, value } = zodObject;
+      switch (type) {
+        case 'isBetween':
+          zodObject = z
+            .object({
+              from: z.date(),
+              to: z.date(),
+            })
+            .superRefine((data, ctx) => {
+              const { from, to } = data;
+              if (from && to) {
+                const constrainIsRespected = isBetween(from, to, value);
+                if (!constrainIsRespected) {
                   ctx.addIssue({
                     code: z.ZodIssueCode.custom,
-                    message: "You must provide a 'from' and 'to' date",
+                    message: `The difference between the chosen dates must be less than ${stringifyDuration(value)}`,
                   });
                 }
-              });
+              } else {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: "You must provide a 'from' and 'to' date",
+                });
+              }
+            });
 
-          case 'isOutside':
-            zodObject = z
-              .object({
-                from: z.date(),
-                to: z.date(),
-              })
-              .superRefine((data, ctx) => {
-                const { from, to } = data;
-                if (from && to) {
-                  const constrainIsRespected = !isBetween(from, to, value);
-                  if (!constrainIsRespected) {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message: `The difference between the chosen dates must be more than ${stringifyDuration(value)}`,
-                    });
-                  }
-                } else {
+        case 'isOutside':
+          zodObject = z
+            .object({
+              from: z.date(),
+              to: z.date(),
+            })
+            .superRefine((data, ctx) => {
+              const { from, to } = data;
+              if (from && to) {
+                const constrainIsRespected = !isBetween(from, to, value);
+                if (!constrainIsRespected) {
                   ctx.addIssue({
                     code: z.ZodIssueCode.custom,
-                    message: "You must provide a 'from' and 'to' date",
+                    message: `The difference between the chosen dates must be more than ${stringifyDuration(value)}`,
                   });
                 }
-              });
-        }
-      } else if (zodObject instanceof ZodType) {
-        zodObject = zodObject;
-      } else if (
-        typeof zodObject === 'object' &&
-        'from' in zodObject &&
-        'to' in zodObject
-      ) {
-        zodObject = z.object({
-          from: this.defineZodDateType(zodObject.from),
-          to: this.defineZodDateType(zodObject.to),
-        });
-      } else {
-        console.warn('Invalid date range type');
-        zodObject = z.object({
-          from: z.date(),
-          to: z.date(),
-        });
+              } else {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: "You must provide a 'from' and 'to' date",
+                });
+              }
+            });
       }
+    } else if (zodObject instanceof ZodType) {
+      zodObject = zodObject;
+    } else if (
+      typeof zodObject === 'object' &&
+      'from' in zodObject &&
+      'to' in zodObject
+    ) {
+      zodObject = z.object({
+        from: this.defineZodDateType(zodObject.from),
+        to: this.defineZodDateType(zodObject.to),
+      });
+    } else {
+      console.warn('Invalid date range type');
+      zodObject = z.object({
+        from: z.date(),
+        to: z.date(),
+      });
     }
     this.zodObject = zodObject;
     this.inputType = 'dateRange';
@@ -774,7 +794,8 @@ export default class Field<T extends FieldReactFormMaker> {
         .transform((data) => Number(data));
     }
     this.zodObject = zodObject;
-    this.zodObject as ZodNumber;
+    // this.zodObject as ZodNumber;
+    this.inputType = 'number';
     return this;
   }
 
@@ -1046,6 +1067,7 @@ export default class Field<T extends FieldReactFormMaker> {
       inputName: this.inputName,
       label: this.label,
       placeholder: this.placeholder,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       defaultValues: this.defaultValues,
       zodObject: this.zodObject,
       inputType: this.inputType,
@@ -1063,6 +1085,7 @@ export default class Field<T extends FieldReactFormMaker> {
       props: this.props,
     };
   }
+
   /**
    * Get the field name
    * @returns
@@ -1203,6 +1226,7 @@ export default class Field<T extends FieldReactFormMaker> {
    * @returns
    */
   setDefaultValues(value: any): this {
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
     this.defaultValues = value;
     return this;
   }
@@ -1227,3 +1251,5 @@ export default class Field<T extends FieldReactFormMaker> {
     return this;
   }
 }
+
+/* eslint-enable @typescript-eslint/no-explicit-any */

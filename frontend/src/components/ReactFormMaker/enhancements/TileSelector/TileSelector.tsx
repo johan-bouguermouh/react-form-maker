@@ -4,7 +4,7 @@ import { useGenerateUUIDs } from '@/lib/useGenerateUUIDs';
 import TileSelectorItem from './TileSelectorItem';
 import {
   isOption,
-  Option,
+  type Option,
 } from '../../utils/typeGuards/optionsFields.TypeGuards';
 
 interface TileSelectorProps {
@@ -29,15 +29,12 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
   (props, ref) => {
     const {
       options,
-      onSelect,
-      onChange,
       onClick,
       defaultValue,
       className,
       disabled,
       id,
       legend,
-      label,
       itemClassName,
       excludes,
     } = props;
@@ -56,7 +53,7 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
       return itemsRef.current.some((item) => item === activeElement);
     }
 
-    const handleChange = (value: string) => {
+    const handleChange = (value: string | number) => {
       const option = options.find(
         (item) => (isOption(item) ? item.label : item) === value,
       );
@@ -114,12 +111,12 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
         ref={ref}
         id={id}
         aria-disabled={disabled}
-        role="radiogroup"
-        aria-labelledby="tile-selector-legend"
+        role="listbox"
+        tabIndex={0}
         className={cn('flex flex-col p-4', className)}
         onKeyDown={handleKeyDown}
       >
-        {<legend className="text-sm font-semibold">{legend}</legend>}
+        <legend className="text-sm font-semibold">{legend}</legend>
         {options.map((item, index) => {
           const itemValue = isOption(item) ? item.value : item;
           function isExcluded() {
@@ -137,7 +134,7 @@ const TileSelector = forwardRef<HTMLDivElement, TileSelectorProps>(
               ref={(el) => {
                 itemsRef.current[index] = el;
               }}
-              id={'tileSelectorItem-' + itemValue}
+              id={`tileSelectorItem-${itemValue}`}
             />
           );
         })}

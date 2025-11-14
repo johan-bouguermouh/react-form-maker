@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react';
 import { useHeaderStepperItem } from './useHeaderStepperItem.hook';
 import StepInfoDisplay from './StepInfoDisplay.component';
-import {
+import type {
   HeaderStepperItemInterface,
   HeaderStepperItemProps,
 } from './HeaderStepperItem.interface';
@@ -56,10 +56,18 @@ const HeaderStepperItem: HeaderStepperItemInterface = forwardRef<
   return (
     <React.Fragment key={index}>
       <div
+        role="tab"
+        tabIndex={0}
         className={`${styles.stepDirectionContainerClass} ${styles.cursorClass}`}
-        onClick={(e) => {
+        onClick={() => {
           if (formIsLoading()) return;
           goToStep(index);
+        }}
+        onKeyDown={(e) => {
+          if (formIsLoading()) return;
+          if (e.key === 'Enter' || e.key === ' ') {
+            goToStep(index);
+          }
         }}
       >
         {icon()}
@@ -87,7 +95,7 @@ const HeaderStepperItem: HeaderStepperItemInterface = forwardRef<
         <div
           className={`${styles.progressBarPositionClass} ${styles.barProgressClass}`}
           style={ajustHeightProgressBar()}
-        ></div>
+        />
       )}
     </React.Fragment>
   );

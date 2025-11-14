@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
 import React from 'react';
+import { type ButtonProps } from 'react-day-picker';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ButtonProps } from 'react-day-picker';
 import { useStepper } from '../StepperContext';
 
 interface FooterStepperReactHookFormProps extends Omit<ButtonProps, 'variant'> {
@@ -38,7 +38,7 @@ interface FooterStepperReactHookFormProps extends Omit<ButtonProps, 'variant'> {
 const FooterStepperReactHookForm = React.forwardRef<
   HTMLButtonElement,
   FooterStepperReactHookFormProps
->(({ className = '', variant = 'default' }, ref) => {
+>(({ variant = 'default' }, ref) => {
   const {
     getFieldStatesBySteps,
     goNextStep,

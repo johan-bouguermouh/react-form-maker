@@ -1,22 +1,22 @@
 'use client';
 
 import { useState } from 'react';
+import { type DropzoneOptions } from 'react-dropzone';
+import { Paperclip } from 'lucide-react';
 import {
+  type FileUploaderProps,
   FileUploader,
   FileUploaderContent,
   FileUploaderItem,
   FileInput,
-  FileUploaderProps,
 } from '@/components/ReactFormMaker/enhancements/FileUploader/FileUploader';
-import { Paperclip } from 'lucide-react';
-import { DropzoneOptions } from 'react-dropzone';
 import { cn } from '@/lib/utils';
 
 interface FileSvgDrawProps {
   placeholder?: string | undefined;
 }
 
-const FileSvgDraw = ({ placeholder }: FileSvgDrawProps) => {
+function FileSvgDraw({ placeholder }: FileSvgDrawProps) {
   return (
     <>
       <svg
@@ -43,7 +43,7 @@ const FileSvgDraw = ({ placeholder }: FileSvgDrawProps) => {
       </p>
     </>
   );
-};
+}
 
 export interface DefaultFileUploaderProps
   extends Omit<FileUploaderProps, 'dropzoneOptions'>,
@@ -55,10 +55,10 @@ export interface DefaultFileUploaderProps
   className?: string;
 }
 
-const DefaultFileUploader = ({
+function DefaultFileUploader({
   placeholder,
   ...props
-}: DefaultFileUploaderProps) => {
+}: DefaultFileUploaderProps) {
   const [files, setFiles] = useState<File[] | null>(props.value || null);
 
   const dropZoneConfig = {
@@ -99,6 +99,6 @@ const DefaultFileUploader = ({
       </FileUploaderContent>
     </FileUploader>
   );
-};
+}
 
 export default DefaultFileUploader;

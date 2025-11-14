@@ -1,6 +1,6 @@
 import React from 'react';
+import type { FieldParams } from '../interfaces/FieldParams';
 import { Textarea } from '@/components/ui/textarea';
-import { FieldParams } from '../interfaces/FieldParams';
 
 function TextareaInput({ zFields, fieldProps, indexField }: FieldParams) {
   return (

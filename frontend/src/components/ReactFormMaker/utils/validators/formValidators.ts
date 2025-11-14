@@ -1,4 +1,4 @@
-import { CompositeField } from '../../interfaces/FieldInterfaces';
+import type { CompositeField } from '../../interfaces/FieldInterfaces';
 import { isStepReactFormMaker } from '../typeGuards/compositeField.TypeGuards';
 
 /**

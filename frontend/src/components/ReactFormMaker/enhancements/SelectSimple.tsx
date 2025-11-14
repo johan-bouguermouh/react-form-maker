@@ -1,4 +1,6 @@
 import React from 'react';
+import * as SelectPrimitive from '@radix-ui/react-select';
+import type { FieldParams } from '../interfaces/FieldParams';
 import {
   Select,
   SelectTrigger,
@@ -8,8 +10,6 @@ import {
   SelectLabel,
   SelectItem,
 } from '@/components/ui/select';
-import * as SelectPrimitive from '@radix-ui/react-select';
-import { FieldParams } from '../interfaces/FieldParams';
 import { isOption } from '../utils/typeGuards/optionsFields.TypeGuards';
 import { mergeRefs } from '@/lib/utils';
 

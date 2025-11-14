@@ -1,22 +1,28 @@
 import React from 'react';
-import { UseFormReturn, FieldValues, Path } from 'react-hook-form';
-import { CompositeField } from '../../interfaces/FieldInterfaces';
-import {
-  isFieldReactFormMaker,
-  isStepReactFormMaker,
-} from '../../utils/typeGuards/compositeField.TypeGuards';
-import stepReducer, { initialSteps } from './SteppersElements/stepReducer';
+import type { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 import { z } from 'zod';
-import {
+import type { CompositeField } from '../../interfaces/FieldInterfaces';
+import type {
   orientationMutable,
   StepElement,
   StepFormState,
   StepperContextProps,
 } from './SteppersElements/StepperContext.interface';
+import {
+  isFieldReactFormMaker,
+  isStepReactFormMaker,
+} from '../../utils/typeGuards/compositeField.TypeGuards';
+import stepReducer, { initialSteps } from './SteppersElements/stepReducer';
 import { usePromiseObserver } from '@/lib/usePromiseObserver';
 import { CommandManager } from '@/lib/commandManager';
 
-let bounced = 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
 const StepperContext = React.createContext<
   StepperContextProps<any> | undefined
@@ -60,7 +66,7 @@ function extractFieldNamesFromStep(
  * @param param0
  * @returns
  */
-export const StepperProvider = <T extends FieldValues>({
+export function StepperProvider<T extends FieldValues>({
   children,
   form,
   formfields,
@@ -72,7 +78,7 @@ export const StepperProvider = <T extends FieldValues>({
   formfields: CompositeField[];
   orientation?: 'vertical' | 'horizontal';
   zObject: { [key in keyof T]: z.ZodType<T[key], z.ZodTypeDef, T[key]> };
-}) => {
+}) {
   const [stepIndex, setStepIndex] = React.useState<number>(0);
   const [orientationMutable, setOrientationMutable] =
     React.useState<orientationMutable>({ orientation, isOriginal: true });
@@ -162,9 +168,10 @@ export const StepperProvider = <T extends FieldValues>({
     currentStepIndex: number,
   ): Promise<boolean> => {
     const inputsNames = inputsNamesBySteps[currentStepIndex] as Path<T>[];
-    return await form.trigger(inputsNames);
+    return form.trigger(inputsNames);
   };
 
+  /* eslint-disable @typescript-eslint/require-await */
   const executeStepCompletion = async (currentStepIndex: number) => {
     const dispachQueue = new CommandManager({
       dispatch,
@@ -196,20 +203,23 @@ export const StepperProvider = <T extends FieldValues>({
     ]);
     await dispachQueue.execute();
   };
-
+  /* eslint-enable @typescript-eslint/require-await */
   const getNbSteps = () => steps.length;
 
   const getCurrentStep = () => steps[stepIndex];
-
+  /* eslint-disable @typescript-eslint/require-await */
   const goToStep = async (newStepIndex: number) => {
     if (stepIndex === newStepIndex) {
       return;
-    } else if (steps[newStepIndex].isdisabled) {
+    }
+    if (steps[newStepIndex].isdisabled) {
       return;
-    } else if (stepIndex > newStepIndex) {
+    }
+    if (stepIndex > newStepIndex) {
       setStepIndex(newStepIndex);
       return;
     }
+
     triggeringFormStep(stepIndex).then((isValid) => {
       if (isValid) {
         executeStepCompletion(stepIndex).then(() => {
@@ -220,7 +230,7 @@ export const StepperProvider = <T extends FieldValues>({
       }
     });
   };
-
+  /* eslint-enable @typescript-eslint/require-await */
   const goNextStep = (): void => {
     triggeringFormStep(stepIndex).then((isValid) => {
       if (isValid) {
@@ -293,10 +303,11 @@ export const StepperProvider = <T extends FieldValues>({
         steps,
         getNbSteps,
         getCurrentStep,
+        /* eslint-disable @typescript-eslint/no-misused-promises */
         goToStep,
         goNextStep,
         goPreviousStep,
-        form: form as UseFormReturn<T>,
+        form,
         getFieldStatesBySteps,
         getPreviousStep,
         getNextStep,
@@ -309,7 +320,7 @@ export const StepperProvider = <T extends FieldValues>({
       {children}
     </StepperContext.Provider>
   );
-};
+}
 
 /**
  * ### Stepper Context Hook

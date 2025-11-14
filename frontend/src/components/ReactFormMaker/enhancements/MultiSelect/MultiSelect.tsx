@@ -1,8 +1,9 @@
 'use client';
 
 import * as React from 'react';
+import { type ClassValue } from 'clsx';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
-
+import useResizeObserver from '@react-hook/resize-observer';
 import { cn } from '@/lib/utils';
 import {
   Command,
@@ -17,8 +18,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import useResizeObserver from '@react-hook/resize-observer';
-import { ClassValue } from 'clsx';
 import BadgeItem from './BadgeItem';
 
 export type Option = { value: string | number; label: string };

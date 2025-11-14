@@ -1,11 +1,17 @@
-import React, { useEffect } from 'react';
-import { FieldParams } from '../interfaces/FieldParams';
-import { isOption } from '../utils/typeGuards/optionsFields.TypeGuards';
-import { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
+import React from 'react';
 import { z } from 'zod';
+import type { FieldParams } from '../interfaces/FieldParams';
+import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
+import { isOption } from '../utils/typeGuards/optionsFields.TypeGuards';
 import TileMultiSelector, {
-  TileMultiSelectorProps,
+  type TileMultiSelectorProps,
 } from '../enhancements/TileSelector/TileMultiSelector';
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 
 interface TileMultiSelectorInputProps
   extends FieldParams,

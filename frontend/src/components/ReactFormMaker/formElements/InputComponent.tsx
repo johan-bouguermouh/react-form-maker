@@ -1,4 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import { v4 as uuidV4 } from 'uuid';
+import type { FieldParams } from '../interfaces/FieldParams';
 import TextInput from '../inputs/TextInput';
 import PasswordInput from '../inputs/PasswordInput';
 import SelectInput from '../inputs/SelectInput';
@@ -9,8 +11,6 @@ import CheckboxInput from '../inputs/CheckboxInput';
 import SwitchInput from '../inputs/SwitchInput';
 import NumberInput from '../inputs/NumberInput';
 import FileInput from '../inputs/FileInput';
-import { FieldParams } from '../interfaces/FieldParams';
-import { v4 as uuidV4 } from 'uuid';
 import TileSelectorInput from '../inputs/TileSelectorInput';
 import TileMultiSelectorInput from '../inputs/TileMultiselectorInput';
 import SelectAutocompleteInput from '../inputs/SelectAutocompleteInput';
@@ -29,7 +29,6 @@ import DateRangeInput from '../inputs/DateRangeInput';
  * @param {Object} params.fieldProps - The properties of the field.
  * @param {string} params.fieldProps.inputType - The type of input to render.
  * @param {React.ReactNode} params.fieldProps.children - The children elements for custom input.
- * @param {number} params.indexField - The index of the field.
  *
  * @returns {JSX.Element} The rendered input component based on the **input type**.
  *
@@ -37,13 +36,12 @@ import DateRangeInput from '../inputs/DateRangeInput';
  *
  * @see {@link FieldParams} for the interface used in the `params` argument.
  */
-function InputComponent(params: FieldParams) {
+function InputComponent(params: FieldParams): JSX.Element {
   const {
     fieldProps: { inputType, customInputFieldElement },
-    indexField,
   } = params;
 
-  //const [uuid, setUuid] = useState<string>(uuidV4());
+  // const [uuid, setUuid] = useState<string>(uuidV4());
   const uuid = useMemo(() => uuidV4(), []);
 
   switch (inputType) {
