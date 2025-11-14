@@ -78,6 +78,7 @@ export default function ReactFormMaker<T extends FieldValues>({
     return (
       <Form {...form}>
         <form
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={form.handleSubmit(onValid, onInvalid)}
           className={cn(
             ' flex flex-col gap-4 p-4 rounded-lg shadow-lg mx-auto mt-4 bg-white w-5/6 h-full min-h-80 overflow-hidden',
@@ -99,6 +100,7 @@ export default function ReactFormMaker<T extends FieldValues>({
   return (
     <Form {...form}>
       <form
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onSubmit={form.handleSubmit(onValid, onInvalid)}
         className={className}
       >
