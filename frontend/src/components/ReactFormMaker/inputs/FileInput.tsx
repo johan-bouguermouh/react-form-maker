@@ -16,6 +16,7 @@ function FileInput({ zFields, fieldProps, indexField }: FieldParams) {
       onChange={(event) =>
         onChange(event.target.files && event.target.files[0])
       }
+      value=""
     />
   );
 }
