@@ -18,6 +18,7 @@ interface StepperFormProps<T extends FieldValues> {
   zObject: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   orientation: 'horizontal' | 'vertical';
   formFieldsMap: (dataField: CompositeField[]) => (React.JSX.Element | null)[];
+  btnTextSubmit: string;
 }
 
 /**
@@ -48,6 +49,7 @@ function StepperForm<T extends FieldValues>({
   zObject,
   orientation,
   formFieldsMap: FormFieldsMap,
+  btnTextSubmit,
 }: StepperFormProps<T>) {
   const { StepperItemsMap } = useStepperItemsMap(FormFieldsMap);
   return (
@@ -56,6 +58,7 @@ function StepperForm<T extends FieldValues>({
       formfields={formfields}
       zObject={zObject} // eslint-disable-line @typescript-eslint/no-unsafe-assignment
       orientation={orientation}
+      btnTextSubmit={btnTextSubmit}
     >
       <Stepper<T>>
         <NavigationStepper />
