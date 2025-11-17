@@ -80,6 +80,6 @@
     "typescript-eslint": "^8.46.4"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "npx eslint ./src/components/ReactFormMaker --fix"
+    "src/components/ReactFormMaker/*.{ts,tsx}": "npx eslint ./src/components/ReactFormMaker --fix"
   }
 }
