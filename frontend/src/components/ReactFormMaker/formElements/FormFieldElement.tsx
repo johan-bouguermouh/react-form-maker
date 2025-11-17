@@ -70,11 +70,13 @@ function FormFieldElement<T extends FieldValues>({
             }
           }}
         >
-          {elementField.label && !elementField.isSecure && (
-            <FormLabel htmlFor={elementField.inputName}>
-              {elementField.label}
-            </FormLabel>
-          )}
+          {elementField.label &&
+            !elementField.isSecure &&
+            !['checkbox', 'switch'].includes(elementField.inputType) && (
+              <FormLabel htmlFor={elementField.inputName}>
+                {elementField.label}
+              </FormLabel>
+            )}
           <FormControl>
             <InpuTComponentCallBack
               zFields={field}
