@@ -8,7 +8,7 @@ import type {
   ReactFormMakerFieldset,
 } from '../../../interfaces/FieldInterfaces';
 import type { FormFieldEvent } from '../../../interfaces/FormFieldEvent';
-import type { CustomInputFieldElementParams } from '@/components/ReactFormMaker/interfaces/CustomInputFieldElementParams';
+import type { RFMCustom } from '@/components/ReactFormMaker/interfaces/RFMCustom';
 import type { Option } from '@/components/ReactFormMaker/utils/typeGuards/optionsFields.TypeGuards';
 
 import {
@@ -809,8 +809,8 @@ export default class Field<T extends FieldReactFormMaker> {
    * ---
    * @template T - The type of the specific properties for the custom component.
    *
-   * @param {React.ComponentType<CustomInputFieldElementParams<T>>} type
-   * The React component to use as the custom field. This component must accept props conforming to `CustomInputFieldElementParams<T>`.
+   * @param {React.ComponentType<RFMCustom<T>>} type
+   * The React component to use as the custom field. This component must accept props conforming to `RFMCustom<T>`.
    *
    * @param {T} [props]
    * The specific properties to pass to the custom component. These properties will automatically be wrapped into the `props` key.
@@ -830,9 +830,7 @@ export default class Field<T extends FieldReactFormMaker> {
    */
   public custom<T>(
     type: React.ComponentType<
-      CustomInputFieldElementParams<
-        T extends Record<string, any> ? T : Record<string, any>
-      >
+      RFMCustom<T extends Record<string, any> ? T : Record<string, any>>
     >,
     props?: T,
     ...children: React.ReactNode[]
@@ -840,7 +838,7 @@ export default class Field<T extends FieldReactFormMaker> {
     this.inputType = 'custom';
 
     // Encapsuler automatiquement les propriétés dans un objet `props`
-    const wrappedProps: CustomInputFieldElementParams<
+    const wrappedProps: RFMCustom<
       T extends Record<string, any> ? T : Record<string, any>
     > = {
       props: (props || {}) as T extends Record<string, any>
@@ -964,15 +962,13 @@ export default class Field<T extends FieldReactFormMaker> {
    */
   public Children<T>(
     type: React.ComponentType<
-      CustomInputFieldElementParams<
-        T extends Record<string, any> ? T : Record<string, any>
-      >
+      RFMCustom<T extends Record<string, any> ? T : Record<string, any>>
     >,
     props?: T,
     ...children: React.ReactNode[]
   ): this {
     // Encapsuler automatiquement les propriétés dans un objet `props`
-    const wrappedProps: CustomInputFieldElementParams<
+    const wrappedProps: RFMCustom<
       T extends Record<string, any> ? T : Record<string, any>
     > = {
       props: (props || {}) as T extends Record<string, any>

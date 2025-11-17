@@ -1,4 +1,4 @@
-import type { CustomInputFieldElementParams } from './ReactFormMaker/interfaces/CustomInputFieldElementParams';
+import type { RFMCustom } from './ReactFormMaker/interfaces/CustomInputFieldElementParams';
 import React from 'react';
 import {
   Popover,
@@ -11,13 +11,13 @@ import { CalendarIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
-type DatePickerCustomType = {
+export type DatePickerCustomType = {
   disabled: Date[];
 };
 
 const DatePickerCustom = React.forwardRef<
   HTMLButtonElement,
-  CustomInputFieldElementParams<DatePickerCustomType>
+  RFMCustom<DatePickerCustomType>
 >(({ zFields, fieldProps, props }, ref) => {
   const [date, setDate] = React.useState<Date | undefined>();
 

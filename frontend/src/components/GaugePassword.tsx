@@ -2,15 +2,13 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import type { CustomInputFieldElementParams } from './ReactFormMaker/interfaces/CustomInputFieldElementParams';
+import { RFMCustom } from './ReactFormMaker/interfaces/CustomInputFieldElementParams';
 
-interface GaugePasswordProps {
+type GaugePasswordProps = {
   exemple?: string;
-}
+};
 
-function GaugePassword(
-  params: CustomInputFieldElementParams<GaugePasswordProps>,
-) {
+function GaugePassword(params: RFMCustom<GaugePasswordProps>) {
   const { zFields, props } = params;
 
   // Définir une valeur par défaut pour valuePassword

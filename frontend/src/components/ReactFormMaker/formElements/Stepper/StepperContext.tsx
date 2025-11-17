@@ -72,12 +72,14 @@ export function StepperProvider<T extends FieldValues>({
   formfields,
   zObject,
   orientation = 'horizontal',
+  btnTextSubmit,
 }: {
   children: React.ReactNode;
   form: UseFormReturn<T>;
   formfields: CompositeField[];
   orientation?: 'vertical' | 'horizontal';
   zObject: { [key in keyof T]: z.ZodType<T[key], z.ZodTypeDef, T[key]> };
+  btnTextSubmit?: string;
 }) {
   const [stepIndex, setStepIndex] = React.useState<number>(0);
   const [orientationMutable, setOrientationMutable] =
@@ -138,8 +140,8 @@ export function StepperProvider<T extends FieldValues>({
 
       const { invalid, isDirty } = fiedState;
       const fieldHasValue: boolean = value !== undefined;
-      const fieldIsNullable: boolean = zField.isNullable();
-      const fieldIsOptional: boolean = zField.isOptional();
+      const fieldIsNullable: boolean = zField?.isNullable();
+      const fieldIsOptional: boolean = zField?.isOptional();
       if (fieldIsOptional || fieldIsNullable) {
         isValid = isDirty ? !invalid : true;
       } else {
@@ -297,6 +299,10 @@ export function StepperProvider<T extends FieldValues>({
     return handlersObserver.listener(stepName);
   };
 
+  const getButtonTextSubmit = (): string => {
+    return btnTextSubmit || 'Submit';
+  };
+
   return (
     <StepperContext.Provider
       value={{
@@ -315,6 +321,7 @@ export function StepperProvider<T extends FieldValues>({
         orientation: orientationMutable.orientation,
         shiftOrientation,
         getListenerObserver,
+        getButtonTextSubmit,
       }}
     >
       {children}

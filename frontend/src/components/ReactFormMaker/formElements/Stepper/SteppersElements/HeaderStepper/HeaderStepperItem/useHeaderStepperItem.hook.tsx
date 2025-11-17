@@ -62,8 +62,8 @@ export function useHeaderStepperItem({
     const heightBar =
       localRef.current !== null
         ? {
-            'min-height': `${localRef.current.offsetHeight.toString()}px`,
-            'max-height': `${localRef.current.offsetHeight.toString()}px`,
+            minHeight: `${localRef.current.offsetHeight.toString()}px`,
+            maxHeight: `${localRef.current.offsetHeight.toString()}px`,
           }
         : { flex: 1 };
     return heightBar;

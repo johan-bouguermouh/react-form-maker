@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import type { FieldParams } from '../interfaces/FieldParams';
-import type { CustomInputFieldElementParams } from '../interfaces/CustomInputFieldElementParams';
+import type { RFMCustom } from '../interfaces/RFMCustom';
 import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -70,11 +70,13 @@ function FormFieldElement<T extends FieldValues>({
             }
           }}
         >
-          {elementField.label && !elementField.isSecure && (
-            <FormLabel htmlFor={elementField.inputName}>
-              {elementField.label}
-            </FormLabel>
-          )}
+          {elementField.label &&
+            !elementField.isSecure &&
+            !['checkbox', 'switch'].includes(elementField.inputType) && (
+              <FormLabel htmlFor={elementField.inputName}>
+                {elementField.label}
+              </FormLabel>
+            )}
           <FormControl>
             <InpuTComponentCallBack
               zFields={field}
@@ -93,7 +95,7 @@ function FormFieldElement<T extends FieldValues>({
               fieldProps: elementField,
               index: key,
               ...elementField.props,
-            } as CustomInputFieldElementParams<any>)}
+            } as RFMCustom<any>)}
         </FormItem>
       )}
     />

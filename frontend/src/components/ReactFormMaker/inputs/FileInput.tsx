@@ -3,7 +3,9 @@ import type { FieldParams } from '../interfaces/FieldParams';
 import { Input } from '@/components/ui/input';
 
 function FileInput({ zFields, fieldProps, indexField }: FieldParams) {
-  const { onChange, ...restZfields } = zFields;
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+  const { onChange, value: _, ...restZfields } = zFields;
   return (
     <Input
       className={fieldProps.className}

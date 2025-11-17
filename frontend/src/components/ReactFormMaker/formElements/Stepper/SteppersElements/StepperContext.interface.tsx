@@ -394,6 +394,13 @@ export interface StepperContextProps<T extends FieldValues> {
   getListenerObserver: (
     index: number,
   ) => 'idle' | 'loading' | 'resolved' | 'rejected';
+
+  /**
+   * **Get the text of the submit button**
+   * _Returns the text to be displayed on the submit button of the stepper form._
+   * @returns {string}
+   */
+  getButtonTextSubmit: () => string;
 }
 
 /**

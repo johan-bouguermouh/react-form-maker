@@ -47,6 +47,7 @@ const FooterStepperReactHookForm = React.forwardRef<
     getNbSteps,
     getPreviousStep,
     getListenerObserver,
+    getButtonTextSubmit,
   } = useStepper();
 
   const step = getCurrentStep();
@@ -75,7 +76,7 @@ const FooterStepperReactHookForm = React.forwardRef<
     <footer
       ref={ref}
       className={cn(
-        'flex flex-col-reverse align-center sm:flex-row sm:justify-between transition-all duration-300',
+        'sticky bottom-[-16px] p-4 border-t border-t-slate-200 left-4 z-30 mb-0 bg-white flex flex-col-reverse align-center sm:flex-row sm:justify-between transition-all duration-300',
         step.footerClassName,
       )}
     >
@@ -98,7 +99,9 @@ const FooterStepperReactHookForm = React.forwardRef<
           type="submit"
           disabled={!getFieldStatesBySteps().isValidStep || formIsLoading()}
         >
-          {step.buttonNextContent ? step.buttonNextContent : 'Previous'}
+          {step.buttonNextContent
+            ? step.buttonNextContent
+            : getButtonTextSubmit()}
         </Button>
       ) : (
         <Button

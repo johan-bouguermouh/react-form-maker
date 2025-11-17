@@ -81,7 +81,7 @@ export default function ReactFormMaker<T extends FieldValues>({
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={form.handleSubmit(onValid, onInvalid)}
           className={cn(
-            ' flex flex-col gap-4 p-4 rounded-lg shadow-lg mx-auto mt-4 bg-white w-5/6 h-full min-h-80 overflow-hidden',
+            'min-w-full flex flex-col gap-4 p-4 rounded-lg shadow-lg mx-auto mt-4 bg-white w-5/6 h-full overflow-hidden relative overflow-y-auto',
             className,
           )}
         >
@@ -91,6 +91,7 @@ export default function ReactFormMaker<T extends FieldValues>({
             zObject={zObject}
             orientation={orientation}
             formFieldsMap={FormFieldsMap}
+            btnTextSubmit={btnTextSubmit}
           />
         </form>
       </Form>
@@ -102,7 +103,7 @@ export default function ReactFormMaker<T extends FieldValues>({
       <form
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onSubmit={form.handleSubmit(onValid, onInvalid)}
-        className={className}
+        className={cn('!mx-0 w-full bg-red-500', className)}
       >
         {FieldsetMap(formfields)}
 
