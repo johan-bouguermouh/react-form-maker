@@ -1,61 +1,94 @@
+import { cn } from '@/lib/utils';
 import React from 'react';
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
   className?: string;
-  children: string | string[] | React.ReactNode;
+  children: React.ReactNode;
 }
 
-const H1: React.FC<Props> = ({ className, children }) => {
+interface BlockquoteProps
+  extends React.BlockquoteHTMLAttributes<HTMLQuoteElement> {
+  className?: string;
+  children: React.ReactNode;
+}
+
+const H1: React.FC<Props> = ({ className, children, ...props }) => {
   return (
     <h1
-      className={`scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl ${className}`}
+      className={cn(
+        'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
+        className,
+      )}
+      {...props}
     >
       {children}
     </h1>
   );
 };
 
-const H2: React.FC<Props> = ({ className, children }) => {
+const H2: React.FC<Props> = ({ className, children, ...props }) => {
   return (
     <h2
-      className={`scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 ${className}`}
+      className={cn(
+        'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
+        className,
+      )}
+      {...props}
     >
       {children}
     </h2>
   );
 };
 
-const H3: React.FC<Props> = ({ className, children }) => {
+const H3: React.FC<Props> = ({ className, children, ...props }) => {
   return (
     <h3
-      className={`scroll-m-20 text-2xl font-semibold tracking-tight ${className}`}
+      className={cn(
+        'scroll-m-20 text-2xl font-semibold tracking-tight',
+        className,
+      )}
+      {...props}
     >
       {children}
     </h3>
   );
 };
 
-const H4: React.FC<Props> = ({ className, children }) => {
+const H4: React.FC<Props> = ({ className, children, ...props }) => {
   return (
     <h4
-      className={`scroll-m-20 text-xl font-semibold tracking-tight ${className}`}
+      className={cn(
+        'scroll-m-20 text-xl font-semibold tracking-tight',
+        className,
+      )}
+      {...props}
     >
       {children}
     </h4>
   );
 };
 
-const P: React.FC<Props> = ({ className, children }) => {
+const P: React.FC<Props> = ({ className, children, ...props }) => {
   return (
-    <p className={`leading-7 [&:not(:first-child)]:mt-6 ${className}`}>
+    <p
+      className={cn('leading-7 [&:not(:first-child)]:mt-6', className)}
+      {...props}
+    >
       {children}
     </p>
   );
 };
 
-const Blockquote: React.FC<Props> = ({ className, children }) => {
+const Blockquote: React.FC<BlockquoteProps> = ({
+  className,
+  children,
+  ...props
+}) => {
   return (
-    <blockquote className={`mt-6 border-l-2 pl-6 italic ${className}`}>
+    <blockquote
+      className={cn('mt-6 border-l-2 pl-6 italic', className)}
+      {...props}
+    >
       {children}
     </blockquote>
   );
@@ -73,17 +106,21 @@ const InlineCode: React.FC<Props> = ({ className, children }) => {
 
 const Lead: React.FC<Props> = ({ className, children }) => {
   return (
-    <p className={`text-xl text-muted-foreground ${className}`}>{children}</p>
+    <p className={cn('text-xl text-muted-foreground', className)}>{children}</p>
   );
 };
 
 const Large: React.FC<Props> = ({ className, children }) => {
-  return <div className={`text-lg font-semibold ${className}`}>{children}</div>;
+  return (
+    <div className={cn('text-lg font-semibold', className)}>{children}</div>
+  );
 };
 
 const Muted: React.FC<Props> = ({ className, children }) => {
   return (
-    <p className={`text-sm text-muted-foreground ${className}`}>{children}.</p>
+    <p className={cn('text-sm text-muted-foreground', className)}>
+      {children}.
+    </p>
   );
 };
 
