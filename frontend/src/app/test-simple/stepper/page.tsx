@@ -1,13 +1,15 @@
 'use client';
 
 import { CodeBlock } from '@/components/CodeBlock';
+import DatePickerCustom, {
+  DatePickerCustomType,
+} from '@/components/DatePickerCustom';
 import Field from '@/components/ReactFormMaker/FormFields/Class/FieldFactory/FieldFactory.class';
-import FieldSet from '@/components/ReactFormMaker/FormFields/Class/Fieldset.class';
 import { TextField } from '@/components/ReactFormMaker/FormFields/Class/TextFields.class';
 import { ReactFormMakerStep } from '@/components/ReactFormMaker/interfaces/FieldInterfaces';
 import ReactFormMaker from '@/components/ReactFormMaker/ReactFormMaker';
 import { H3, H4, Lead, P } from '@/components/ui/Typography';
-import Link from 'next/link';
+import z from 'zod';
 
 export default function TestTextPage() {
   type FormData = {
@@ -65,6 +67,12 @@ export default function TestTextPage() {
         .setLabel('Phone Number')
         .setPlaceholder('Enter your phone number'),
       new TextField('personalInfo').textarea(),
+      new Field('myCustom')
+        .custom<DatePickerCustomType>(DatePickerCustom, {
+          disabled: [new Date()],
+        })
+        .setValidation(z.date().nullable())
+        .setLabel('Select a date'),
     ],
   };
   return (

@@ -140,8 +140,8 @@ export function StepperProvider<T extends FieldValues>({
 
       const { invalid, isDirty } = fiedState;
       const fieldHasValue: boolean = value !== undefined;
-      const fieldIsNullable: boolean = zField.isNullable();
-      const fieldIsOptional: boolean = zField.isOptional();
+      const fieldIsNullable: boolean = zField?.isNullable();
+      const fieldIsOptional: boolean = zField?.isOptional();
       if (fieldIsOptional || fieldIsNullable) {
         isValid = isDirty ? !invalid : true;
       } else {

@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import type { FieldParams } from '../interfaces/FieldParams';
-import type { CustomInputFieldElementParams } from '../interfaces/CustomInputFieldElementParams';
+import type { RFMCustom } from '../interfaces/RFMCustom';
 import type { FieldReactFormMaker } from '../interfaces/FieldInterfaces';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -95,7 +95,7 @@ function FormFieldElement<T extends FieldValues>({
               fieldProps: elementField,
               index: key,
               ...elementField.props,
-            } as CustomInputFieldElementParams<any>)}
+            } as RFMCustom<any>)}
         </FormItem>
       )}
     />
